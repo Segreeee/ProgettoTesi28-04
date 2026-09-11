@@ -1,0 +1,16 @@
+FD,Tipo,Dipendenza,Significato,Righe_CSV_completo,Gruppi_CSV_completo,Violazioni_CSV_completo,NaN_CSV_completo,Righe_Dataset_bilanciato,Gruppi_Dataset_bilanciato,Violazioni_Dataset_bilanciato,NaN_Dataset_bilanciato,Colonne_al_modello
+FD1,principale,Origin+Dest -> Distance,una rotta ha una distanza fissa,539747,5649,0,0,66770,5037,0,0,True
+FD2,principale,Distance -> DistanceGroup,la fascia di distanza (250 miglia) deriva dalla distanza,539747,1487,0,0,66770,1459,0,0,True
+FD3,principale,CRSDepTime -> DepTimeBlk,la fascia oraria deriva dall'orario programmato,539747,1209,0,0,66770,1177,0,0,True
+FD4,principale,Origin -> OriginWac,un aeroporto sta in una sola area geografica (World Area Code),539747,329,0,0,66770,326,0,0,True
+R1,ridondante,Origin -> OriginAirportID,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,326,0,0,True
+R2,ridondante,Dest -> DestAirportID,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R3,ridondante,Dest -> DestCityName,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R4,ridondante,Dest -> DestState,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R5,ridondante,Dest -> DestStateName,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R6,ridondante,Dest -> DestStateFips,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R7,ridondante,Dest -> DestWac,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,322,0,0,True
+R8,ridondante,Origin -> OriginCityName,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,326,0,0,True
+R9,ridondante,Origin -> OriginState,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,326,0,0,True
+R10,ridondante,Origin -> OriginStateName,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,326,0,0,True
+R11,ridondante,Origin -> OriginStateFips,colonna ridondante del concetto aeroporto,539747,329,0,0,66770,326,0,0,True

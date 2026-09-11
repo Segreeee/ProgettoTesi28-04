@@ -1,0 +1,108 @@
+[2026-09-11 18:30:16] ======================================================================
+[2026-09-11 18:30:16] Avvio esperimento Blocco 2 (campione 45% del CSV originale)
+[2026-09-11 18:30:16] Dataset pulito e bilanciato: 66,770 righe, 45 colonne, 3 fold da 22,256-22,257 righe
+[2026-09-11 18:30:16] Dataset pulito: 0 violazioni su FD principali e ridondanti.
+[2026-09-11 18:30:16] RAM disponibile 4.1 GB -> 4 processi paralleli, Random Forest con 4 thread
+[2026-09-11 18:30:16] Lavori totali 99, gia' completati 0, da eseguire 99
+[2026-09-11 18:34:17] PILOTA 1/3  fold=2 rumore= 0% baseline IM=         0 acc media=0.9688  lavoro 240s  fine stimata tra 8 min
+[2026-09-11 18:34:22] PILOTA 2/3  fold=1 rumore= 0% baseline IM=         0 acc media=0.9680  lavoro 244s  fine stimata tra 2 min
+[2026-09-11 18:35:10] PILOTA 3/3  fold=0 rumore= 0% baseline IM=         0 acc media=0.9679  lavoro 292s  fine stimata tra 0 min
+[2026-09-11 18:35:10] Baseline (rumore 0%): accuracy minima 0.9532, media per modello: Decision Tree 0.9717, Logistic Regression 0.9534, Neural Network 0.9712, Random Forest 0.9766
+[2026-09-11 18:35:10] Proiezione: 96 lavori x 259s / 4 processi = ~1.7 ore
+[2026-09-11 18:39:43] LAVORO 1/96  fold=0 rumore= 5% C1       IM=       734 acc media=0.9620  lavoro 273s  fine stimata tra 433 min
+[2026-09-11 18:40:06] LAVORO 2/96  fold=2 rumore= 5% C1       IM=       758 acc media=0.9625  lavoro 296s  fine stimata tra 232 min
+[2026-09-11 18:40:07] LAVORO 3/96  fold=0 rumore= 5% C2       IM=    61,727 acc media=0.9538  lavoro 294s  fine stimata tra 153 min
+[2026-09-11 18:40:13] LAVORO 4/96  fold=1 rumore= 5% C1       IM=       804 acc media=0.9623  lavoro 303s  fine stimata tra 116 min
+[2026-09-11 18:43:37] LAVORO 5/96  fold=1 rumore= 5% C2       IM=    63,281 acc media=0.9557  lavoro 234s  fine stimata tra 154 min
+[2026-09-11 18:44:11] LAVORO 6/96  fold=1 rumore= 5% C3       IM=   142,069 acc media=0.9557  lavoro 237s  fine stimata tra 135 min
+[2026-09-11 18:44:19] LAVORO 7/96  fold=0 rumore= 5% C3       IM=   137,030 acc media=0.9542  lavoro 252s  fine stimata tra 116 min
+[2026-09-11 18:44:41] LAVORO 8/96  fold=2 rumore= 5% C2       IM=    62,883 acc media=0.9544  lavoro 275s  fine stimata tra 105 min
+[2026-09-11 18:47:53] LAVORO 9/96  fold=2 rumore= 5% C3       IM=   139,222 acc media=0.9543  lavoro 256s  fine stimata tra 123 min
+[2026-09-11 18:49:18] LAVORO 10/96  fold=0 rumore= 5% C4       IM=   429,760 acc media=0.9543  lavoro 308s  fine stimata tra 122 min
+[2026-09-11 18:49:28] LAVORO 11/96  fold=2 rumore= 5% C4       IM=   421,584 acc media=0.9549  lavoro 287s  fine stimata tra 110 min
+[2026-09-11 18:49:44] LAVORO 12/96  fold=1 rumore= 5% C4       IM=   434,127 acc media=0.9553  lavoro 325s  fine stimata tra 102 min
+[2026-09-11 18:52:07] LAVORO 13/96  fold=0 rumore=10% C1       IM=     2,038 acc media=0.9605  lavoro 254s  fine stimata tra 108 min
+[2026-09-11 18:54:17] LAVORO 14/96  fold=2 rumore=10% C1       IM=     2,024 acc media=0.9606  lavoro 289s  fine stimata tra 112 min
+[2026-09-11 18:54:50] LAVORO 15/96  fold=1 rumore=10% C1       IM=     1,788 acc media=0.9622  lavoro 332s  fine stimata tra 106 min
+[2026-09-11 18:55:18] LAVORO 16/96  fold=0 rumore=10% C2       IM=   123,850 acc media=0.9434  lavoro 334s  fine stimata tra 101 min
+[2026-09-11 18:56:25] LAVORO 17/96  fold=1 rumore=10% C2       IM=   121,507 acc media=0.9452  lavoro 258s  fine stimata tra 99 min
+[2026-09-11 18:59:17] LAVORO 18/96  fold=2 rumore=10% C2       IM=   122,619 acc media=0.9437  lavoro 300s  fine stimata tra 104 min
+[2026-09-11 18:59:25] LAVORO 19/96  fold=0 rumore=10% C3       IM=   276,783 acc media=0.9438  lavoro 275s  fine stimata tra 98 min
+[2026-09-11 18:59:40] LAVORO 20/96  fold=1 rumore=10% C3       IM=   274,456 acc media=0.9453  lavoro 262s  fine stimata tra 93 min
+[2026-09-11 19:01:03] LAVORO 21/96  fold=2 rumore=10% C3       IM=   273,415 acc media=0.9447  lavoro 278s  fine stimata tra 92 min
+[2026-09-11 19:03:31] LAVORO 22/96  fold=1 rumore=10% C4       IM=   825,639 acc media=0.9447  lavoro 246s  fine stimata tra 95 min
+[2026-09-11 19:04:03] LAVORO 23/96  fold=0 rumore=10% C4       IM=   841,444 acc media=0.9426  lavoro 286s  fine stimata tra 92 min
+[2026-09-11 19:05:39] LAVORO 24/96  fold=0 rumore=15% C1       IM=     2,288 acc media=0.9583  lavoro 277s  fine stimata tra 91 min
+[2026-09-11 19:05:41] LAVORO 25/96  fold=2 rumore=10% C4       IM=   830,192 acc media=0.9440  lavoro 361s  fine stimata tra 87 min
+[2026-09-11 19:08:31] LAVORO 26/96  fold=2 rumore=15% C1       IM=     2,225 acc media=0.9591  lavoro 268s  fine stimata tra 90 min
+[2026-09-11 19:08:32] LAVORO 27/96  fold=1 rumore=15% C1       IM=     2,563 acc media=0.9600  lavoro 301s  fine stimata tra 85 min
+[2026-09-11 19:10:28] LAVORO 28/96  fold=1 rumore=15% C2       IM=   177,723 acc media=0.9340  lavoro 287s  fine stimata tra 86 min
+[2026-09-11 19:10:55] LAVORO 29/96  fold=0 rumore=15% C2       IM=   175,700 acc media=0.9334  lavoro 316s  fine stimata tra 83 min
+[2026-09-11 19:13:46] LAVORO 30/96  fold=0 rumore=15% C3       IM=   401,310 acc media=0.9339  lavoro 314s  fine stimata tra 85 min
+[2026-09-11 19:13:50] LAVORO 31/96  fold=2 rumore=15% C2       IM=   177,261 acc media=0.9342  lavoro 319s  fine stimata tra 81 min
+[2026-09-11 19:15:02] LAVORO 32/96  fold=1 rumore=15% C3       IM=   400,985 acc media=0.9340  lavoro 273s  fine stimata tra 80 min
+[2026-09-11 19:16:11] LAVORO 33/96  fold=2 rumore=15% C3       IM=   389,213 acc media=0.9338  lavoro 316s  fine stimata tra 78 min
+[2026-09-11 19:18:36] LAVORO 34/96  fold=1 rumore=15% C4       IM= 1,233,878 acc media=0.9334  lavoro 286s  fine stimata tra 79 min
+[2026-09-11 19:18:59] LAVORO 35/96  fold=0 rumore=15% C4       IM= 1,215,075 acc media=0.9331  lavoro 313s  fine stimata tra 76 min
+[2026-09-11 19:20:21] LAVORO 36/96  fold=2 rumore=15% C4       IM= 1,187,016 acc media=0.9333  lavoro 320s  fine stimata tra 75 min
+[2026-09-11 19:20:37] LAVORO 37/96  fold=0 rumore=20% C1       IM=     3,199 acc media=0.9576  lavoro 266s  fine stimata tra 72 min
+[2026-09-11 19:23:31] LAVORO 38/96  fold=2 rumore=20% C1       IM=     3,875 acc media=0.9573  lavoro 272s  fine stimata tra 74 min
+[2026-09-11 19:23:47] LAVORO 39/96  fold=1 rumore=20% C1       IM=     3,777 acc media=0.9589  lavoro 311s  fine stimata tra 71 min
+[2026-09-11 19:24:49] LAVORO 40/96  fold=1 rumore=20% C2       IM=   230,635 acc media=0.9270  lavoro 252s  fine stimata tra 70 min
+[2026-09-11 19:25:21] LAVORO 41/96  fold=0 rumore=20% C2       IM=   227,706 acc media=0.9243  lavoro 300s  fine stimata tra 67 min
+[2026-09-11 19:27:37] LAVORO 42/96  fold=0 rumore=20% C3       IM=   507,704 acc media=0.9246  lavoro 230s  fine stimata tra 67 min
+[2026-09-11 19:28:30] LAVORO 43/96  fold=2 rumore=20% C2       IM=   229,096 acc media=0.9272  lavoro 298s  fine stimata tra 66 min
+[2026-09-11 19:29:40] LAVORO 44/96  fold=1 rumore=20% C3       IM=   518,463 acc media=0.9265  lavoro 291s  fine stimata tra 64 min
+[2026-09-11 19:29:48] LAVORO 45/96  fold=2 rumore=20% C3       IM=   515,419 acc media=0.9272  lavoro 267s  fine stimata tra 62 min
+[2026-09-11 19:32:06] LAVORO 46/96  fold=0 rumore=20% C4       IM= 1,597,913 acc media=0.9241  lavoro 269s  fine stimata tra 62 min
+[2026-09-11 19:32:50] LAVORO 47/96  fold=1 rumore=20% C4       IM= 1,609,426 acc media=0.9256  lavoro 260s  fine stimata tra 60 min
+[2026-09-11 19:34:11] LAVORO 48/96  fold=0 rumore=25% C1       IM=     4,724 acc media=0.9562  lavoro 263s  fine stimata tra 59 min
+[2026-09-11 19:34:49] LAVORO 49/96  fold=2 rumore=20% C4       IM= 1,565,680 acc media=0.9257  lavoro 309s  fine stimata tra 57 min
+[2026-09-11 19:36:35] LAVORO 50/96  fold=1 rumore=25% C1       IM=     4,287 acc media=0.9574  lavoro 268s  fine stimata tra 56 min
+[2026-09-11 19:36:58] LAVORO 51/96  fold=2 rumore=25% C1       IM=     3,707 acc media=0.9556  lavoro 248s  fine stimata tra 55 min
+[2026-09-11 19:38:50] LAVORO 52/96  fold=1 rumore=25% C2       IM=   280,811 acc media=0.9196  lavoro 241s  fine stimata tra 54 min
+[2026-09-11 19:39:25] LAVORO 53/96  fold=0 rumore=25% C2       IM=   275,468 acc media=0.9181  lavoro 314s  fine stimata tra 52 min
+[2026-09-11 19:40:49] LAVORO 54/96  fold=2 rumore=25% C2       IM=   276,371 acc media=0.9184  lavoro 254s  fine stimata tra 51 min
+[2026-09-11 19:42:24] LAVORO 55/96  fold=0 rumore=25% C3       IM=   626,530 acc media=0.9186  lavoro 325s  fine stimata tra 50 min
+[2026-09-11 19:43:15] LAVORO 56/96  fold=1 rumore=25% C3       IM=   637,149 acc media=0.9187  lavoro 265s  fine stimata tra 49 min
+[2026-09-11 19:44:25] LAVORO 57/96  fold=2 rumore=25% C3       IM=   629,001 acc media=0.9181  lavoro 300s  fine stimata tra 47 min
+[2026-09-11 19:44:51] LAVORO 58/96  fold=0 rumore=25% C4       IM= 1,955,329 acc media=0.9167  lavoro 242s  fine stimata tra 46 min
+[2026-09-11 19:46:07] LAVORO 59/96  fold=1 rumore=25% C4       IM= 1,883,515 acc media=0.9175  lavoro 223s  fine stimata tra 44 min
+[2026-09-11 19:47:45] LAVORO 60/96  fold=2 rumore=25% C4       IM= 1,880,177 acc media=0.9162  lavoro 271s  fine stimata tra 44 min
+[2026-09-11 19:48:25] LAVORO 61/96  fold=1 rumore=30% C1       IM=     4,478 acc media=0.9558  lavoro 214s  fine stimata tra 42 min
+[2026-09-11 19:48:38] LAVORO 62/96  fold=0 rumore=30% C1       IM=     4,614 acc media=0.9544  lavoro 253s  fine stimata tra 40 min
+[2026-09-11 19:49:53] LAVORO 63/96  fold=2 rumore=30% C1       IM=     4,213 acc media=0.9549  lavoro 226s  fine stimata tra 39 min
+[2026-09-11 19:52:10] LAVORO 64/96  fold=0 rumore=30% C2       IM=   321,801 acc media=0.9120  lavoro 265s  fine stimata tra 39 min
+[2026-09-11 19:52:42] LAVORO 65/96  fold=2 rumore=30% C2       IM=   315,518 acc media=0.9133  lavoro 244s  fine stimata tra 37 min
+[2026-09-11 19:52:59] LAVORO 66/96  fold=1 rumore=30% C2       IM=   328,423 acc media=0.9102  lavoro 273s  fine stimata tra 35 min
+[2026-09-11 19:53:30] LAVORO 67/96  fold=0 rumore=30% C3       IM=   732,228 acc media=0.9124  lavoro 218s  fine stimata tra 34 min
+[2026-09-11 19:56:52] LAVORO 68/96  fold=0 rumore=30% C4       IM= 2,249,032 acc media=0.9098  lavoro 234s  fine stimata tra 34 min
+[2026-09-11 19:56:53] LAVORO 69/96  fold=1 rumore=30% C3       IM=   743,275 acc media=0.9102  lavoro 283s  fine stimata tra 32 min
+[2026-09-11 19:57:37] LAVORO 70/96  fold=1 rumore=30% C4       IM= 2,271,852 acc media=0.9104  lavoro 247s  fine stimata tra 31 min
+[2026-09-11 19:57:45] LAVORO 71/96  fold=2 rumore=30% C3       IM=   722,334 acc media=0.9126  lavoro 303s  fine stimata tra 29 min
+[2026-09-11 20:01:05] LAVORO 72/96  fold=0 rumore=35% C1       IM=     5,507 acc media=0.9526  lavoro 252s  fine stimata tra 29 min
+[2026-09-11 20:01:44] LAVORO 73/96  fold=2 rumore=30% C4       IM= 2,199,176 acc media=0.9099  lavoro 292s  fine stimata tra 27 min
+[2026-09-11 20:02:39] LAVORO 74/96  fold=1 rumore=35% C1       IM=     5,268 acc media=0.9533  lavoro 302s  fine stimata tra 26 min
+[2026-09-11 20:02:43] LAVORO 75/96  fold=2 rumore=35% C1       IM=     5,384 acc media=0.9516  lavoro 298s  fine stimata tra 25 min
+[2026-09-11 20:04:53] LAVORO 76/96  fold=0 rumore=35% C2       IM=   371,969 acc media=0.9044  lavoro 228s  fine stimata tra 24 min
+[2026-09-11 20:05:25] LAVORO 77/96  fold=1 rumore=35% C2       IM=   364,374 acc media=0.9041  lavoro 221s  fine stimata tra 22 min
+[2026-09-11 20:06:15] LAVORO 78/96  fold=0 rumore=35% C3       IM=   836,450 acc media=0.9039  lavoro 212s  fine stimata tra 21 min
+[2026-09-11 20:06:34] LAVORO 79/96  fold=2 rumore=35% C2       IM=   370,737 acc media=0.9052  lavoro 235s  fine stimata tra 20 min
+[2026-09-11 20:08:52] LAVORO 80/96  fold=1 rumore=35% C3       IM=   820,992 acc media=0.9043  lavoro 240s  fine stimata tra 19 min
+[2026-09-11 20:09:48] LAVORO 81/96  fold=2 rumore=35% C3       IM=   836,714 acc media=0.9060  lavoro 262s  fine stimata tra 18 min
+[2026-09-11 20:10:26] LAVORO 82/96  fold=0 rumore=35% C4       IM= 2,554,936 acc media=0.9030  lavoro 251s  fine stimata tra 16 min
+[2026-09-11 20:10:27] LAVORO 83/96  fold=1 rumore=35% C4       IM= 2,497,490 acc media=0.9031  lavoro 233s  fine stimata tra 15 min
+[2026-09-11 20:12:15] LAVORO 84/96  fold=2 rumore=35% C4       IM= 2,603,937 acc media=0.9037  lavoro 203s  fine stimata tra 14 min
+[2026-09-11 20:13:19] LAVORO 85/96  fold=0 rumore=40% C1       IM=     6,146 acc media=0.9524  lavoro 212s  fine stimata tra 13 min
+[2026-09-11 20:14:19] LAVORO 86/96  fold=2 rumore=40% C1       IM=     5,908 acc media=0.9494  lavoro 232s  fine stimata tra 12 min
+[2026-09-11 20:14:52] LAVORO 87/96  fold=1 rumore=40% C1       IM=     5,939 acc media=0.9521  lavoro 266s  fine stimata tra 10 min
+[2026-09-11 20:15:49] LAVORO 88/96  fold=0 rumore=40% C2       IM=   407,038 acc media=0.8987  lavoro 214s  fine stimata tra 9 min
+[2026-09-11 20:16:56] LAVORO 89/96  fold=1 rumore=40% C2       IM=   404,590 acc media=0.8985  lavoro 217s  fine stimata tra 8 min
+[2026-09-11 20:18:12] LAVORO 90/96  fold=2 rumore=40% C2       IM=   409,697 acc media=0.8985  lavoro 233s  fine stimata tra 7 min
+[2026-09-11 20:18:21] LAVORO 91/96  fold=0 rumore=40% C3       IM=   924,679 acc media=0.8991  lavoro 209s  fine stimata tra 6 min
+[2026-09-11 20:20:01] LAVORO 92/96  fold=1 rumore=40% C3       IM=   921,201 acc media=0.8979  lavoro 252s  fine stimata tra 5 min
+[2026-09-11 20:20:41] LAVORO 93/96  fold=2 rumore=40% C3       IM=   917,674 acc media=0.8988  lavoro 225s  fine stimata tra 3 min
+[2026-09-11 20:21:48] LAVORO 94/96  fold=0 rumore=40% C4       IM= 2,821,372 acc media=0.8973  lavoro 215s  fine stimata tra 2 min
+[2026-09-11 20:21:52] LAVORO 95/96  fold=1 rumore=40% C4       IM= 2,830,404 acc media=0.8958  lavoro 211s  fine stimata tra 1 min
+[2026-09-11 20:23:47] LAVORO 96/96  fold=2 rumore=40% C4       IM= 2,826,859 acc media=0.8962  lavoro 226s  fine stimata tra 0 min
+[2026-09-11 20:23:47] FINE. Righe nel CSV: 432 (attese 432), valori mancanti nelle metriche: 0

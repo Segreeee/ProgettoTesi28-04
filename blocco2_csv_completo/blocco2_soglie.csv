@@ -1,0 +1,21 @@
+Config_FD,Modello,Soglia_%,Calo_al_40%
+C1,media dei 4 modelli,15,0.017
+C1,Decision Tree,30,0.0134
+C1,Logistic Regression,0,0.0333
+C1,Neural Network,30,0.011
+C1,Random Forest,35,0.0103
+C2,media dei 4 modelli,0,0.0703
+C2,Decision Tree,25,0.0174
+C2,Logistic Regression,0,0.2362
+C2,Neural Network,25,0.0168
+C2,Random Forest,35,0.0108
+C3,media dei 4 modelli,0,0.0704
+C3,Decision Tree,25,0.0175
+C3,Logistic Regression,0,0.2368
+C3,Neural Network,25,0.0159
+C3,Random Forest,35,0.0113
+C4,media dei 4 modelli,0,0.0727
+C4,Decision Tree,25,0.0163
+C4,Logistic Regression,0,0.2465
+C4,Neural Network,25,0.0174
+C4,Random Forest,35,0.0106
