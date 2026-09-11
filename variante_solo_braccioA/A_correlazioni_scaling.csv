@@ -1,0 +1,13 @@
+N_FD,Modello,r_intero_range,p_intero_range,r_rumore_ge20,p_rumore_ge20
+1,Decision Tree,-0.733,4e-06,-0.246,0.375968
+1,Logistic Regression,-0.858,0.0,-0.55,0.033616
+1,Neural Network,-0.931,0.0,-0.809,0.000256
+1,Random Forest,-0.86,0.0,-0.699,0.003756
+5,Decision Tree,-0.896,0.0,-0.642,0.009943
+5,Logistic Regression,-0.966,0.0,-0.866,3e-05
+5,Neural Network,-0.955,0.0,-0.927,1e-06
+5,Random Forest,-0.945,0.0,-0.792,0.000427
+10,Decision Tree,-0.762,1e-06,0.839,9.2e-05
+10,Logistic Regression,-0.877,0.0,0.853,5.4e-05
+10,Neural Network,-0.736,3e-06,0.97,0.0
+10,Random Forest,-0.657,8.1e-05,0.894,7e-06

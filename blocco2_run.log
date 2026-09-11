@@ -1,0 +1,129 @@
+Caricamento campione e creazione target DurataBucket...
+Verifica preliminare del pool di FD:
+  # 1 Origin+Dest -> Distance                          0 violazioni, colonne OK
+  # 2 OriginAirportID -> OriginCityName                0 violazioni, colonne OK
+  # 3 DestAirportID -> DestCityName                    0 violazioni, colonne OK
+  # 4 OriginAirportID -> OriginState                   0 violazioni, colonne OK
+  # 5 DestAirportID -> DestState                       0 violazioni, colonne OK
+  # 6 OriginAirportID -> Origin                        0 violazioni, colonne OK
+  # 7 DestAirportID -> Dest                            0 violazioni, colonne OK
+  # 8 OriginAirportID -> OriginWac                     0 violazioni, colonne OK
+  # 9 DestAirportID -> DestWac                         0 violazioni, colonne OK
+  #10 OriginAirportID -> OriginStateName               0 violazioni, colonne OK
+
+Verifica dataset di valutazione sulle 10 FD: IM=0 (pulito, OK)
+
+Configurazioni: [1, 5, 10] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+------------------------------------------------------------
+[ 1 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
+[ 1 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
+[ 1 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
+[ 1 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
+[ 1 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
+[ 1 FD] Rumore=5% Rep=0 -> IM=52 IP=72 IH=28
+[ 1 FD] Rumore=5% Rep=1 -> IM=53 IP=76 IH=33
+[ 1 FD] Rumore=5% Rep=2 -> IM=76 IP=104 IH=36
+[ 1 FD] Rumore=5% Rep=3 -> IM=31 IP=47 IH=21
+[ 1 FD] Rumore=5% Rep=4 -> IM=64 IP=87 IH=34
+[ 1 FD] Rumore=10% Rep=0 -> IM=149 IP=203 IH=74
+[ 1 FD] Rumore=10% Rep=1 -> IM=108 IP=158 IH=68
+[ 1 FD] Rumore=10% Rep=2 -> IM=110 IP=146 IH=61
+[ 1 FD] Rumore=10% Rep=3 -> IM=73 IP=113 IH=55
+[ 1 FD] Rumore=10% Rep=4 -> IM=124 IP=168 IH=63
+[ 1 FD] Rumore=20% Rep=0 -> IM=207 IP=298 IH=122
+[ 1 FD] Rumore=20% Rep=1 -> IM=163 IP=235 IH=108
+[ 1 FD] Rumore=20% Rep=2 -> IM=221 IP=313 IH=129
+[ 1 FD] Rumore=20% Rep=3 -> IM=179 IP=267 IH=117
+[ 1 FD] Rumore=20% Rep=4 -> IM=182 IP=278 IH=130
+[ 1 FD] Rumore=30% Rep=0 -> IM=315 IP=481 IH=208
+[ 1 FD] Rumore=30% Rep=1 -> IM=230 IP=364 IH=172
+[ 1 FD] Rumore=30% Rep=2 -> IM=381 IP=561 IH=240
+[ 1 FD] Rumore=30% Rep=3 -> IM=240 IP=362 IH=165
+[ 1 FD] Rumore=30% Rep=4 -> IM=368 IP=530 IH=223
+[ 1 FD] Rumore=40% Rep=0 -> IM=386 IP=584 IH=279
+[ 1 FD] Rumore=40% Rep=1 -> IM=378 IP=608 IH=286
+[ 1 FD] Rumore=40% Rep=2 -> IM=426 IP=660 IH=312
+[ 1 FD] Rumore=40% Rep=3 -> IM=356 IP=560 IH=251
+[ 1 FD] Rumore=40% Rep=4 -> IM=344 IP=552 IH=264
+[ 5 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
+[ 5 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
+[ 5 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
+[ 5 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
+[ 5 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
+[ 5 FD] Rumore=5% Rep=0 -> IM=65,725 IP=9,994 IH=2,857
+[ 5 FD] Rumore=5% Rep=1 -> IM=63,469 IP=10,000 IH=2,824
+[ 5 FD] Rumore=5% Rep=2 -> IM=67,947 IP=10,000 IH=2,880
+[ 5 FD] Rumore=5% Rep=3 -> IM=59,618 IP=9,990 IH=2,833
+[ 5 FD] Rumore=5% Rep=4 -> IM=65,885 IP=9,989 IH=2,870
+[ 5 FD] Rumore=10% Rep=0 -> IM=109,732 IP=10,000 IH=4,847
+[ 5 FD] Rumore=10% Rep=1 -> IM=117,908 IP=10,000 IH=4,906
+[ 5 FD] Rumore=10% Rep=2 -> IM=115,698 IP=10,000 IH=4,901
+[ 5 FD] Rumore=10% Rep=3 -> IM=117,429 IP=10,000 IH=4,897
+[ 5 FD] Rumore=10% Rep=4 -> IM=116,734 IP=10,000 IH=4,898
+[ 5 FD] Rumore=20% Rep=0 -> IM=194,687 IP=10,000 IH=7,416
+[ 5 FD] Rumore=20% Rep=1 -> IM=199,375 IP=10,000 IH=7,411
+[ 5 FD] Rumore=20% Rep=2 -> IM=203,510 IP=10,000 IH=7,490
+[ 5 FD] Rumore=20% Rep=3 -> IM=205,285 IP=10,000 IH=7,459
+[ 5 FD] Rumore=20% Rep=4 -> IM=204,002 IP=10,000 IH=7,436
+[ 5 FD] Rumore=30% Rep=0 -> IM=267,736 IP=10,000 IH=8,771
+[ 5 FD] Rumore=30% Rep=1 -> IM=263,820 IP=10,000 IH=8,721
+[ 5 FD] Rumore=30% Rep=2 -> IM=264,573 IP=10,000 IH=8,782
+[ 5 FD] Rumore=30% Rep=3 -> IM=264,045 IP=10,000 IH=8,767
+[ 5 FD] Rumore=30% Rep=4 -> IM=266,211 IP=10,000 IH=8,788
+[ 5 FD] Rumore=40% Rep=0 -> IM=298,253 IP=10,000 IH=9,397
+[ 5 FD] Rumore=40% Rep=1 -> IM=306,567 IP=10,000 IH=9,448
+[ 5 FD] Rumore=40% Rep=2 -> IM=303,236 IP=10,000 IH=9,448
+[ 5 FD] Rumore=40% Rep=3 -> IM=306,385 IP=10,000 IH=9,430
+[ 5 FD] Rumore=40% Rep=4 -> IM=308,854 IP=10,000 IH=9,409
+[10 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
+[10 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
+[10 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
+[10 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
+[10 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
+[10 FD] Rumore=5% Rep=0 -> IM=247,125 IP=10,000 IH=5,765
+[10 FD] Rumore=5% Rep=1 -> IM=239,196 IP=10,000 IH=5,715
+[10 FD] Rumore=5% Rep=2 -> IM=235,946 IP=10,000 IH=5,758
+[10 FD] Rumore=5% Rep=3 -> IM=248,334 IP=10,000 IH=5,794
+[10 FD] Rumore=5% Rep=4 -> IM=239,452 IP=10,000 IH=5,724
+[10 FD] Rumore=10% Rep=0 -> IM=343,078 IP=10,000 IH=8,212
+[10 FD] Rumore=10% Rep=1 -> IM=339,947 IP=10,000 IH=8,199
+[10 FD] Rumore=10% Rep=2 -> IM=345,192 IP=10,000 IH=8,253
+[10 FD] Rumore=10% Rep=3 -> IM=350,704 IP=10,000 IH=8,258
+[10 FD] Rumore=10% Rep=4 -> IM=351,860 IP=10,000 IH=8,245
+[10 FD] Rumore=20% Rep=0 -> IM=391,456 IP=10,000 IH=9,635
+[10 FD] Rumore=20% Rep=1 -> IM=392,094 IP=10,000 IH=9,619
+[10 FD] Rumore=20% Rep=2 -> IM=390,426 IP=10,000 IH=9,649
+[10 FD] Rumore=20% Rep=3 -> IM=392,007 IP=10,000 IH=9,641
+[10 FD] Rumore=20% Rep=4 -> IM=393,200 IP=10,000 IH=9,603
+[10 FD] Rumore=30% Rep=0 -> IM=375,856 IP=10,000 IH=9,825
+[10 FD] Rumore=30% Rep=1 -> IM=375,924 IP=10,000 IH=9,824
+[10 FD] Rumore=30% Rep=2 -> IM=374,619 IP=10,000 IH=9,827
+[10 FD] Rumore=30% Rep=3 -> IM=377,566 IP=10,000 IH=9,848
+[10 FD] Rumore=30% Rep=4 -> IM=376,557 IP=10,000 IH=9,838
+[10 FD] Rumore=40% Rep=0 -> IM=361,782 IP=10,000 IH=9,867
+[10 FD] Rumore=40% Rep=1 -> IM=362,713 IP=10,000 IH=9,864
+[10 FD] Rumore=40% Rep=2 -> IM=361,290 IP=10,000 IH=9,853
+[10 FD] Rumore=40% Rep=3 -> IM=362,860 IP=10,000 IH=9,861
+[10 FD] Rumore=40% Rep=4 -> IM=363,459 IP=10,000 IH=9,861
+
+Risultati grezzi salvati in 'blocco2_risultati_raw.csv'.
+
+=== SINTESI: F1 medio (test pulito) per numero di FD e livello di rumore ===
+N_FD          1       5       10
+Rumore_%                        
+0         0.8723  0.8723  0.8723
+5         0.8652  0.8622  0.8575
+10        0.8619  0.8575  0.8491
+20        0.8556  0.8434  0.8308
+30        0.8497  0.8325  0.8164
+40        0.8453  0.8225  0.8026
+
+=== IM medio per numero di FD e livello di rumore ===
+N_FD         1         5         10
+Rumore_%                           
+0           0.0       0.0       0.0
+5          55.0   64529.0  242011.0
+10        113.0  115500.0  346156.0
+20        190.0  201372.0  391837.0
+30        307.0  265277.0  376104.0
+40        378.0  304659.0  362421.0

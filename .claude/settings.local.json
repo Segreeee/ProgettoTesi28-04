@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/python progettoTesi_v2.py)",
+      "Bash(.venv/Scripts/python -)",
+      "Bash(.venv/Scripts/python -c ' *)",
+      "Bash(.venv/Scripts/python -m pip freeze)",
+      "Bash(.venv/Scripts/python blocco1_analisi.py)",
+      "Bash(.venv/Scripts/python.exe genera_plot_finali.py)"
+    ]
+  }
+}

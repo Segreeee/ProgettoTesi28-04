@@ -1,0 +1,124 @@
+Braccio A: valori mancanti in F1_Score_test_pulito = 0
+Braccio C: valori mancanti in F1_Score_test_pulito = 0
+
+Tabella aggregata salvata in 'blocco1_aggregato.csv'.
+                Modello  Rumore_% Arm  Accuracy_test_sporco_mean  Accuracy_test_sporco_sd  F1_test_sporco_mean  F1_test_sporco_sd  Accuracy_test_pulito_mean  Accuracy_test_pulito_sd  F1_test_pulito_mean  F1_test_pulito_sd
+0         Decision Tree         0   A                     0.8991                   0.0000               0.8991             0.0000                     0.8991                   0.0000               0.8991             0.0000
+1         Decision Tree         0   C                     0.8991                   0.0000               0.8991             0.0000                     0.8991                   0.0000               0.8991             0.0000
+2         Decision Tree         5   A                     0.8745                   0.0024               0.8742             0.0024                     0.8880                   0.0041               0.8877             0.0041
+3         Decision Tree         5   C                     0.8842                   0.0036               0.8840             0.0035                     0.8904                   0.0026               0.8902             0.0026
+4         Decision Tree        10   A                     0.8707                   0.0023               0.8703             0.0022                     0.8889                   0.0044               0.8885             0.0045
+5         Decision Tree        10   C                     0.8804                   0.0024               0.8801             0.0025                     0.8882                   0.0034               0.8880             0.0035
+6         Decision Tree        20   A                     0.8452                   0.0065               0.8450             0.0066                     0.8833                   0.0026               0.8829             0.0027
+7         Decision Tree        20   C                     0.8669                   0.0070               0.8667             0.0070                     0.8738                   0.0062               0.8736             0.0060
+8         Decision Tree        30   A                     0.8402                   0.0059               0.8396             0.0060                     0.8786                   0.0053               0.8780             0.0052
+9         Decision Tree        30   C                     0.8594                   0.0054               0.8592             0.0052                     0.8691                   0.0021               0.8690             0.0023
+10        Decision Tree        40   A                     0.8166                   0.0071               0.8164             0.0069                     0.8714                   0.0039               0.8710             0.0040
+11        Decision Tree        40   C                     0.8514                   0.0085               0.8511             0.0084                     0.8550                   0.0076               0.8547             0.0076
+12  Logistic Regression         0   A                     0.8781                   0.0000               0.8775             0.0000                     0.8781                   0.0000               0.8775             0.0000
+13  Logistic Regression         0   C                     0.8781                   0.0000               0.8775             0.0000                     0.8781                   0.0000               0.8775             0.0000
+14  Logistic Regression         5   A                     0.8440                   0.0049               0.8434             0.0050                     0.8598                   0.0061               0.8588             0.0061
+15  Logistic Regression         5   C                     0.8489                   0.0071               0.8481             0.0071                     0.8545                   0.0066               0.8536             0.0068
+16  Logistic Regression        10   A                     0.8258                   0.0043               0.8252             0.0041                     0.8518                   0.0031               0.8506             0.0032
+17  Logistic Regression        10   C                     0.8380                   0.0041               0.8371             0.0043                     0.8458                   0.0041               0.8445             0.0042
+18  Logistic Regression        20   A                     0.8037                   0.0059               0.8032             0.0061                     0.8427                   0.0043               0.8417             0.0042
+19  Logistic Regression        20   C                     0.8290                   0.0049               0.8283             0.0046                     0.8323                   0.0063               0.8312             0.0062
+20  Logistic Regression        30   A                     0.7857                   0.0048               0.7846             0.0050                     0.8316                   0.0035               0.8304             0.0032
+21  Logistic Regression        30   C                     0.8230                   0.0045               0.8224             0.0045                     0.8242                   0.0037               0.8231             0.0036
+22  Logistic Regression        40   A                     0.7713                   0.0074               0.7703             0.0074                     0.8202                   0.0040               0.8189             0.0040
+23  Logistic Regression        40   C                     0.8181                   0.0053               0.8174             0.0053                     0.8135                   0.0053               0.8124             0.0056
+24       Neural Network         0   A                     0.8217                   0.0000               0.8208             0.0000                     0.8217                   0.0000               0.8208             0.0000
+25       Neural Network         0   C                     0.8217                   0.0000               0.8208             0.0000                     0.8217                   0.0000               0.8208             0.0000
+26       Neural Network         5   A                     0.7976                   0.0052               0.7971             0.0049                     0.8213                   0.0038               0.8204             0.0038
+27       Neural Network         5   C                     0.8096                   0.0045               0.8088             0.0042                     0.8128                   0.0038               0.8120             0.0036
+28       Neural Network        10   A                     0.7676                   0.0037               0.7677             0.0032                     0.8113                   0.0032               0.8107             0.0030
+29       Neural Network        10   C                     0.7937                   0.0052               0.7930             0.0055                     0.7985                   0.0066               0.7975             0.0067
+30       Neural Network        20   A                     0.7200                   0.0100               0.7199             0.0101                     0.8028                   0.0070               0.8021             0.0070
+31       Neural Network        20   C                     0.7763                   0.0042               0.7755             0.0038                     0.7797                   0.0059               0.7786             0.0054
+32       Neural Network        30   A                     0.6714                   0.0095               0.6716             0.0096                     0.7843                   0.0086               0.7838             0.0085
+33       Neural Network        30   C                     0.7630                   0.0087               0.7619             0.0086                     0.7578                   0.0052               0.7564             0.0048
+34       Neural Network        40   A                     0.6401                   0.0065               0.6401             0.0066                     0.7679                   0.0058               0.7666             0.0062
+35       Neural Network        40   C                     0.7530                   0.0085               0.7525             0.0081                     0.7388                   0.0069               0.7378             0.0062
+36        Random Forest         0   A                     0.8924                   0.0000               0.8918             0.0000                     0.8924                   0.0000               0.8918             0.0000
+37        Random Forest         0   C                     0.8924                   0.0000               0.8918             0.0000                     0.8924                   0.0000               0.8918             0.0000
+38        Random Forest         5   A                     0.8761                   0.0053               0.8759             0.0053                     0.8938                   0.0032               0.8932             0.0032
+39        Random Forest         5   C                     0.8847                   0.0025               0.8842             0.0024                     0.8944                   0.0013               0.8937             0.0012
+40        Random Forest        10   A                     0.8604                   0.0022               0.8603             0.0023                     0.8911                   0.0020               0.8902             0.0020
+41        Random Forest        10   C                     0.8695                   0.0058               0.8689             0.0058                     0.8873                   0.0034               0.8864             0.0034
+42        Random Forest        20   A                     0.8288                   0.0066               0.8287             0.0067                     0.8812                   0.0008               0.8803             0.0009
+43        Random Forest        20   C                     0.8482                   0.0042               0.8476             0.0041                     0.8776                   0.0041               0.8766             0.0040
+44        Random Forest        30   A                     0.8182                   0.0064               0.8175             0.0065                     0.8749                   0.0033               0.8737             0.0034
+45        Random Forest        30   C                     0.8272                   0.0068               0.8265             0.0067                     0.8631                   0.0033               0.8618             0.0033
+46        Random Forest        40   A                     0.7902                   0.0048               0.7894             0.0051                     0.8634                   0.0037               0.8620             0.0039
+47        Random Forest        40   C                     0.8152                   0.0058               0.8144             0.0058                     0.8490                   0.0066               0.8475             0.0066
+
+Correlazioni salvate in 'blocco1_correlazioni.csv'.
+                Modello  Valutazione Metrica_Inconsistenza  Pearson_r  Pearson_p  Spearman_rho  Spearman_p
+0         Decision Tree  test_sporco                    IM    -0.9408        0.0       -0.9495         0.0
+1         Decision Tree  test_sporco                    IH    -0.9496        0.0       -0.9669         0.0
+2         Decision Tree  test_pulito                    IM    -0.8894        0.0       -0.9041         0.0
+3         Decision Tree  test_pulito                    IH    -0.8938        0.0       -0.9113         0.0
+4   Logistic Regression  test_sporco                    IM    -0.9331        0.0       -0.9589         0.0
+5   Logistic Regression  test_sporco                    IH    -0.9296        0.0       -0.9727         0.0
+6   Logistic Regression  test_pulito                    IM    -0.9284        0.0       -0.9464         0.0
+7   Logistic Regression  test_pulito                    IH    -0.9353        0.0       -0.9674         0.0
+8        Neural Network  test_sporco                    IM    -0.9657        0.0       -0.9708         0.0
+9        Neural Network  test_sporco                    IH    -0.9748        0.0       -0.9807         0.0
+10       Neural Network  test_pulito                    IM    -0.9401        0.0       -0.9409         0.0
+11       Neural Network  test_pulito                    IH    -0.9625        0.0       -0.9509         0.0
+12        Random Forest  test_sporco                    IM    -0.9650        0.0       -0.9665         0.0
+13        Random Forest  test_sporco                    IH    -0.9706        0.0       -0.9736         0.0
+14        Random Forest  test_pulito                    IM    -0.9328        0.0       -0.8883         0.0
+15        Random Forest  test_pulito                    IH    -0.9550        0.0       -0.9026         0.0
+
+T-test tra bracci salvati in 'blocco1_test_bracci.csv'.
+                Modello  Valutazione  Rumore_%  F1_medio_A  F1_medio_C  Delta_A_meno_C   t_stat  p_value  Significativo
+0         Decision Tree  test_sporco         5      0.8742      0.8840         -0.0099  -5.1730   0.0008           True
+1         Decision Tree  test_pulito         5      0.8877      0.8902         -0.0025  -1.1698   0.2758          False
+2         Decision Tree  test_sporco        10      0.8703      0.8801         -0.0099  -6.5998   0.0002           True
+3         Decision Tree  test_pulito        10      0.8885      0.8880          0.0005   0.1959   0.8496          False
+4         Decision Tree  test_sporco        20      0.8450      0.8667         -0.0218  -5.0867   0.0009           True
+5         Decision Tree  test_pulito        20      0.8829      0.8736          0.0093   3.1454   0.0137           True
+6         Decision Tree  test_sporco        30      0.8396      0.8592         -0.0196  -5.5311   0.0006           True
+7         Decision Tree  test_pulito        30      0.8780      0.8690          0.0090   3.5289   0.0077           True
+8         Decision Tree  test_sporco        40      0.8164      0.8511         -0.0347  -7.1243   0.0001           True
+9         Decision Tree  test_pulito        40      0.8710      0.8547          0.0163   4.2572   0.0028           True
+10  Logistic Regression  test_sporco         5      0.8434      0.8481         -0.0047  -1.2217   0.2566          False
+11  Logistic Regression  test_pulito         5      0.8588      0.8536          0.0052   1.2712   0.2394          False
+12  Logistic Regression  test_sporco        10      0.8252      0.8371         -0.0119  -4.5025   0.0020           True
+13  Logistic Regression  test_pulito        10      0.8506      0.8445          0.0061   2.5699   0.0331           True
+14  Logistic Regression  test_sporco        20      0.8032      0.8283         -0.0251  -7.3926   0.0001           True
+15  Logistic Regression  test_pulito        20      0.8417      0.8312          0.0105   3.1219   0.0142           True
+16  Logistic Regression  test_sporco        30      0.7846      0.8224         -0.0378 -12.5552   0.0000           True
+17  Logistic Regression  test_pulito        30      0.8304      0.8231          0.0073   3.3569   0.0100           True
+18  Logistic Regression  test_sporco        40      0.7703      0.8174         -0.0471 -11.6330   0.0000           True
+19  Logistic Regression  test_pulito        40      0.8189      0.8124          0.0065   2.1253   0.0663          False
+20       Neural Network  test_sporco         5      0.7971      0.8088         -0.0117  -4.0121   0.0039           True
+21       Neural Network  test_pulito         5      0.8204      0.8120          0.0085   3.6440   0.0066           True
+22       Neural Network  test_sporco        10      0.7677      0.7930         -0.0253  -8.8306   0.0000           True
+23       Neural Network  test_pulito        10      0.8107      0.7975          0.0132   4.0373   0.0037           True
+24       Neural Network  test_sporco        20      0.7199      0.7755         -0.0556 -11.5515   0.0000           True
+25       Neural Network  test_pulito        20      0.8021      0.7786          0.0235   5.9438   0.0003           True
+26       Neural Network  test_sporco        30      0.6716      0.7619         -0.0903 -15.7123   0.0000           True
+27       Neural Network  test_pulito        30      0.7838      0.7564          0.0274   6.2836   0.0002           True
+28       Neural Network  test_sporco        40      0.6401      0.7525         -0.1124 -24.0503   0.0000           True
+29       Neural Network  test_pulito        40      0.7666      0.7378          0.0289   7.3628   0.0001           True
+30        Random Forest  test_sporco         5      0.8759      0.8842         -0.0082  -3.1671   0.0133           True
+31        Random Forest  test_pulito         5      0.8932      0.8937         -0.0005  -0.3397   0.7428          False
+32        Random Forest  test_sporco        10      0.8603      0.8689         -0.0086  -3.0741   0.0153           True
+33        Random Forest  test_pulito        10      0.8902      0.8864          0.0038   2.1575   0.0630          False
+34        Random Forest  test_sporco        20      0.8287      0.8476         -0.0189  -5.4047   0.0006           True
+35        Random Forest  test_pulito        20      0.8803      0.8766          0.0037   2.0007   0.0804          False
+36        Random Forest  test_sporco        30      0.8175      0.8265         -0.0089  -2.1473   0.0640          False
+37        Random Forest  test_pulito        30      0.8737      0.8618          0.0118   5.6190   0.0005           True
+38        Random Forest  test_sporco        40      0.7894      0.8144         -0.0250  -7.1988   0.0001           True
+39        Random Forest  test_pulito        40      0.8620      0.8475          0.0145   4.2482   0.0028           True
+
+====================================================================
+GATE — il braccio C discrimina ancora, valutando sul TEST PULITO?
+====================================================================
+  test_sporco : 18/20 confronti con differenza significativa (p<0.05) | delta medio A-C = -0.0294
+  test_pulito : 13/20 confronti con differenza significativa (p<0.05) | delta medio A-C = +0.0102
+
+  ESITO: TENERE il braccio C — discrimina nel 65% dei confronti.
+Grafico salvato in 'blocco1_plot_f1_vs_rumore.png'.

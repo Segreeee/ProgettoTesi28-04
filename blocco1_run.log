@@ -1,0 +1,89 @@
+Caricamento campione e creazione target DurataBucket...
+DurataBucket
+90-150m     3696
+150-210m    2499
+<90m        2138
+210-300m    1124
+>300m        543
+Name: count, dtype: int64
+
+Verifica dataset di valutazione: IM=0 (pulito, OK)
+FD sporcata: [(['Origin', 'Dest'], 'Distance')]
+Blacklist aggiuntiva: ['CRSElapsedTime', 'CRSArrTime', 'ArrTimeBlk']
+Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche per configurazione: 5
+------------------------------------------------------------
+[Arm A] Rumore=0% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm A] Rumore=0% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm A] Rumore=0% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm A] Rumore=0% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm A] Rumore=0% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm A] Rumore=5% Rep=0 Seed=100 -> IM=52 IP=72 IH=28
+[Arm A] Rumore=5% Rep=1 Seed=101 -> IM=53 IP=76 IH=33
+[Arm A] Rumore=5% Rep=2 Seed=102 -> IM=76 IP=104 IH=36
+[Arm A] Rumore=5% Rep=3 Seed=103 -> IM=31 IP=47 IH=21
+[Arm A] Rumore=5% Rep=4 Seed=104 -> IM=64 IP=87 IH=34
+[Arm A] Rumore=10% Rep=0 Seed=100 -> IM=149 IP=203 IH=74
+[Arm A] Rumore=10% Rep=1 Seed=101 -> IM=108 IP=158 IH=68
+[Arm A] Rumore=10% Rep=2 Seed=102 -> IM=110 IP=146 IH=61
+[Arm A] Rumore=10% Rep=3 Seed=103 -> IM=73 IP=113 IH=55
+[Arm A] Rumore=10% Rep=4 Seed=104 -> IM=124 IP=168 IH=63
+[Arm A] Rumore=20% Rep=0 Seed=100 -> IM=207 IP=298 IH=122
+[Arm A] Rumore=20% Rep=1 Seed=101 -> IM=163 IP=235 IH=108
+[Arm A] Rumore=20% Rep=2 Seed=102 -> IM=221 IP=313 IH=128
+[Arm A] Rumore=20% Rep=3 Seed=103 -> IM=179 IP=267 IH=117
+[Arm A] Rumore=20% Rep=4 Seed=104 -> IM=182 IP=278 IH=131
+[Arm A] Rumore=30% Rep=0 Seed=100 -> IM=315 IP=481 IH=208
+[Arm A] Rumore=30% Rep=1 Seed=101 -> IM=230 IP=364 IH=172
+[Arm A] Rumore=30% Rep=2 Seed=102 -> IM=381 IP=561 IH=240
+[Arm A] Rumore=30% Rep=3 Seed=103 -> IM=240 IP=362 IH=168
+[Arm A] Rumore=30% Rep=4 Seed=104 -> IM=368 IP=530 IH=224
+[Arm A] Rumore=40% Rep=0 Seed=100 -> IM=386 IP=584 IH=280
+[Arm A] Rumore=40% Rep=1 Seed=101 -> IM=378 IP=608 IH=286
+[Arm A] Rumore=40% Rep=2 Seed=102 -> IM=426 IP=660 IH=314
+[Arm A] Rumore=40% Rep=3 Seed=103 -> IM=356 IP=560 IH=252
+[Arm A] Rumore=40% Rep=4 Seed=104 -> IM=344 IP=552 IH=266
+[Arm C] Rumore=0% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=0% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=0% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=0% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=0% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=5% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=5% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=5% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=5% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=5% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=10% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=10% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=10% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=10% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=10% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=20% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=20% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=20% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=20% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=20% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=30% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=30% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=30% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=30% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=30% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=40% Rep=0 Seed=100 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=40% Rep=1 Seed=101 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=40% Rep=2 Seed=102 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=40% Rep=3 Seed=103 -> IM=0 IP=0 IH=0
+[Arm C] Rumore=40% Rep=4 Seed=104 -> IM=0 IP=0 IH=0
+
+Risultati grezzi salvati in 'blocco1_risultati_raw.csv'.
+
+=== VERIFICA BASELINE (Rumore 0%) ===
+Modello
+Decision Tree          0.8991
+Logistic Regression    0.8781
+Neural Network         0.8217
+Random Forest          0.8924
+Name: Accuracy_test_pulito, dtype: float64
+Caso puro atteso per 5 classi bilanciate: ~0.20
+Baseline nettamente sopra il caso puro: si puo' procedere con l'interpretazione dell'effetto del rumore.
+
+Sanity check (rumore 0%): max |test_sporco - test_pulito| = 0.000000
+Sanity check superato.

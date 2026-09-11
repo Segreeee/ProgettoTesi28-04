@@ -1,0 +1,300 @@
+import pandas as pd
+import numpy as np
+import networkx as nx
+from itertools import combinations, product
+from sklearn.base import clone
+from sklearn.model_selection import StratifiedKFold
+#Importo i classificatori
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
+#Importo le metriche
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
+
+N_SPLITS = 5  # numero di fold della cross-validation
+
+
+def get_global_inconsistency_metrics(df, fds_list):
+    """
+    Costruisce un Grafo dei Conflitti Globale basato su una LISTA di Dipendenze Funzionali.
+    fds_list: lista di tuple, es. [(['LHS1'], 'RHS1'), (['LHS2'], 'RHS2')]
+    """
+    G = nx.Graph()
+    G.add_nodes_from(df.index)
+
+    # Controlliamo ogni FD nella lista.
+    # Dentro ogni gruppo LHS le righe vengono raggruppate per valore del RHS:
+    # l'insieme dei conflitti e' allora il grafo multipartito completo tra i
+    # bucket (ogni riga confligge con tutte quelle di bucket diversi e con
+    # nessuna del proprio). E' equivalente a confrontare tutte le coppie una
+    # per una, ma senza doverle enumerare: indispensabile quando il LHS ha
+    # bassa cardinalita' e i gruppi diventano grandi.
+    for lhs, rhs in fds_list:
+        if df[rhs].isna().any():
+            raise ValueError(
+                f"La colonna RHS '{rhs}' contiene valori mancanti: il raggruppamento "
+                "per valore non riprodurrebbe il confronto coppia-a-coppia sui NaN."
+            )
+        for _, group in df.groupby(lhs):
+            vals = group[rhs]
+            if vals.nunique() <= 1:
+                continue
+            buckets = [list(idx) for idx in vals.groupby(vals).groups.values()]
+            for b1, b2 in combinations(buckets, 2):
+                G.add_edges_from(product(b1, b2))
+
+    IM = G.number_of_edges()
+    IP = len([n for n in G.nodes() if G.degree(n) > 0])
+
+    # IH: Trova il set minimo di tuple per sanare TUTTE le FD contemporaneamente
+    vc_set = nx.algorithms.approximation.min_weighted_vertex_cover(G)
+    IH = len(vc_set)
+
+    return IM, IP, IH, G
+
+def inject_multiple_fd_noise(df, fds_list, noise_level, corrupt_lhs=True, redundant_cols_map=None, seed=42):
+    """
+    Applica il Data Poisoning alle colonne di una o più FD contemporaneamente.
+
+    corrupt_lhs=True sporca, per le righe selezionate, TUTTE le colonne
+    coinvolte nella FD (sia il LHS/determinante che il RHS/dipendente), non
+    solo il RHS. Questo evita che il modello possa "aggirare" il danno
+    ricostruendo l'informazione persa dal LHS rimasto pulito (il LHS di una
+    FD è per definizione almeno tanto informativo quanto il RHS).
+
+    redundant_cols_map: dict opzionale {(tuple(lhs), rhs): [colonne extra]}.
+    Colonne ridondanti che codificano la stessa informazione della FD ma non
+    ne fanno formalmente parte (es. OriginAirportID, che è in corrispondenza
+    biunivoca con Origin) e che quindi rappresentano un'altra "via di fuga"
+    per il modello se lasciate pulite. Vengono sporcate sulle stesse righe.
+    """
+    df_noisy = df.copy()
+    if noise_level == 0.0:
+        return df_noisy
+
+    n_to_corrupt = int(len(df) * noise_level)
+    redundant_cols_map = redundant_cols_map or {}
+    # RandomState dedicato (non np.random globale) per rendere l'iniezione di
+    # rumore riproducibile a parità di seed, invece che diversa a ogni run.
+    rng = np.random.RandomState(seed)
+
+    # Per ogni FD, scegliamo casualmente tuple diverse da sporcare.
+    # Questo espande l'infezione nel dataset in modo molto più aggressivo e realistico.
+    for lhs, rhs in fds_list:
+        indices_to_corrupt = rng.choice(df.index, n_to_corrupt, replace=False)
+        extra_cols = redundant_cols_map.get((tuple(lhs), rhs), [])
+        columns_to_corrupt = (list(lhs) if corrupt_lhs else []) + [rhs] + list(extra_cols)
+
+        for col in columns_to_corrupt:
+            unique_values = df[col].unique()
+            for idx in indices_to_corrupt:
+                current_val = df_noisy.loc[idx, col]
+                possible_vals = [v for v in unique_values if v != current_val]
+                if possible_vals:
+                    df_noisy.loc[idx, col] = rng.choice(possible_vals)
+
+    return df_noisy
+
+# ==========================================
+# MOTORE DI VALUTAZIONE MACHINE LEARNING
+# ==========================================
+
+def _prepare_xy(df, target_col, extra_blacklist=None):
+    """
+    Applica blacklist anti-leakage, encoding del target e bilanciamento delle
+    classi, restituendo (X, y) con l'INDICE ORIGINALE del dataframe preservato.
+
+    Preservare l'indice è ciò che permette di valutare un modello addestrato
+    sui dati sporchi usando le STESSE righe di test prese dal dataset pulito:
+    poiché il target non viene mai corrotto, due dataframe che differiscono
+    solo per le feature producono esattamente le stesse righe e lo stesso
+    ordine (proprietà verificata e protetta dagli assert in ml_preparation).
+    """
+    df_ml = df.dropna(subset=[target_col]).copy()
+
+    # 1. BLACKLIST ANTI-LEAKAGE
+    cols_to_drop = [
+        'ArrDelay', 'ArrDelayMinutes', 'ArrDel15', 'ArrTime', 'ActualElapsedTime',
+        'AirTime', 'TaxiIn', 'TaxiOut', 'WheelsOff', 'WheelsOn',
+        'DepTime', 'DepDel15', 'ArrivalDelayGroups', 'DepartureDelayGroups',
+        'FlightDate', 'Tail_Number', 'Flight_Number_Reporting_Airline',
+        'CarrierDelay', 'WeatherDelay', 'NASDelay', 'SecurityDelay', 'LateAircraftDelay',
+        'Cancelled', 'CancellationCode', 'Diverted', 'FirstDepTime', 'TotalAddGTime', 'LongestAddGTime',
+        'DepDelayMinutes', 'DelayGroups' # <-- Le probabili spie
+    ]
+    if extra_blacklist:
+        cols_to_drop.extend(extra_blacklist)
+
+    extra_drops = [c for c in df_ml.columns if 'ID' in c and c not in ['OriginAirportID', 'DestAirportID']]
+    cols_to_drop.extend(extra_drops)
+
+    cols_to_drop = [c for c in cols_to_drop if c in df_ml.columns]
+    if target_col in cols_to_drop:
+        cols_to_drop.remove(target_col)
+
+    df_ml = df_ml.drop(columns=cols_to_drop, errors='ignore')
+
+    # 2. SEPARAZIONE TARGET
+    X = df_ml.drop(columns=[target_col])
+    y = df_ml[target_col]
+
+    # Trasformiamo i minuti di ritardo in binario (1 = in ritardo, 0 = puntuale)
+    if pd.api.types.is_numeric_dtype(y) and y.nunique() > 10:
+        y = (y > 15).astype(int)
+
+    le = LabelEncoder()
+    y = pd.Series(le.fit_transform(y), index=y.index, name='TARGET')
+
+    # 3. DATA-CENTRIC BALANCING (Bilanciamo i dati fisicamente!)
+    # Pareggiamo il numero di righe per ciascuna classe del target (generico per
+    # N classi, non solo per il caso binario) per non far barare il modello
+    # sulla classe maggioritaria.
+    df_temp = X.copy()
+    df_temp['TARGET_TEMP'] = y
+
+    class_groups = [group for _, group in df_temp.groupby('TARGET_TEMP')]
+    n_minimo = min(len(group) for group in class_groups)
+
+    # Sottocampionamento (Under-sampling) casuale, stesso n_minimo per ogni classe
+    balanced_samples = [group.sample(n=n_minimo, random_state=42) for group in class_groups]
+    df_balanced = pd.concat(balanced_samples).sample(frac=1, random_state=42)
+
+    X_bal = df_balanced.drop(columns=['TARGET_TEMP'])
+    y_bal = df_balanced['TARGET_TEMP']
+    return X_bal, y_bal
+
+
+def _metrics(y_true, preds):
+    """Le 4 metriche standard, weighted (i dati sono bilanciati a monte)."""
+    return {
+        "Accuracy": accuracy_score(y_true, preds),
+        "Precision": precision_score(y_true, preds, average='weighted', zero_division=0),
+        "Recall": recall_score(y_true, preds, average='weighted', zero_division=0),
+        "F1_Score": f1_score(y_true, preds, average='weighted', zero_division=0),
+    }
+
+
+def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
+    """
+    Addestra 4 modelli RAW in cross-validation stratificata a N_SPLITS fold e
+    ne restituisce le metriche medie (e la deviazione standard sui fold).
+
+    df       : dataset di TRAINING, eventualmente sporcato.
+    df_eval  : dataset opzionale da cui prendere il test set — tipicamente il
+               dataset PULITO. Se fornito, ogni fold viene valutato DUE volte:
+                 - 'test_sporco': righe di test prese da `df` (come prima);
+                 - 'test_pulito': STESSE righe di test prese da `df_eval`.
+               Il modello è sempre e solo addestrato sulle righe sporcate di
+               `df`: cambia unicamente il dataset su cui si misura.
+
+    Nomi delle metriche restituite:
+      Accuracy_test_sporco, Precision_test_sporco, Recall_test_sporco,
+      F1_Score_test_sporco (+ *_std per Accuracy e F1) e, se df_eval è
+      fornito, gli omologhi con suffisso _test_pulito.
+    """
+    X, y = _prepare_xy(df, target_col, extra_blacklist)
+
+    X_eval = None
+    if df_eval is not None:
+        X_eval, y_eval = _prepare_xy(df_eval, target_col, extra_blacklist)
+        # ASSERT 1: le righe selezionate devono essere le stesse, nello stesso
+        # ordine. Se il target venisse corrotto in futuro questa proprietà
+        # cadrebbe e il confronto sporco/pulito diventerebbe privo di senso.
+        if not X.index.equals(X_eval.index):
+            raise ValueError(
+                "Indici disallineati tra dataset di training e dataset di valutazione: "
+                "il confronto test sporco / test pulito non sarebbe valido. "
+                "Causa probabile: il target e' stato corrotto dall'iniezione di rumore."
+            )
+        # ASSERT 2: le etichette devono coincidere riga per riga.
+        if not np.array_equal(y.values, y_eval.values):
+            raise ValueError(
+                "Le etichette del dataset di training e di quello di valutazione differiscono: "
+                "il target non deve mai essere corrotto."
+            )
+        # Stesso ordine di colonne del training, per sicurezza.
+        X_eval = X_eval[X.columns]
+
+    # 4. PRE-PROCESSING DELLE FEATURE
+    numeric_features = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+    categorical_features = X.select_dtypes(include=['object', 'bool']).columns.tolist()
+
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='mean')),
+        ('scaler', StandardScaler())
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+    ])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, numeric_features),
+            ('cat', categorical_transformer, categorical_features)
+        ])
+
+    # 5. MODELLI STANDARD (Nessuna manipolazione, no class_weight)
+    models = {
+        "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
+        "Random Forest": RandomForestClassifier(random_state=42),
+        "Decision Tree": DecisionTreeClassifier(random_state=42),
+        "Neural Network": MLPClassifier(max_iter=1000, random_state=42)
+    }
+
+    # 6. CROSS-VALIDATION STRATIFICATA
+    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=42)
+    fold_scores = {name: {'test_sporco': [], 'test_pulito': []} for name in models}
+
+    for train_idx, test_idx in skf.split(X, y):
+        X_tr, y_tr = X.iloc[train_idx], y.iloc[train_idx]
+        y_te = y.iloc[test_idx]
+
+        for name, model in models.items():
+            clf = Pipeline(steps=[('preprocessor', clone(preprocessor)),
+                                  ('classifier', clone(model))])
+            try:
+                # Il training avviene SEMPRE sulle righe (eventualmente) sporcate.
+                clf.fit(X_tr, y_tr)
+
+                # Valutazione 1: test set preso dal dataset sporcato.
+                fold_scores[name]['test_sporco'].append(
+                    _metrics(y_te, clf.predict(X.iloc[test_idx]))
+                )
+                # Valutazione 2: STESSE righe, prese dal dataset pulito.
+                if X_eval is not None:
+                    fold_scores[name]['test_pulito'].append(
+                        _metrics(y_te, clf.predict(X_eval.iloc[test_idx]))
+                    )
+            except Exception as e:
+                # NaN (non 0): un fallimento resta visibile come dato mancante
+                # invece di mascherarsi da punteggio pessimo ma legittimo.
+                print(f"Errore nel modello {name}: {e}")
+                nan_metrics = {m: np.nan for m in ["Accuracy", "Precision", "Recall", "F1_Score"]}
+                fold_scores[name]['test_sporco'].append(nan_metrics)
+                if X_eval is not None:
+                    fold_scores[name]['test_pulito'].append(nan_metrics)
+
+    # 7. AGGREGAZIONE SUI FOLD
+    results = {}
+    for name, per_test in fold_scores.items():
+        row = {}
+        for suffix, folds in per_test.items():
+            if not folds:
+                continue
+            for m in ["Accuracy", "Precision", "Recall", "F1_Score"]:
+                row[f"{m}_{suffix}"] = float(np.mean([f[m] for f in folds]))
+            # Deviazione standard sui fold, per le due metriche principali.
+            row[f"Accuracy_{suffix}_std"] = float(np.std([f["Accuracy"] for f in folds], ddof=1))
+            row[f"F1_Score_{suffix}_std"] = float(np.std([f["F1_Score"] for f in folds], ddof=1))
+        results[name] = row
+
+    return results
