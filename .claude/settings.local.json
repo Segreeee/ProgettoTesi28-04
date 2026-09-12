@@ -6,7 +6,8 @@
       "Bash(.venv/Scripts/python -c ' *)",
       "Bash(.venv/Scripts/python -m pip freeze)",
       "Bash(.venv/Scripts/python blocco1_analisi.py)",
-      "Bash(.venv/Scripts/python.exe genera_plot_finali.py)"
+      "Bash(.venv/Scripts/python.exe genera_plot_finali.py)",
+      "Bash(PYTHONWARNINGS=ignore .venv/Scripts/python.exe -c ' *)"
     ]
   }
 }

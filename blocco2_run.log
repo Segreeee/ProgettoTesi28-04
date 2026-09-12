@@ -1,129 +1,117 @@
-Caricamento campione e creazione target DurataBucket...
-Verifica preliminare del pool di FD:
-  # 1 Origin+Dest -> Distance                          0 violazioni, colonne OK
-  # 2 OriginAirportID -> OriginCityName                0 violazioni, colonne OK
-  # 3 DestAirportID -> DestCityName                    0 violazioni, colonne OK
-  # 4 OriginAirportID -> OriginState                   0 violazioni, colonne OK
-  # 5 DestAirportID -> DestState                       0 violazioni, colonne OK
-  # 6 OriginAirportID -> Origin                        0 violazioni, colonne OK
-  # 7 DestAirportID -> Dest                            0 violazioni, colonne OK
-  # 8 OriginAirportID -> OriginWac                     0 violazioni, colonne OK
-  # 9 DestAirportID -> DestWac                         0 violazioni, colonne OK
-  #10 OriginAirportID -> OriginStateName               0 violazioni, colonne OK
-
-Verifica dataset di valutazione sulle 10 FD: IM=0 (pulito, OK)
-
-Configurazioni: [1, 5, 10] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
-------------------------------------------------------------
-[ 1 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
-[ 1 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
-[ 1 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
-[ 1 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
-[ 1 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
-[ 1 FD] Rumore=5% Rep=0 -> IM=52 IP=72 IH=28
-[ 1 FD] Rumore=5% Rep=1 -> IM=53 IP=76 IH=33
-[ 1 FD] Rumore=5% Rep=2 -> IM=76 IP=104 IH=36
-[ 1 FD] Rumore=5% Rep=3 -> IM=31 IP=47 IH=21
-[ 1 FD] Rumore=5% Rep=4 -> IM=64 IP=87 IH=34
-[ 1 FD] Rumore=10% Rep=0 -> IM=149 IP=203 IH=74
-[ 1 FD] Rumore=10% Rep=1 -> IM=108 IP=158 IH=68
-[ 1 FD] Rumore=10% Rep=2 -> IM=110 IP=146 IH=61
-[ 1 FD] Rumore=10% Rep=3 -> IM=73 IP=113 IH=55
-[ 1 FD] Rumore=10% Rep=4 -> IM=124 IP=168 IH=63
-[ 1 FD] Rumore=20% Rep=0 -> IM=207 IP=298 IH=122
-[ 1 FD] Rumore=20% Rep=1 -> IM=163 IP=235 IH=108
-[ 1 FD] Rumore=20% Rep=2 -> IM=221 IP=313 IH=129
-[ 1 FD] Rumore=20% Rep=3 -> IM=179 IP=267 IH=117
-[ 1 FD] Rumore=20% Rep=4 -> IM=182 IP=278 IH=130
-[ 1 FD] Rumore=30% Rep=0 -> IM=315 IP=481 IH=208
-[ 1 FD] Rumore=30% Rep=1 -> IM=230 IP=364 IH=172
-[ 1 FD] Rumore=30% Rep=2 -> IM=381 IP=561 IH=240
-[ 1 FD] Rumore=30% Rep=3 -> IM=240 IP=362 IH=165
-[ 1 FD] Rumore=30% Rep=4 -> IM=368 IP=530 IH=223
-[ 1 FD] Rumore=40% Rep=0 -> IM=386 IP=584 IH=279
-[ 1 FD] Rumore=40% Rep=1 -> IM=378 IP=608 IH=286
-[ 1 FD] Rumore=40% Rep=2 -> IM=426 IP=660 IH=312
-[ 1 FD] Rumore=40% Rep=3 -> IM=356 IP=560 IH=251
-[ 1 FD] Rumore=40% Rep=4 -> IM=344 IP=552 IH=264
-[ 5 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
-[ 5 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
-[ 5 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
-[ 5 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
-[ 5 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
-[ 5 FD] Rumore=5% Rep=0 -> IM=65,725 IP=9,994 IH=2,857
-[ 5 FD] Rumore=5% Rep=1 -> IM=63,469 IP=10,000 IH=2,824
-[ 5 FD] Rumore=5% Rep=2 -> IM=67,947 IP=10,000 IH=2,880
-[ 5 FD] Rumore=5% Rep=3 -> IM=59,618 IP=9,990 IH=2,833
-[ 5 FD] Rumore=5% Rep=4 -> IM=65,885 IP=9,989 IH=2,870
-[ 5 FD] Rumore=10% Rep=0 -> IM=109,732 IP=10,000 IH=4,847
-[ 5 FD] Rumore=10% Rep=1 -> IM=117,908 IP=10,000 IH=4,906
-[ 5 FD] Rumore=10% Rep=2 -> IM=115,698 IP=10,000 IH=4,901
-[ 5 FD] Rumore=10% Rep=3 -> IM=117,429 IP=10,000 IH=4,897
-[ 5 FD] Rumore=10% Rep=4 -> IM=116,734 IP=10,000 IH=4,898
-[ 5 FD] Rumore=20% Rep=0 -> IM=194,687 IP=10,000 IH=7,416
-[ 5 FD] Rumore=20% Rep=1 -> IM=199,375 IP=10,000 IH=7,411
-[ 5 FD] Rumore=20% Rep=2 -> IM=203,510 IP=10,000 IH=7,490
-[ 5 FD] Rumore=20% Rep=3 -> IM=205,285 IP=10,000 IH=7,459
-[ 5 FD] Rumore=20% Rep=4 -> IM=204,002 IP=10,000 IH=7,436
-[ 5 FD] Rumore=30% Rep=0 -> IM=267,736 IP=10,000 IH=8,771
-[ 5 FD] Rumore=30% Rep=1 -> IM=263,820 IP=10,000 IH=8,721
-[ 5 FD] Rumore=30% Rep=2 -> IM=264,573 IP=10,000 IH=8,782
-[ 5 FD] Rumore=30% Rep=3 -> IM=264,045 IP=10,000 IH=8,767
-[ 5 FD] Rumore=30% Rep=4 -> IM=266,211 IP=10,000 IH=8,788
-[ 5 FD] Rumore=40% Rep=0 -> IM=298,253 IP=10,000 IH=9,397
-[ 5 FD] Rumore=40% Rep=1 -> IM=306,567 IP=10,000 IH=9,448
-[ 5 FD] Rumore=40% Rep=2 -> IM=303,236 IP=10,000 IH=9,448
-[ 5 FD] Rumore=40% Rep=3 -> IM=306,385 IP=10,000 IH=9,430
-[ 5 FD] Rumore=40% Rep=4 -> IM=308,854 IP=10,000 IH=9,409
-[10 FD] Rumore=0% Rep=0 -> IM=0 IP=0 IH=0
-[10 FD] Rumore=0% Rep=1 -> IM=0 IP=0 IH=0
-[10 FD] Rumore=0% Rep=2 -> IM=0 IP=0 IH=0
-[10 FD] Rumore=0% Rep=3 -> IM=0 IP=0 IH=0
-[10 FD] Rumore=0% Rep=4 -> IM=0 IP=0 IH=0
-[10 FD] Rumore=5% Rep=0 -> IM=247,125 IP=10,000 IH=5,765
-[10 FD] Rumore=5% Rep=1 -> IM=239,196 IP=10,000 IH=5,715
-[10 FD] Rumore=5% Rep=2 -> IM=235,946 IP=10,000 IH=5,758
-[10 FD] Rumore=5% Rep=3 -> IM=248,334 IP=10,000 IH=5,794
-[10 FD] Rumore=5% Rep=4 -> IM=239,452 IP=10,000 IH=5,724
-[10 FD] Rumore=10% Rep=0 -> IM=343,078 IP=10,000 IH=8,212
-[10 FD] Rumore=10% Rep=1 -> IM=339,947 IP=10,000 IH=8,199
-[10 FD] Rumore=10% Rep=2 -> IM=345,192 IP=10,000 IH=8,253
-[10 FD] Rumore=10% Rep=3 -> IM=350,704 IP=10,000 IH=8,258
-[10 FD] Rumore=10% Rep=4 -> IM=351,860 IP=10,000 IH=8,245
-[10 FD] Rumore=20% Rep=0 -> IM=391,456 IP=10,000 IH=9,635
-[10 FD] Rumore=20% Rep=1 -> IM=392,094 IP=10,000 IH=9,619
-[10 FD] Rumore=20% Rep=2 -> IM=390,426 IP=10,000 IH=9,649
-[10 FD] Rumore=20% Rep=3 -> IM=392,007 IP=10,000 IH=9,641
-[10 FD] Rumore=20% Rep=4 -> IM=393,200 IP=10,000 IH=9,603
-[10 FD] Rumore=30% Rep=0 -> IM=375,856 IP=10,000 IH=9,825
-[10 FD] Rumore=30% Rep=1 -> IM=375,924 IP=10,000 IH=9,824
-[10 FD] Rumore=30% Rep=2 -> IM=374,619 IP=10,000 IH=9,827
-[10 FD] Rumore=30% Rep=3 -> IM=377,566 IP=10,000 IH=9,848
-[10 FD] Rumore=30% Rep=4 -> IM=376,557 IP=10,000 IH=9,838
-[10 FD] Rumore=40% Rep=0 -> IM=361,782 IP=10,000 IH=9,867
-[10 FD] Rumore=40% Rep=1 -> IM=362,713 IP=10,000 IH=9,864
-[10 FD] Rumore=40% Rep=2 -> IM=361,290 IP=10,000 IH=9,853
-[10 FD] Rumore=40% Rep=3 -> IM=362,860 IP=10,000 IH=9,861
-[10 FD] Rumore=40% Rep=4 -> IM=363,459 IP=10,000 IH=9,861
-
-Risultati grezzi salvati in 'blocco2_risultati_raw.csv'.
-
-=== SINTESI: F1 medio (test pulito) per numero di FD e livello di rumore ===
+[2026-09-12 00:11:27] ============================================================
+[2026-09-12 00:11:27] Blocco 2 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-12 00:11:27]   FD # 1 Origin+Dest -> Distance                  gruppi= 4624 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 2 OriginAirportID -> OriginCityName        gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 3 DestAirportID -> DestCityName            gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 4 OriginAirportID -> OriginState           gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 5 DestAirportID -> DestState               gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 6 OriginAirportID -> Origin                gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 7 DestAirportID -> Dest                    gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 8 OriginAirportID -> OriginWac             gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD # 9 DestAirportID -> DestWac                 gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27]   FD #10 OriginAirportID -> OriginStateName       gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-12 00:11:27] Verifica superata: le 10 FD hanno 0 violazioni sul campione. Salvata in blocco2_verifica_fd.csv
+[2026-09-12 00:11:28] Campione di valutazione sulle 10 FD: IM=0 (pulito, OK)
+[2026-09-12 00:11:28] RAM disponibile 3.7 GB -> 2 processi paralleli, Random Forest con 8 thread
+[2026-09-12 00:11:28] Configurazioni: [1, 5, 10] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-12 00:11:28] Lavori totali 90, gia' completati 0, da eseguire 90
+[2026-09-12 00:12:33] LAVORO 1/90  (1, 0, 1)  IM=0  fine stimata tra 96 min
+[2026-09-12 00:12:41] LAVORO 2/90  (1, 0, 0)  IM=0  fine stimata tra 54 min
+[2026-09-12 00:13:46] LAVORO 3/90  (1, 0, 3)  IM=0  fine stimata tra 67 min
+[2026-09-12 00:13:48] LAVORO 4/90  (1, 0, 2)  IM=0  fine stimata tra 50 min
+[2026-09-12 00:14:57] LAVORO 5/90  (5, 0, 0)  IM=0  fine stimata tra 59 min
+[2026-09-12 00:14:59] LAVORO 6/90  (1, 0, 4)  IM=0  fine stimata tra 49 min
+[2026-09-12 00:16:10] LAVORO 7/90  (5, 0, 1)  IM=0  fine stimata tra 56 min
+[2026-09-12 00:16:17] LAVORO 8/90  (5, 0, 2)  IM=0  fine stimata tra 49 min
+[2026-09-12 00:17:19] LAVORO 9/90  (5, 0, 3)  IM=0  fine stimata tra 53 min
+[2026-09-12 00:17:24] LAVORO 10/90  (5, 0, 4)  IM=0  fine stimata tra 47 min
+[2026-09-12 00:18:23] LAVORO 11/90  (10, 0, 0)  IM=0  fine stimata tra 50 min
+[2026-09-12 00:18:23] LAVORO 12/90  (10, 0, 1)  IM=0  fine stimata tra 45 min
+[2026-09-12 00:19:23] LAVORO 13/90  (10, 0, 3)  IM=0  fine stimata tra 47 min
+[2026-09-12 00:19:30] LAVORO 14/90  (10, 0, 2)  IM=0  fine stimata tra 44 min
+[2026-09-12 00:20:21] LAVORO 15/90  (10, 0, 4)  IM=0  fine stimata tra 44 min
+[2026-09-12 00:21:47] LAVORO 16/90  (1, 5, 0)  IM=336  fine stimata tra 48 min
+[2026-09-12 00:22:39] LAVORO 17/90  (1, 5, 1)  IM=353  fine stimata tra 48 min
+[2026-09-12 00:24:06] LAVORO 18/90  (1, 5, 2)  IM=538  fine stimata tra 51 min
+[2026-09-12 00:25:00] LAVORO 19/90  (1, 5, 3)  IM=455  fine stimata tra 51 min
+[2026-09-12 00:26:24] LAVORO 20/90  (1, 5, 4)  IM=372  fine stimata tra 52 min
+[2026-09-12 00:27:17] LAVORO 21/90  (5, 5, 0)  IM=531,194  fine stimata tra 52 min
+[2026-09-12 00:28:48] LAVORO 22/90  (5, 5, 1)  IM=517,044  fine stimata tra 54 min
+[2026-09-12 00:29:40] LAVORO 23/90  (5, 5, 2)  IM=525,065  fine stimata tra 53 min
+[2026-09-12 00:31:04] LAVORO 24/90  (5, 5, 3)  IM=507,394  fine stimata tra 54 min
+[2026-09-12 00:31:55] LAVORO 25/90  (5, 5, 4)  IM=519,028  fine stimata tra 53 min
+[2026-09-12 00:33:33] LAVORO 26/90  (10, 5, 0)  IM=2,106,448  fine stimata tra 54 min
+[2026-09-12 00:34:27] LAVORO 27/90  (10, 5, 1)  IM=2,046,737  fine stimata tra 54 min
+[2026-09-12 00:36:03] LAVORO 28/90  (10, 5, 2)  IM=2,046,565  fine stimata tra 54 min
+[2026-09-12 00:36:59] LAVORO 29/90  (10, 5, 3)  IM=2,049,272  fine stimata tra 54 min
+[2026-09-12 00:38:37] LAVORO 30/90  (10, 5, 4)  IM=2,076,837  fine stimata tra 54 min
+[2026-09-12 00:39:24] LAVORO 31/90  (1, 10, 0)  IM=809  fine stimata tra 53 min
+[2026-09-12 00:40:57] LAVORO 32/90  (1, 10, 1)  IM=711  fine stimata tra 53 min
+[2026-09-12 00:41:43] LAVORO 33/90  (1, 10, 2)  IM=693  fine stimata tra 52 min
+[2026-09-12 00:43:11] LAVORO 34/90  (1, 10, 3)  IM=934  fine stimata tra 52 min
+[2026-09-12 00:44:04] LAVORO 35/90  (1, 10, 4)  IM=788  fine stimata tra 51 min
+[2026-09-12 00:45:43] LAVORO 36/90  (5, 10, 0)  IM=971,573  fine stimata tra 51 min
+[2026-09-12 00:46:19] LAVORO 37/90  (5, 10, 1)  IM=981,778  fine stimata tra 50 min
+[2026-09-12 00:48:02] LAVORO 38/90  (5, 10, 2)  IM=947,761  fine stimata tra 50 min
+[2026-09-12 00:48:45] LAVORO 39/90  (5, 10, 3)  IM=949,911  fine stimata tra 49 min
+[2026-09-12 00:50:48] LAVORO 40/90  (5, 10, 4)  IM=979,722  fine stimata tra 49 min
+[2026-09-12 00:51:21] LAVORO 41/90  (10, 10, 0)  IM=2,987,394  fine stimata tra 48 min
+[2026-09-12 00:53:21] LAVORO 42/90  (10, 10, 1)  IM=2,914,616  fine stimata tra 48 min
+[2026-09-12 00:53:54] LAVORO 43/90  (10, 10, 2)  IM=2,955,448  fine stimata tra 46 min
+[2026-09-12 00:55:48] LAVORO 44/90  (10, 10, 3)  IM=2,955,389  fine stimata tra 46 min
+[2026-09-12 00:56:14] LAVORO 45/90  (10, 10, 4)  IM=2,981,727  fine stimata tra 45 min
+[2026-09-12 00:58:03] LAVORO 46/90  (1, 20, 0)  IM=1,081  fine stimata tra 45 min
+[2026-09-12 00:58:35] LAVORO 47/90  (1, 20, 1)  IM=1,619  fine stimata tra 43 min
+[2026-09-12 01:00:24] LAVORO 48/90  (1, 20, 2)  IM=1,634  fine stimata tra 43 min
+[2026-09-12 01:00:57] LAVORO 49/90  (1, 20, 3)  IM=1,757  fine stimata tra 41 min
+[2026-09-12 01:02:38] LAVORO 50/90  (1, 20, 4)  IM=1,610  fine stimata tra 41 min
+[2026-09-12 01:03:08] LAVORO 51/90  (5, 20, 0)  IM=1,672,020  fine stimata tra 40 min
+[2026-09-12 01:04:58] LAVORO 52/90  (5, 20, 1)  IM=1,683,024  fine stimata tra 39 min
+[2026-09-12 01:05:26] LAVORO 53/90  (5, 20, 2)  IM=1,645,470  fine stimata tra 38 min
+[2026-09-12 01:07:14] LAVORO 54/90  (5, 20, 3)  IM=1,685,507  fine stimata tra 37 min
+[2026-09-12 01:07:29] LAVORO 55/90  (5, 20, 4)  IM=1,650,563  fine stimata tra 36 min
+[2026-09-12 01:09:43] LAVORO 56/90  (10, 20, 0)  IM=3,274,677  fine stimata tra 35 min
+[2026-09-12 01:10:05] LAVORO 57/90  (10, 20, 1)  IM=3,288,932  fine stimata tra 34 min
+[2026-09-12 01:11:59] LAVORO 58/90  (10, 20, 2)  IM=3,257,587  fine stimata tra 33 min
+[2026-09-12 01:12:19] LAVORO 59/90  (10, 20, 3)  IM=3,256,972  fine stimata tra 32 min
+[2026-09-12 01:14:12] LAVORO 60/90  (10, 20, 4)  IM=3,266,544  fine stimata tra 31 min
+[2026-09-12 01:14:32] LAVORO 61/90  (1, 30, 0)  IM=2,096  fine stimata tra 30 min
+[2026-09-12 01:16:32] LAVORO 62/90  (1, 30, 1)  IM=2,287  fine stimata tra 29 min
+[2026-09-12 01:16:44] LAVORO 63/90  (1, 30, 2)  IM=2,367  fine stimata tra 28 min
+[2026-09-12 01:18:59] LAVORO 64/90  (1, 30, 3)  IM=2,213  fine stimata tra 27 min
+[2026-09-12 01:19:00] LAVORO 65/90  (1, 30, 4)  IM=2,324  fine stimata tra 26 min
+[2026-09-12 01:21:24] LAVORO 66/90  (5, 30, 1)  IM=2,146,526  fine stimata tra 25 min
+[2026-09-12 01:21:39] LAVORO 67/90  (5, 30, 0)  IM=2,140,620  fine stimata tra 24 min
+[2026-09-12 01:23:35] LAVORO 68/90  (5, 30, 2)  IM=2,119,571  fine stimata tra 23 min
+[2026-09-12 01:23:49] LAVORO 69/90  (5, 30, 3)  IM=2,109,373  fine stimata tra 22 min
+[2026-09-12 01:25:29] LAVORO 70/90  (5, 30, 4)  IM=2,142,340  fine stimata tra 21 min
+[2026-09-12 01:26:09] LAVORO 71/90  (10, 30, 0)  IM=3,068,843  fine stimata tra 20 min
+[2026-09-12 01:27:55] LAVORO 72/90  (10, 30, 1)  IM=3,077,987  fine stimata tra 19 min
+[2026-09-12 01:28:37] LAVORO 73/90  (10, 30, 2)  IM=3,054,909  fine stimata tra 18 min
+[2026-09-12 01:30:19] LAVORO 74/90  (10, 30, 3)  IM=3,079,214  fine stimata tra 17 min
+[2026-09-12 01:31:06] LAVORO 75/90  (10, 30, 4)  IM=3,069,476  fine stimata tra 16 min
+[2026-09-12 01:32:33] LAVORO 76/90  (1, 40, 0)  IM=2,842  fine stimata tra 15 min
+[2026-09-12 01:33:27] LAVORO 77/90  (1, 40, 1)  IM=2,905  fine stimata tra 14 min
+[2026-09-12 01:34:35] LAVORO 78/90  (1, 40, 2)  IM=2,605  fine stimata tra 13 min
+[2026-09-12 01:35:42] LAVORO 79/90  (1, 40, 3)  IM=2,847  fine stimata tra 12 min
+[2026-09-12 01:36:37] LAVORO 80/90  (1, 40, 4)  IM=2,879  fine stimata tra 11 min
+[2026-09-12 01:37:36] LAVORO 81/90  (5, 40, 0)  IM=2,430,479  fine stimata tra 10 min
+[2026-09-12 01:38:34] LAVORO 82/90  (5, 40, 1)  IM=2,434,115  fine stimata tra 8 min
+[2026-09-12 01:39:32] LAVORO 83/90  (5, 40, 2)  IM=2,447,742  fine stimata tra 7 min
+[2026-09-12 01:40:34] LAVORO 84/90  (5, 40, 3)  IM=2,409,960  fine stimata tra 6 min
+[2026-09-12 01:41:26] LAVORO 85/90  (5, 40, 4)  IM=2,450,294  fine stimata tra 5 min
+[2026-09-12 01:43:03] LAVORO 86/90  (10, 40, 0)  IM=2,913,826  fine stimata tra 4 min
+[2026-09-12 01:43:56] LAVORO 87/90  (10, 40, 1)  IM=2,920,678  fine stimata tra 3 min
+[2026-09-12 01:45:33] LAVORO 88/90  (10, 40, 2)  IM=2,919,559  fine stimata tra 2 min
+[2026-09-12 01:46:23] LAVORO 89/90  (10, 40, 3)  IM=2,918,296  fine stimata tra 1 min
+[2026-09-12 01:47:59] LAVORO 90/90  (10, 40, 4)  IM=2,912,734  fine stimata tra 0 min
+[2026-09-12 01:48:00] Sintesi — F1 medio sul test pulito, per numero di FD:
 N_FD          1       5       10
 Rumore_%                        
-0         0.8723  0.8723  0.8723
-5         0.8652  0.8622  0.8575
-10        0.8619  0.8575  0.8491
-20        0.8556  0.8434  0.8308
-30        0.8497  0.8325  0.8164
-40        0.8453  0.8225  0.8026
-
-=== IM medio per numero di FD e livello di rumore ===
-N_FD         1         5         10
-Rumore_%                           
-0           0.0       0.0       0.0
-5          55.0   64529.0  242011.0
-10        113.0  115500.0  346156.0
-20        190.0  201372.0  391837.0
-30        307.0  265277.0  376104.0
-40        378.0  304659.0  362421.0
+0         0.9233  0.9233  0.9233
+5         0.9169  0.9151  0.9129
+10        0.9141  0.9104  0.9071
+20        0.9109  0.9039  0.8961
+30        0.9070  0.8966  0.8848
+40        0.9034  0.8900  0.8724
+[2026-09-12 01:48:00] FINE. Righe nel CSV: 360 (attese 360)

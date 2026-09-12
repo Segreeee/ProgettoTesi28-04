@@ -1,172 +1,53 @@
 """
-Genera i grafici esplicativi e le tabelle riassuntive per la relazione di tesi.
+Genera i grafici esplicativi e le tabelle riassuntive per la relazione.
 
-Blocco 1 (blocco1_risultati_raw.csv): disegno a due bracci sul target
-DurataBucket, con doppia valutazione (test sporco / test pulito).
-Blocco 2 (blocco2_risultati_raw.csv, opzionale): scaling 1 -> 5 -> 10 FD.
+Blocco 1 (blocco1_risultati_raw.csv): una FD (rotta -> distanza) con le
+colonne ridondanti; modello addestrato sui dati sporcati e valutato sul test
+pulito e, per confronto, sul test sporcato.
+Blocco 2 (blocco2_risultati_raw.csv, se presente): 1, 5 e 10 FD corrotte.
 
 Palette e regole di stile seguono lo skill "dataviz" (palette categoriale
-validata, un solo hue per serie, niente doppio asse, griglia recessiva).
+validata assegnata in ordine fisso, niente doppio asse, griglia recessiva).
 """
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 
-# ---------------------------------------------------------------
-# Palette (dataviz skill, modalita' light)
-# ---------------------------------------------------------------
-BLUE = "#2a78d6"      # slot 1 - Braccio A (incoerente)
-ORANGE = "#eb6834"    # slot 2 - Braccio C (coerente)
-AQUA = "#1baf7a"       # slot 3 - serie accessoria
-INK = "#0b0b0b"
-INK_SECONDARY = "#52514e"
-INK_MUTED = "#898781"
-GRID = "#e1e0d9"
-AXIS = "#c3c2b7"
-SURFACE = "#fcfcfb"
+BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
+INK, INK_SECONDARY, INK_MUTED = "#0b0b0b", "#52514e", "#898781"
+GRID, AXIS, SURFACE = "#e1e0d9", "#c3c2b7", "#fcfcfb"
+PALETTE = [BLUE, ORANGE, AQUA, YELLOW]      # ordine fisso, mai ciclato
 
 plt.rcParams.update({
-    "figure.facecolor": SURFACE,
-    "axes.facecolor": SURFACE,
-    "axes.edgecolor": AXIS,
-    "axes.labelcolor": INK_SECONDARY,
-    "text.color": INK,
-    "xtick.color": INK_MUTED,
-    "ytick.color": INK_MUTED,
-    "grid.color": GRID,
-    "font.family": "sans-serif",
-    "font.size": 10.5,
-    "axes.titlesize": 12,
-    "axes.titleweight": "bold",
-    "axes.titlecolor": INK,
+    "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "axes.edgecolor": AXIS,
+    "axes.labelcolor": INK_SECONDARY, "text.color": INK,
+    "xtick.color": INK_MUTED, "ytick.color": INK_MUTED, "grid.color": GRID,
+    "font.family": "sans-serif", "font.size": 10.5,
+    "axes.titlesize": 12, "axes.titleweight": "bold", "axes.titlecolor": INK,
 })
 
-ARMS = [
-    ('A', BLUE, 'o', 'Braccio A — incoerente (viola la FD)'),
-    ('C', ORANGE, 's', 'Braccio C — coerente (preserva la FD)'),
-]
 
-
-def style_axes(ax):
+def stile(ax):
     ax.grid(axis="y", linewidth=0.8, zorder=0)
     ax.set_axisbelow(True)
-    for side in ("top", "right"):
-        ax.spines[side].set_visible(False)
-    for side in ("left", "bottom"):
-        ax.spines[side].set_color(AXIS)
-        ax.spines[side].set_linewidth(0.8)
+    for s in ("top", "right"):
+        ax.spines[s].set_visible(False)
+    for s in ("left", "bottom"):
+        ax.spines[s].set_color(AXIS)
+        ax.spines[s].set_linewidth(0.8)
     ax.tick_params(length=0)
 
 
-def serie(df, arm, tt):
-    """F1 medio sui 4 modelli (± std) per livello di rumore."""
-    sub = df[df['Arm'] == arm]
-    return (sub.groupby('Rumore_%')[f'F1_Score_{tt}']
-               .agg(['mean', 'std']).reset_index().sort_values('Rumore_%'))
+def linea(ax, x, y, colore, etichetta=None, marker='o'):
+    ax.plot(x, y, color=colore, linewidth=2, marker=marker, markersize=6,
+            markeredgecolor=SURFACE, markeredgewidth=1, label=etichetta, zorder=3)
 
 
-# =================================================================
-# BLOCCO 1
-# =================================================================
-df1 = pd.read_csv('blocco1_risultati_raw.csv')
-
-# --- Grafico 1 (PRINCIPALE): F1 vs rumore sul TEST PULITO ---
-# NOTA: nei grafici aggregati non si disegna una banda di dispersione. La
-# deviazione standard su queste serie e' calcolata su 4 modelli diversi messi
-# insieme, quindi misura la differenza FRA modelli (la rete neurale sta molto
-# sotto il decision tree), non l'incertezza della stima: presentarla come banda
-# sarebbe fuorviante. La variabilita' vera, fra le 5 repliche di uno stesso
-# modello, e' mostrata nel grafico per modello.
-fig, ax = plt.subplots(figsize=(7.5, 5))
-for arm, color, marker, label in ARMS:
-    s = serie(df1, arm, 'test_pulito')
-    ax.plot(s['Rumore_%'], s['mean'], color=color, linewidth=2, marker=marker,
-            markersize=6, markeredgecolor=SURFACE, markeredgewidth=1, label=label, zorder=3)
-ax.set_xlabel("Rumore nel training (%)")
-ax.set_ylabel("F1 sul test pulito (media dei 4 modelli)")
-ax.set_title("Training sporcato, test su dati puliti:\nentrambi i tipi di errore degradano le predizioni",
-             loc="left", pad=52)
-ax.legend(frameon=False, loc="upper left", ncols=1, bbox_to_anchor=(0, 1.20))
-style_axes(ax)
-fig.tight_layout()
-fig.savefig("plot_blocco1_f1_test_pulito.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-
-# --- Grafico 2: confronto metodologico test sporco vs test pulito ---
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.8), sharey=True)
-for ax, tt, titolo in zip(
-        axes, ['test_sporco', 'test_pulito'],
-        ["Test sui dati SPORCHI (metodo precedente)", "Test sui dati PULITI (metodo corretto)"]):
-    for arm, color, marker, label in ARMS:
-        s = serie(df1, arm, tt)
-        ax.plot(s['Rumore_%'], s['mean'], color=color, linewidth=2, marker=marker,
-                markersize=6, markeredgecolor=SURFACE, markeredgewidth=1, label=label, zorder=3)
-    ax.set_title(titolo, loc="left", fontsize=11)
-    ax.set_xlabel("Rumore nel training (%)")
-    style_axes(ax)
-axes[0].set_ylabel("F1 medio (4 modelli)")
-handles, labels = axes[0].get_legend_handles_labels()
-fig.legend(handles, labels, frameon=False, loc="upper center", ncols=2, bbox_to_anchor=(0.5, 1.06))
-fig.suptitle("Perche' il dataset di test cambia la conclusione", x=0.02, ha="left", fontsize=13, y=1.13)
-fig.tight_layout()
-fig.savefig("plot_blocco1_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-
-# --- Grafico 3: dettaglio per modello, test pulito ---
-modelli = sorted(df1['Modello'].unique())
-fig, axes = plt.subplots(2, 2, figsize=(11, 8.5), sharex=True, sharey=True)
-axes = axes.flatten()
-for ax, modello in zip(axes, modelli):
-    for arm, color, marker, label in ARMS:
-        sub = df1[(df1['Modello'] == modello) & (df1['Arm'] == arm)]
-        s = sub.groupby('Rumore_%')['F1_Score_test_pulito'].agg(['mean', 'std']).reset_index()
-        ax.fill_between(s['Rumore_%'], s['mean'] - s['std'], s['mean'] + s['std'],
-                        color=color, alpha=0.15, linewidth=0)
-        ax.plot(s['Rumore_%'], s['mean'], color=color, linewidth=2, marker=marker,
-                markersize=5, markeredgecolor=SURFACE, markeredgewidth=1, label=label, zorder=3)
-    ax.set_title(modello, loc="left", fontsize=11)
-    style_axes(ax)
-for ax in axes[2:]:
-    ax.set_xlabel("Rumore nel training (%)")
-for ax in [axes[0], axes[2]]:
-    ax.set_ylabel("F1 sul test pulito")
-handles, labels = axes[0].get_legend_handles_labels()
-fig.legend(handles, labels, frameon=False, loc="upper center", ncols=2, bbox_to_anchor=(0.5, 1.03))
-fig.suptitle("Blocco 1 — F1 sul test pulito, per modello", x=0.02, ha="left", fontsize=13, y=0.99)
-fig.tight_layout(rect=[0, 0, 1, 0.95])
-fig.savefig("plot_blocco1_f1_per_modello.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-
-# --- Grafico 4: correlazione IM/IH vs F1 (braccio A, test pulito) ---
-corr = pd.read_csv('blocco1_correlazioni.csv')
-corr = corr[corr['Valutazione'] == 'test_pulito']
-x = range(len(modelli))
-width = 0.35
-fig, ax = plt.subplots(figsize=(8, 5.5))
-im_vals = [corr[(corr['Modello'] == m) & (corr['Metrica_Inconsistenza'] == 'IM')]['Pearson_r'].iloc[0] for m in modelli]
-ih_vals = [corr[(corr['Modello'] == m) & (corr['Metrica_Inconsistenza'] == 'IH')]['Pearson_r'].iloc[0] for m in modelli]
-ax.bar([i - width / 2 for i in x], im_vals, width=width, color=BLUE, label="IM (conflitti a coppie)", zorder=3)
-ax.bar([i + width / 2 for i in x], ih_vals, width=width, color=AQUA, label="IH (tuple minime da correggere)", zorder=3)
-ax.axhline(0, color=AXIS, linewidth=0.8)
-ax.set_xticks(list(x))
-ax.set_xticklabels(modelli)
-ax.set_ylim(-1.05, 0.1)
-ax.set_ylabel("Correlazione di Pearson con F1 (test pulito)")
-ax.set_title("Piu' cresce l'inconsistenza nel training,\npiu' peggiorano le predizioni sui dati puliti",
-             loc="left", pad=52)
-ax.legend(frameon=False, loc="upper left", ncols=2, bbox_to_anchor=(0, 1.16))
-style_axes(ax)
-fig.tight_layout()
-fig.savefig("plot_blocco1_correlazioni.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-
-print("Grafici Blocco 1 salvati: plot_blocco1_f1_test_pulito.png, "
-      "plot_blocco1_sporco_vs_pulito.png, plot_blocco1_f1_per_modello.png, "
-      "plot_blocco1_correlazioni.png")
+def formato_migliaia(ax):
+    ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
 
 
-# --- Tabella riassuntiva Blocco 1 ---
 def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths):
     fig, ax = plt.subplots(figsize=(11, 0.9 + 0.5 * len(df)))
     ax.axis("off")
@@ -191,27 +72,91 @@ def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths):
     plt.close(fig)
 
 
-tab = df1[df1['Arm'] == 'A'].groupby('Rumore_%').agg(IM=('IM', 'mean'), IH=('IH', 'mean')).reset_index()
-for arm in ['A', 'C']:
-    for tt in ['test_sporco', 'test_pulito']:
-        m = df1[df1['Arm'] == arm].groupby('Rumore_%')[f'F1_Score_{tt}'].mean().reset_index()
-        tab[f'{arm}_{tt}'] = m[f'F1_Score_{tt}'].round(4).values
-tab['IM'] = tab['IM'].round(0).astype(int)
-tab['IH'] = tab['IH'].round(0).astype(int)
-tab['Delta_pulito'] = (tab['A_test_pulito'] - tab['C_test_pulito']).round(4)
-tab = tab[['Rumore_%', 'IM', 'IH', 'A_test_sporco', 'C_test_sporco',
-           'A_test_pulito', 'C_test_pulito', 'Delta_pulito']]
-tab.to_csv('tabella_riassuntiva_blocco1.csv', index=False)
-salva_tabella_immagine(
-    tab, "tabella_riassuntiva_blocco1.png",
-    "Blocco 1 — F1 per livello di rumore: test sporco vs test pulito, bracci A e C",
-    ["Rumore\n%", "IM\n(braccio A)", "IH\n(braccio A)",
-     "F1 A\ntest sporco", "F1 C\ntest sporco",
-     "F1 A\ntest pulito", "F1 C\ntest pulito", "Delta A-C\ntest pulito"],
-    col_widths=[0.6, 0.9, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0],
-)
-print("Tabella Blocco 1 salvata: tabella_riassuntiva_blocco1.csv/.png")
+# =================================================================
+# BLOCCO 1
+# =================================================================
+df1 = pd.read_csv('blocco1_risultati_raw.csv')
+modelli = sorted(df1['Modello'].unique())
+COLORI_MODELLI = dict(zip(modelli, PALETTE))
 
+# --- Grafico 1: F1 sul test pulito, per modello (banda = std sulle repliche) ---
+fig, ax = plt.subplots(figsize=(8, 5.2))
+for m in modelli:
+    s = df1[df1['Modello'] == m].groupby('Rumore_%')['F1_Score_test_pulito'].agg(['mean', 'std'])
+    ax.fill_between(s.index, s['mean'] - s['std'], s['mean'] + s['std'],
+                    color=COLORI_MODELLI[m], alpha=0.12, linewidth=0)
+    linea(ax, s.index, s['mean'].values, COLORI_MODELLI[m], m)
+ax.set_xlabel("Rumore nel training (%)")
+ax.set_ylabel("F1 sul test pulito (± std sulle repliche)")
+ax.set_title("Training sporcato, test su dati puliti: F1 per modello", loc="left", pad=62)
+ax.legend(frameon=False, loc="upper left", ncols=2, bbox_to_anchor=(0, 1.22))
+stile(ax)
+fig.tight_layout()
+fig.savefig("plot_blocco1_f1_test_pulito.png", dpi=300, bbox_inches="tight")
+plt.close(fig)
+
+# --- Grafico 2: test sporco vs test pulito (media dei 4 modelli) ---
+# Nessuna banda: la media e' su 4 modelli diversi e la loro dispersione non e'
+# un'incertezza della misura.
+fig, ax = plt.subplots(figsize=(8, 5.2))
+for tt, colore, marker, etichetta in [
+        ('test_sporco', ORANGE, 's', 'Test su dati sporchi (il modello riceve input corrotti)'),
+        ('test_pulito', BLUE, 'o', 'Test su dati puliti (misura quanto il modello ha imparato male)')]:
+    s = df1.groupby('Rumore_%')[f'F1_Score_{tt}'].mean()
+    linea(ax, s.index, s.values, colore, etichetta, marker)
+ax.set_xlabel("Rumore nel training (%)")
+ax.set_ylabel("F1 (media dei 4 modelli)")
+ax.set_title("Dove si misura cambia quanto danno si vede", loc="left", pad=52)
+ax.legend(frameon=False, loc="upper left", ncols=1, bbox_to_anchor=(0, 1.20))
+stile(ax)
+fig.tight_layout()
+fig.savefig("plot_blocco1_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
+plt.close(fig)
+
+# --- Grafico 3: correlazione IM/IH vs F1 (test pulito), per modello ---
+corr = pd.read_csv('blocco1_correlazioni.csv')
+corr = corr[corr['Valutazione'] == 'test_pulito']
+x = range(len(modelli))
+fig, ax = plt.subplots(figsize=(8, 5.5))
+for i, (metrica, colore, etichetta) in enumerate([('IM', BLUE, "IM (conflitti a coppie)"),
+                                                  ('IH', AQUA, "IH (tuple minime da correggere)")]):
+    valori = [corr[(corr['Modello'] == m) & (corr['Metrica_Inconsistenza'] == metrica)]['Pearson_r'].iloc[0]
+              for m in modelli]
+    ax.bar([j + (i - 0.5) * 0.35 for j in x], valori, width=0.35, color=colore, label=etichetta, zorder=3)
+ax.axhline(0, color=AXIS, linewidth=0.8)
+ax.set_xticks(list(x))
+ax.set_xticklabels(modelli)
+ax.set_ylim(-1.05, 1.05)
+ax.set_ylabel("Correlazione di Pearson con F1 sul test pulito")
+ax.set_title("Inconsistenza del training e qualita' delle predizioni", loc="left", pad=48)
+ax.legend(frameon=False, loc="upper left", ncols=2, bbox_to_anchor=(0, 1.14))
+stile(ax)
+fig.tight_layout()
+fig.savefig("plot_blocco1_correlazioni.png", dpi=300, bbox_inches="tight")
+plt.close(fig)
+
+# --- Tabella Blocco 1 ---
+tab1 = df1.groupby('Rumore_%').agg(
+    IM=('IM', 'mean'), IH=('IH', 'mean'),
+    F1_sporco=('F1_Score_test_sporco', 'mean'), F1_pulito=('F1_Score_test_pulito', 'mean'),
+).reset_index()
+base1 = tab1.loc[tab1['Rumore_%'] == 0, 'F1_pulito'].iloc[0]
+tab1['Calo'] = base1 - tab1['F1_pulito']
+tab1['IM'] = tab1['IM'].round(0).astype(int)
+tab1['IH'] = tab1['IH'].round(0).astype(int)
+tab1[['F1_sporco', 'F1_pulito', 'Calo']] = tab1[['F1_sporco', 'F1_pulito', 'Calo']].round(4)
+tab1.to_csv('tabella_riassuntiva_blocco1.csv', index=False)
+vista1 = tab1.copy()
+for c in ['F1_sporco', 'F1_pulito', 'Calo']:
+    vista1[c] = [f"{v:.4f}" for v in tab1[c]]
+salva_tabella_immagine(
+    vista1, "tabella_riassuntiva_blocco1.png",
+    "Blocco 1 — inconsistenza e F1 (media dei 4 modelli) per livello di rumore",
+    ["Rumore\n%", "IM", "IH", "F1\ntest sporco", "F1\ntest pulito", "Calo\n(test pulito)"],
+    [0.7, 0.9, 0.9, 1.0, 1.0, 1.0],
+)
+print("Blocco 1: plot_blocco1_f1_test_pulito.png, plot_blocco1_sporco_vs_pulito.png, "
+      "plot_blocco1_correlazioni.png, tabella_riassuntiva_blocco1.csv/.png")
 
 # =================================================================
 # BLOCCO 2 (se disponibile)
@@ -219,91 +164,85 @@ print("Tabella Blocco 1 salvata: tabella_riassuntiva_blocco1.csv/.png")
 if os.path.exists('blocco2_risultati_raw.csv'):
     df2 = pd.read_csv('blocco2_risultati_raw.csv')
     counts = sorted(df2['N_FD'].unique())
-    colori = {counts[0]: BLUE, counts[1]: ORANGE, counts[2]: AQUA} if len(counts) >= 3 else {}
+    colori = dict(zip(counts, PALETTE))
 
+    # --- Grafico 4: F1 e IM al variare del numero di FD corrotte ---
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
-    # F1 vs rumore, una serie per numero di FD
     for n in counts:
-        s = (df2[df2['N_FD'] == n].groupby('Rumore_%')['F1_Score_test_pulito']
-             .mean().reset_index())
-        axes[0].plot(s['Rumore_%'], s['F1_Score_test_pulito'], color=colori.get(n, INK_MUTED),
-                     linewidth=2, marker='o', markersize=6, markeredgecolor=SURFACE,
-                     markeredgewidth=1, label=f'{n} FD corrotte', zorder=3)
-    axes[0].set_xlabel("Rumore nel training (%)")
+        sub = df2[df2['N_FD'] == n]
+        s = sub.groupby('Rumore_%')['F1_Score_test_pulito'].mean()
+        linea(axes[0], s.index, s.values, colori[n], f'{n} FD corrotte')
+        si = sub.drop_duplicates(['Rumore_%', 'Rep']).groupby('Rumore_%')['IM'].mean()
+        linea(axes[1], si.index, si.values, colori[n], f'{n} FD corrotte', marker='s')
     axes[0].set_ylabel("F1 sul test pulito (media dei 4 modelli)")
     axes[0].set_title("Effetto sul modello", loc="left", fontsize=11)
-    axes[0].legend(frameon=False)
-    style_axes(axes[0])
-
-    # IM vs rumore, una serie per numero di FD
-    for n in counts:
-        s = df2[df2['N_FD'] == n].groupby('Rumore_%')['IM'].mean().reset_index()
-        axes[1].plot(s['Rumore_%'], s['IM'], color=colori.get(n, INK_MUTED), linewidth=2,
-                     marker='o', markersize=6, markeredgecolor=SURFACE, markeredgewidth=1,
-                     label=f'{n} FD corrotte', zorder=3)
-    axes[1].set_xlabel("Rumore nel training (%)")
     axes[1].set_ylabel("IM — conflitti a coppie")
     axes[1].set_title("Inconsistenza misurata", loc="left", fontsize=11)
-    axes[1].yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
-    axes[1].legend(frameon=False)
-    style_axes(axes[1])
-
+    formato_migliaia(axes[1])
+    for ax in axes:
+        ax.set_xlabel("Rumore nel training (%)")
+        ax.legend(frameon=False)
+        stile(ax)
     fig.suptitle("Blocco 2 — cosa succede aumentando il numero di FD corrotte",
                  x=0.02, ha="left", fontsize=13, y=1.04)
     fig.tight_layout()
     fig.savefig("plot_blocco2_scaling_fd.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- Grafico dedicato: l'inversione di segno di IM (10 FD) ---
-    # Due pannelli affiancati sulla stessa scala delle ascisse: MAI un doppio
-    # asse y. A destra IM, che cresce e poi cala; a sinistra F1, che peggiora
-    # sempre. Nella zona ombreggiata (>=20%) le due curve vanno in direzioni
-    # opposte: IM smette di tracciare il danno.
+    # --- Grafico 5: IM e F1 con il numero massimo di FD ---
+    # Due pannelli sulla stessa ascissa, mai un doppio asse. Il titolo e la zona
+    # ombreggiata dipendono dai dati: si segnala un'inversione solo se IM
+    # raggiunge il massimo prima dell'ultimo livello di rumore.
     n_max = counts[-1]
-    s_f1 = (df2[df2['N_FD'] == n_max].groupby('Rumore_%')['F1_Score_test_pulito']
-            .mean().reset_index())
-    s_im = df2[df2['N_FD'] == n_max].groupby('Rumore_%')['IM'].mean().reset_index()
-    picco = int(s_im.loc[s_im['IM'].idxmax(), 'Rumore_%'])
+    sub = df2[df2['N_FD'] == n_max]
+    s_f1 = sub.groupby('Rumore_%')['F1_Score_test_pulito'].mean()
+    s_im = sub.drop_duplicates(['Rumore_%', 'Rep']).groupby('Rumore_%')['IM'].mean()
+    picco = int(s_im.idxmax())
+    ultimo = int(s_im.index.max())
+    inversione = picco < ultimo
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
-    axes[0].axvspan(picco, 40, color=INK_MUTED, alpha=0.08, linewidth=0)
-    axes[0].plot(s_f1['Rumore_%'], s_f1['F1_Score_test_pulito'], color=BLUE, linewidth=2,
-                 marker='o', markersize=6, markeredgecolor=SURFACE, markeredgewidth=1, zorder=3)
+    if inversione:
+        for ax in axes:
+            ax.axvspan(picco, ultimo, color=INK_MUTED, alpha=0.08, linewidth=0)
+    linea(axes[0], s_f1.index, s_f1.values, BLUE)
     axes[0].set_ylabel("F1 sul test pulito (media dei 4 modelli)")
-    axes[0].set_title("Il danno continua a crescere", loc="left", fontsize=11)
-
-    axes[1].axvspan(picco, 40, color=INK_MUTED, alpha=0.08, linewidth=0)
-    axes[1].plot(s_im['Rumore_%'], s_im['IM'], color=ORANGE, linewidth=2, marker='s',
-                 markersize=6, markeredgecolor=SURFACE, markeredgewidth=1, zorder=3)
-    axes[1].axvline(picco, color=INK_MUTED, linewidth=1, linestyle=(0, (3, 3)))
-    axes[1].annotate(f"picco al {picco}%,\npoi cala", xy=(picco, s_im['IM'].max()),
-                     xytext=(picco + 3, s_im['IM'].max() * 0.72), fontsize=9, color=INK_SECONDARY)
+    axes[0].set_title("Danno sul modello", loc="left", fontsize=11)
+    linea(axes[1], s_im.index, s_im.values, ORANGE, marker='s')
     axes[1].set_ylabel("IM — conflitti a coppie")
-    axes[1].set_title("Ma l'inconsistenza misurata cala", loc="left", fontsize=11)
-    axes[1].yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
-
+    axes[1].set_title("Inconsistenza misurata", loc="left", fontsize=11)
+    formato_migliaia(axes[1])
     for ax in axes:
         ax.set_xlabel("Rumore nel training (%)")
-        style_axes(ax)
-    fig.suptitle(f"Con {n_max} FD corrotte, oltre il {picco}% di rumore IM smette di tracciare il danno",
-                 x=0.02, ha="left", fontsize=13, y=1.04)
+        stile(ax)
+    titolo = (f"Con {n_max} FD corrotte, oltre il {picco}% di rumore IM cala mentre il danno cresce"
+              if inversione else f"Con {n_max} FD corrotte, IM e danno crescono insieme con il rumore")
+    fig.suptitle(titolo, x=0.02, ha="left", fontsize=13, y=1.04)
     fig.tight_layout()
-    fig.savefig("plot_blocco2_im_inversione.png", dpi=300, bbox_inches="tight")
+    fig.savefig("plot_blocco2_im_e_f1.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
+    # --- Tabella Blocco 2 ---
     tab2 = df2.pivot_table(index='Rumore_%', columns='N_FD',
-                           values='F1_Score_test_pulito', aggfunc='mean').round(4).reset_index()
-    im2 = df2.pivot_table(index='Rumore_%', columns='N_FD', values='IM', aggfunc='mean').round(0)
+                           values='F1_Score_test_pulito', aggfunc='mean').round(4)
+    im2 = df2.drop_duplicates(['N_FD', 'Rumore_%', 'Rep']).pivot_table(
+        index='Rumore_%', columns='N_FD', values='IM', aggfunc='mean').round(0)
+    tabella = pd.DataFrame({'Rumore_%': tab2.index})
     for n in counts:
-        tab2[f'IM_{n}'] = im2[n].astype(int).values
-    tab2.columns = ['Rumore_%'] + [f'F1_{n}FD' for n in counts] + [f'IM_{n}FD' for n in counts]
-    tab2.to_csv('tabella_riassuntiva_blocco2.csv', index=False)
+        tabella[f'F1_{n}FD'] = tab2[n].values
+    for n in counts:
+        tabella[f'IM_{n}FD'] = im2[n].astype(int).values
+    tabella.to_csv('tabella_riassuntiva_blocco2.csv', index=False)
+    vista2 = tabella.copy()
+    for n in counts:
+        vista2[f'F1_{n}FD'] = [f"{v:.4f}" for v in tabella[f'F1_{n}FD']]
+        vista2[f'IM_{n}FD'] = [f"{v:,}".replace(",", ".") for v in tabella[f'IM_{n}FD']]
     salva_tabella_immagine(
-        tab2, "tabella_riassuntiva_blocco2.png",
+        vista2, "tabella_riassuntiva_blocco2.png",
         "Blocco 2 — F1 sul test pulito e inconsistenza, per numero di FD corrotte",
         ["Rumore\n%"] + [f"F1\n{n} FD" for n in counts] + [f"IM\n{n} FD" for n in counts],
-        col_widths=[0.6] + [0.9] * len(counts) + [1.0] * len(counts),
+        [0.6] + [0.9] * len(counts) + [1.1] * len(counts),
     )
-    print("Grafico e tabella Blocco 2 salvati.")
+    print("Blocco 2: plot_blocco2_scaling_fd.png, plot_blocco2_im_e_f1.png, tabella_riassuntiva_blocco2.csv/.png")
 else:
-    print("blocco2_risultati_raw.csv non ancora presente: sezione Blocco 2 saltata.")
+    print("blocco2_risultati_raw.csv non presente: sezione Blocco 2 saltata.")

@@ -181,7 +181,17 @@ def _metrics(y_true, preds):
     }
 
 
-def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
+def _righe_diverse(a, b):
+    """Maschera delle righe di `a` che differiscono da `b` in almeno una colonna
+    (stesso indice e stesse colonne; due NaN contano come uguali)."""
+    diverse = np.zeros(len(a), dtype=bool)
+    for c in a.columns:
+        uguali = (a[c] == b[c]) | (a[c].isna() & b[c].isna())
+        diverse |= ~uguali.to_numpy()
+    return diverse
+
+
+def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None, n_jobs_rf=None) -> dict:
     """
     Addestra 4 modelli RAW in cross-validation stratificata a N_SPLITS fold e
     ne restituisce le metriche medie (e la deviazione standard sui fold).
@@ -189,19 +199,24 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
     df       : dataset di TRAINING, eventualmente sporcato.
     df_eval  : dataset opzionale da cui prendere il test set — tipicamente il
                dataset PULITO. Se fornito, ogni fold viene valutato DUE volte:
-                 - 'test_sporco': righe di test prese da `df` (come prima);
+                 - 'test_sporco': righe di test prese da `df` (confronto);
                  - 'test_pulito': STESSE righe di test prese da `df_eval`.
                Il modello è sempre e solo addestrato sulle righe sporcate di
                `df`: cambia unicamente il dataset su cui si misura.
+    n_jobs_rf: thread del Random Forest. Cambia solo la velocita': le
+               predizioni sono identiche per qualunque valore (verificato).
 
     Nomi delle metriche restituite:
       Accuracy_test_sporco, Precision_test_sporco, Recall_test_sporco,
       F1_Score_test_sporco (+ *_std per Accuracy e F1) e, se df_eval è
-      fornito, gli omologhi con suffisso _test_pulito.
+      fornito, gli omologhi con suffisso _test_pulito, piu'
+      Quota_train_sporca: quota media di righe di training che differiscono
+      dal dataset pulito (0 a rumore 0%, cresce con il rumore).
     """
     X, y = _prepare_xy(df, target_col, extra_blacklist)
 
     X_eval = None
+    righe_sporche = None
     if df_eval is not None:
         X_eval, y_eval = _prepare_xy(df_eval, target_col, extra_blacklist)
         # ASSERT 1: le righe selezionate devono essere le stesse, nello stesso
@@ -221,6 +236,9 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
             )
         # Stesso ordine di colonne del training, per sicurezza.
         X_eval = X_eval[X.columns]
+        # Quali righe sono effettivamente sporche: serve a documentare che il
+        # training e' sporcato, mentre il test pulito viene da X_eval.
+        righe_sporche = _righe_diverse(X, X_eval)
 
     # 4. PRE-PROCESSING DELLE FEATURE
     numeric_features = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
@@ -231,9 +249,11 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
         ('scaler', StandardScaler())
     ])
 
+    # One-hot in formato sparso: predizioni identiche al formato denso
+    # (verificato riga per riga), ma senza matrici da centinaia di MB.
     categorical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='most_frequent')),
-        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=True))
     ])
 
     preprocessor = ColumnTransformer(
@@ -245,7 +265,7 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
     # 5. MODELLI STANDARD (Nessuna manipolazione, no class_weight)
     models = {
         "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
-        "Random Forest": RandomForestClassifier(random_state=42),
+        "Random Forest": RandomForestClassifier(random_state=42, n_jobs=n_jobs_rf),
         "Decision Tree": DecisionTreeClassifier(random_state=42),
         "Neural Network": MLPClassifier(max_iter=1000, random_state=42)
     }
@@ -253,10 +273,13 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
     # 6. CROSS-VALIDATION STRATIFICATA
     skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=42)
     fold_scores = {name: {'test_sporco': [], 'test_pulito': []} for name in models}
+    quote_train_sporche = []
 
     for train_idx, test_idx in skf.split(X, y):
         X_tr, y_tr = X.iloc[train_idx], y.iloc[train_idx]
         y_te = y.iloc[test_idx]
+        if righe_sporche is not None:
+            quote_train_sporche.append(float(righe_sporche[train_idx].mean()))
 
         for name, model in models.items():
             clf = Pipeline(steps=[('preprocessor', clone(preprocessor)),
@@ -295,6 +318,8 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None) -> dict:
             # Deviazione standard sui fold, per le due metriche principali.
             row[f"Accuracy_{suffix}_std"] = float(np.std([f["Accuracy"] for f in folds], ddof=1))
             row[f"F1_Score_{suffix}_std"] = float(np.std([f["F1_Score"] for f in folds], ddof=1))
+        if quote_train_sporche:
+            row["Quota_train_sporca"] = float(np.mean(quote_train_sporche))
         results[name] = row
 
     return results

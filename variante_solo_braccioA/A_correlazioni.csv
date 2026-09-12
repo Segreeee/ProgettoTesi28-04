@@ -1,9 +1,0 @@
-Modello,Metrica,Pearson_r,p_value
-Decision Tree,IM,-0.8894,0.0
-Decision Tree,IH,-0.8938,0.0
-Logistic Regression,IM,-0.9284,0.0
-Logistic Regression,IH,-0.9353,0.0
-Neural Network,IM,-0.9401,0.0
-Neural Network,IH,-0.9625,0.0
-Random Forest,IM,-0.9328,0.0
-Random Forest,IH,-0.955,0.0
