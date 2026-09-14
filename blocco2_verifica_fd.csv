@@ -1,11 +1,5 @@
-N,FD,Significato_nel_mondo_reale,Gruppi,Violazioni,Valori_mancanti,Colonne_al_modello
-1,Origin+Dest -> Distance,la distanza fra due aeroporti e' una quantita' fisica fissa,4624,0,0,True
-2,OriginAirportID -> OriginCityName,un aeroporto sta in una sola citta',322,0,0,True
-3,DestAirportID -> DestCityName,un aeroporto sta in una sola citta' (arrivo),315,0,0,True
-4,OriginAirportID -> OriginState,un aeroporto sta in un solo stato,322,0,0,True
-5,DestAirportID -> DestState,un aeroporto sta in un solo stato (arrivo),315,0,0,True
-6,OriginAirportID -> Origin,l'ID identifica il codice IATA dell'aeroporto,322,0,0,True
-7,DestAirportID -> Dest,l'ID identifica il codice IATA dell'aeroporto (arrivo),315,0,0,True
-8,OriginAirportID -> OriginWac,il World Area Code e' determinato dallo stato,322,0,0,True
-9,DestAirportID -> DestWac,il World Area Code e' determinato dallo stato (arrivo),315,0,0,True
-10,OriginAirportID -> OriginStateName,il nome dello stato e' determinato dallo stato,322,0,0,True
+N,FD,Significato_nel_mondo_reale,Gruppi,Colonne_ridondanti,Violazioni,Valori_mancanti,Colonne_al_modello
+1,Distance -> DistanceGroup,la fascia di distanza e' definita dalla distanza,1403,,0,0,True
+2,Origin+Dest -> Distance,la distanza fra due aeroporti e' una quantita' fisica fissa,4624,,0,0,True
+3,OriginAirportID -> Origin,l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono,322,"OriginCityName, OriginState, OriginStateFips, OriginStateName, OriginWac",0,0,True
+4,DestAirportID -> Dest,l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono (arrivo),315,"DestCityName, DestState, DestStateFips, DestStateName, DestWac",0,0,True

@@ -1,0 +1,9 @@
+Modello,Intervallo,N_punti,R2,Coef_quota,Coef_quota2,Coef_N_FD,SE_N_FD,t_N_FD,p_N_FD,Significativo
+Decision Tree,tutti i punti,80,0.9608,-0.05433,-0.06534,0.00438,0.000581,7.537,8.425063402033959e-11,True
+Decision Tree,quota <= 0.41 (comune alle configurazioni),55,0.929,-0.07817,-0.0242,0.003494,0.000416,8.397,3.4949447622830143e-11,True
+Logistic Regression,tutti i punti,80,0.9597,-0.6169,0.31159,0.022782,0.001879,12.121,1.9428271259609585e-19,True
+Logistic Regression,quota <= 0.41 (comune alle configurazioni),55,0.9911,-1.07777,1.31293,0.027902,0.000879,31.734,2.9802090113059076e-35,True
+Neural Network,tutti i punti,80,0.9497,0.06395,-0.21048,-0.004877,0.000929,-5.248,1.3468205539704898e-06,True
+Neural Network,quota <= 0.41 (comune alle configurazioni),55,0.8573,-0.10312,0.13026,-0.001815,0.000422,-4.3,7.720852496311585e-05,True
+Random Forest,tutti i punti,80,0.9568,0.01307,-0.10833,-0.000385,0.000515,-0.749,0.45646186622041407,False
+Random Forest,quota <= 0.41 (comune alle configurazioni),55,0.9701,-0.05107,0.00967,0.000325,0.000143,2.272,0.027351953642071027,True

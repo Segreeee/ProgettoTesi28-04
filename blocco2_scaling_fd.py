@@ -1,15 +1,20 @@
 """
-Blocco 2 — quante FD? Scaling 1 -> 5 -> 10.
+Blocco 2 — quante FD? Scaling 1 -> 2 -> 4.
 
 Stesso disegno del Blocco 1 (training sporcato, test pulito in
 cross-validation), ma corrompendo un numero crescente di dipendenze
-funzionali: 1, 5 e 10.
+funzionali: 1, 2 e 4.
 
-Qui NON si usano colonne ridondanti forzate: le colonne che codificano la
-stessa informazione compaiono come RHS delle FD aggiuntive, quindi vengono
-sporcate solo nella misura in cui la FD che le riguarda entra nel set. E'
-questo che rende l'esperimento informativo: con 1 sola FD il modello puo'
-ancora aggirare il danno, con 10 le vie di fuga si chiudono progressivamente.
+Si usano solo FD RILEVANTI per l'obiettivo predittivo, individuate da
+analisi_rilevanza_fd.py: sporcate al 40%, fanno calare la F1 sul test pulito
+in modo significativo per tutti e 4 i modelli. Le altre FD valide del dataset
+(stato, citta', WAC dell'aeroporto presi singolarmente, compagnia, orario)
+hanno un effetto nullo o non significativo e sono escluse. L'ordine segue la
+rilevanza misurata.
+
+Le FD sugli aeroporti sporcano anche le colonne che ripetono la stessa
+informazione (citta', stato, FIPS, nome dello stato, WAC): senza, il modello
+le userebbe come via di fuga e la FD non avrebbe effetto.
 
 Esecuzione parallela con checkpoint (vedi esecuzione_parallela.py).
 Uso:  python blocco2_scaling_fd.py [--workers N]
@@ -37,43 +42,34 @@ from esecuzione_parallela import numero_processi, esegui_lavori, Registro
 
 # Pool di FD: tutte verificate a 0 violazioni sul campione, valide nel
 # dominio reale e con TUTTE le colonne che superano la blacklist (verifica
-# automatica all'avvio, salvata in blocco2_verifica_fd.csv). Ordine scelto
-# per massimizzare la diversita' di concetto nei primi step: rotta ->
-# aeroporto di origine -> aeroporto di destinazione, poi si estende
-# all'interno delle famiglie.
+# automatica all'avvio, salvata in blocco2_verifica_fd.csv). Ordine per
+# rilevanza misurata (calo di F1 al 40%, media dei 4 modelli, in
+# rilevanza_fd.csv).
 FD_POOL = [
-    (['Origin', 'Dest'], 'Distance'),                 # 1  rotta -> distanza
-    (['OriginAirportID'], 'OriginCityName'),          # 2  aeroporto origine
-    (['DestAirportID'], 'DestCityName'),              # 3  aeroporto destinazione
-    (['OriginAirportID'], 'OriginState'),             # 4
-    (['DestAirportID'], 'DestState'),                 # 5
-    (['OriginAirportID'], 'Origin'),                  # 6
-    (['DestAirportID'], 'Dest'),                      # 7
-    (['OriginAirportID'], 'OriginWac'),               # 8
-    (['DestAirportID'], 'DestWac'),                   # 9
-    (['OriginAirportID'], 'OriginStateName'),         # 10
+    (['Distance'], 'DistanceGroup'),                  # 1  distanza -> fascia di distanza   (7,9 punti)
+    (['Origin', 'Dest'], 'Distance'),                 # 2  rotta -> distanza                (2,0 punti)
+    (['OriginAirportID'], 'Origin'),                  # 3  aeroporto di origine             (1,3 punti)
+    (['DestAirportID'], 'Dest'),                      # 4  aeroporto di destinazione        (1,1 punti)
 ]
 
 SIGNIFICATO = [
+    "la fascia di distanza e' definita dalla distanza",
     "la distanza fra due aeroporti e' una quantita' fisica fissa",
-    "un aeroporto sta in una sola citta'",
-    "un aeroporto sta in una sola citta' (arrivo)",
-    "un aeroporto sta in un solo stato",
-    "un aeroporto sta in un solo stato (arrivo)",
-    "l'ID identifica il codice IATA dell'aeroporto",
-    "l'ID identifica il codice IATA dell'aeroporto (arrivo)",
-    "il World Area Code e' determinato dallo stato",
-    "il World Area Code e' determinato dallo stato (arrivo)",
-    "il nome dello stato e' determinato dallo stato",
+    "l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono",
+    "l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono (arrivo)",
 ]
 
-# ESCLUSA deliberatamente: Reporting_Airline -> IATA_CODE_Reporting_Airline.
-# E' valida e sensata nel mondo reale, ma il suo LHS ha solo 14 valori
-# distinti: i gruppi risultanti sono enormi e da sola genererebbe molti piu'
-# conflitti di tutte le altre nove FD messe insieme, dominando IM/IP/IH e
-# rendendoli non confrontabili tra le configurazioni a 1, 5 e 10 FD.
+# Colonne che ripetono l'informazione dell'aeroporto: sporcate sulle stesse
+# righe della FD corrispondente (vie di fuga chiuse, come nel Blocco 1).
+REDUNDANT_COLS_MAP = {
+    (('OriginAirportID',), 'Origin'): ['OriginCityName', 'OriginState', 'OriginStateFips',
+                                       'OriginStateName', 'OriginWac'],
+    (('DestAirportID',), 'Dest'): ['DestCityName', 'DestState', 'DestStateFips',
+                                   'DestStateName', 'DestWac'],
+}
+FD_RIDONDANTI = [(list(lhs), c) for (lhs, _), cols in REDUNDANT_COLS_MAP.items() for c in cols]
 
-FD_COUNTS = [1, 5, 10]
+FD_COUNTS = [1, 2, 4]
 NOISE_LEVELS = [0.0, 0.05, 0.10, 0.20, 0.30, 0.40]
 N_REPS = 5
 SEED_BASE = 100
@@ -81,7 +77,7 @@ SEED_BASE = 100
 RAW_RESULTS_FILE = 'blocco2_risultati_raw.csv'
 VERIFICA_FD_FILE = 'blocco2_verifica_fd.csv'
 LOG_FILE = 'blocco2_run.log'
-RAM_PER_PROCESSO_GB = 1.0   # il grafo di networkx arriva a ~0,5 GB nel caso peggiore
+RAM_PER_PROCESSO_GB = 1.5   # il grafo di networkx supera 5 milioni di archi (~0,8 GB) con 4 FD
 
 
 def verifica_fd(df, log):
@@ -105,12 +101,14 @@ def verifica_fd(df, log):
 
     righe = []
     for i, ((lhs, rhs), significato) in enumerate(zip(FD_POOL, SIGNIFICATO), 1):
-        fuori = [c for c in lhs + [rhs] if c in scartate]
+        extra = REDUNDANT_COLS_MAP.get((tuple(lhs), rhs), [])
+        fuori = [c for c in lhs + [rhs] + extra if c in scartate]
         righe.append({
             'N': i, 'FD': f"{'+'.join(lhs)} -> {rhs}", 'Significato_nel_mondo_reale': significato,
             'Gruppi': int(df.groupby(lhs).ngroups),
-            'Violazioni': conta_violazioni(df, [(lhs, rhs)]),
-            'Valori_mancanti': int(df[lhs + [rhs]].isna().sum().sum()),
+            'Colonne_ridondanti': ', '.join(extra),
+            'Violazioni': conta_violazioni(df, [(lhs, rhs)] + [(lhs, c) for c in extra]),
+            'Valori_mancanti': int(df[lhs + [rhs] + extra].isna().sum().sum()),
             'Colonne_al_modello': not fuori,
         })
     tabella = pd.DataFrame(righe)
@@ -122,7 +120,8 @@ def verifica_fd(df, log):
     if len(problemi):
         log(f"STOP: FD non valide: {problemi['FD'].tolist()}")
         sys.exit(1)
-    log(f"Verifica superata: le 10 FD hanno 0 violazioni sul campione. Salvata in {VERIFICA_FD_FILE}")
+    log(f"Verifica superata: le {len(FD_POOL)} FD e le loro colonne ridondanti hanno 0 violazioni "
+        f"sul campione. Salvata in {VERIFICA_FD_FILE}")
 
 
 # ---------------------------------------------------------------
@@ -142,7 +141,7 @@ def esegui_lavoro(n_fd, level, rep, n_jobs_rf):
     seed = SEED_BASE + rep
     df_noisy = inject_multiple_fd_noise(
         _DF, fds, noise_level=level,
-        corrupt_lhs=True, redundant_cols_map=None, seed=seed,
+        corrupt_lhs=True, redundant_cols_map=REDUNDANT_COLS_MAP, seed=seed,
     )
     # IM/IP/IH misurati sullo STESSO set di FD che viene corrotto.
     im, ip, ih, _ = get_global_inconsistency_metrics(df_noisy, fds)
@@ -191,7 +190,7 @@ def main():
     if im0 != 0:
         log(f"STOP: il campione di riferimento non e' pulito (IM={im0}).")
         sys.exit(1)
-    log(f"Campione di valutazione sulle 10 FD: IM={im0} (pulito, OK)")
+    log(f"Campione di valutazione sulle {len(FD_POOL)} FD: IM={im0} (pulito, OK)")
 
     n_processi, ram = numero_processi(RAM_PER_PROCESSO_GB, args.workers)
     n_jobs_rf = max(1, (os.cpu_count() or 1) // n_processi)

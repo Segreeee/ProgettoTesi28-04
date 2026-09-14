@@ -5,7 +5,8 @@ Obiettivo predittivo: DurataBucket, 5 fasce di durata schedulata del volo.
 
 Il rumore viola la FD Origin + Dest -> Distance: per le righe scelte vengono
 corrotte in modo indipendente tutte le colonne del concetto "rotta", comprese
-le colonne ridondanti che codificano la stessa informazione, cosi' che il
+le colonne ridondanti che codificano la stessa informazione (aeroporti, citta',
+stati e fasce di distanza), cosi' che il
 modello non possa recuperarla da una colonna rimasta pulita.
 
 Il modello e' addestrato sui dati sporcati (a rumore 0% restano puliti) e
@@ -52,6 +53,9 @@ REDUNDANT_COLS_MAP = {
         'OriginWac', 'DestWac',
         'OriginCityMarketID', 'DestCityMarketID',
         'OriginAirportSeqID', 'DestAirportSeqID',
+        # Fasce di distanza: da sola predice la durata quasi quanto Distance
+        # (analisi_rilevanza_fd.py), quindi lasciarla pulita aggirava il rumore.
+        'DistanceGroup',
     ]
 }
 
@@ -60,6 +64,7 @@ REDUNDANT_COLS_MAP = {
 FD_RIDONDANTI = (
     [(['Origin'], c) for c in REDUNDANT_COLS_MAP[(('Origin', 'Dest'), 'Distance')] if c.startswith('Origin')]
     + [(['Dest'], c) for c in REDUNDANT_COLS_MAP[(('Origin', 'Dest'), 'Distance')] if c.startswith('Dest')]
+    + [(['Distance'], 'DistanceGroup')]
 )
 
 # CRSElapsedTime e' la fonte diretta del target; CRSArrTime/ArrTimeBlk sono

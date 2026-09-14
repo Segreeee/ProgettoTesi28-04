@@ -50,27 +50,32 @@ Rumore fino al 100%, con livelli grossolani; nessuna cross-validation (un solo s
 | 1 | **Valutazione su dati puliti** | `progettoTesi_v2.py`, `blocco1_esperimento.py`, `blocco2_scaling_fd.py` | Richieste 4 e 6: separa "il modello ha imparato peggio" da "gli stiamo dando input illeggibili" |
 | 2 | **Rumore fino al 40%**: 0, 5, 10, 20, 30, 40% | `blocco1_esperimento.py`, `blocco2_scaling_fd.py` | Richiesta 3 |
 | 3 | **Cross-validation stratificata a 5 fold** | `progettoTesi_v2.py` | Richiesta 5 |
-| 4 | **Esperimento con 1, 5 e 10 FD** | `blocco2_scaling_fd.py` | Richiesta 1 |
+| 4 | **Esperimento con più FD: 1, 2 e 4** (in una prima versione 1, 5 e 10) | `blocco2_scaling_fd.py` | Richiesta 1; il numero massimo è limitato dalle FD rilevanti per l'obiettivo (§3.5) |
 | 5 | **Verifica delle FD nel dominio reale**, salvata in `blocco2_verifica_fd.csv` | `blocco2_scaling_fd.py`, `blocco1_esperimento.py` | Richiesta 2; controllo automatico all'avvio |
 | 6 | **Campione da 10.000 a 30.000 righe** | `creaCampione.py` | Dataset più grande, entro il limite di memoria del grafo dei conflitti (§3.2) |
 | 7 | **Calcolo di IM/IP/IH più rapido** | `progettoTesi_v2.py` | Con più FD e più righe il confronto di tutte le coppie diventava troppo lento |
 | 8 | **One-hot in formato sparso** | `progettoTesi_v2.py` | Memoria; predizioni identiche al formato denso |
 | 9 | **Esecuzione parallela con checkpoint** | `esecuzione_parallela.py` (nuovo) | Tempi; i risultati non cambiano |
+| 10 | **Selezione delle FD per rilevanza rispetto all'obiettivo** | `analisi_rilevanza_fd.py` (nuovo) | Le 10 FD della prima versione del Blocco 2 erano valide ma quasi tutte irrilevanti per la durata del volo (§3.5) |
+| 11 | **`DistanceGroup` sporcata insieme alla distanza** | `blocco1_esperimento.py`, `blocco2_scaling_fd.py` | Era una via di fuga aperta: il modello recuperava la distanza corrotta dalle fasce di distanza rimaste pulite |
+| 12 | **Analisi statistica del Blocco 2**, speculare a quella del Blocco 1 | `blocco2_analisi.py` (nuovo) | Simmetria fra i due capitoli sperimentali |
 
 ### 3.1 La valutazione su dati puliti
 
 `ml_preparation` accetta un parametro `df_eval`: il dataset **pulito**. Per ogni fold il modello è addestrato sulle righe sporcate e valutato due volte — sulle righe di test prese dal dataset sporco (`*_test_sporco`, per confronto) e sulle stesse righe prese da quello pulito (`*_test_pulito`, la misura richiesta).
 
-Due assert bloccanti proteggono la validità: gli indici delle due matrici devono coincidere e le etichette devono essere identiche. Per documentare che il training è davvero sporcato, ogni risultato riporta anche la **quota di righe di training che differiscono dal dataset pulito** (`Quota_train_sporca`): è zero a rumore 0% e cresce con il rumore. L'analisi del Blocco 1 si rifiuta di procedere se questo non accade, o se a rumore 0% le due valutazioni non coincidono.
+Due assert bloccanti proteggono la validità: gli indici delle due matrici devono coincidere e le etichette devono essere identiche. Per documentare che il training è davvero sporcato, ogni risultato riporta anche la **quota di righe di training che differiscono dal dataset pulito** (`Quota_train_sporca`): è zero a rumore 0% e cresce con il rumore. Le analisi di entrambi i blocchi si rifiutano di procedere se questo non accade, o se a rumore 0% le due valutazioni non coincidono.
 
 ### 3.2 Perché 30.000 righe e non di più
 
 Le misure di inconsistenza sono calcolate costruendo il grafo dei conflitti con networkx, che va tenuto interamente in memoria. Misurato sul progetto:
 
 - ogni arco del grafo occupa **~160 byte**;
-- il numero di archi cresce circa **con il quadrato delle righe**: nel caso peggiore dell'esperimento (10 FD corrotte al 20% di rumore) si passa da 391 mila archi a 10.000 righe a 1,48 milioni a 20.000 e a **3,27 milioni a 30.000**.
+- il numero di archi cresce circa **con il quadrato delle righe**: nel caso peggiore della prima versione (10 FD corrotte al 20% di rumore) si passa da 391 mila archi a 10.000 righe a 1,48 milioni a 20.000 e a **3,27 milioni a 30.000**.
 
-A 30.000 righe il grafo più grande occupa **0,54 GB** di memoria reale del processo, compatibile con l'esecuzione di più processi in parallelo sulla RAM disponibile. A 150.000 righe il numero di archi sarebbe circa 25 volte maggiore (~80 milioni, oltre 13 GB per un solo grafo): non costruibile in memoria.
+A 30.000 righe quel grafo occupava **0,54 GB** di memoria reale del processo. A 150.000 righe il numero di archi sarebbe circa 25 volte maggiore (~80 milioni, oltre 13 GB per un solo grafo): non costruibile in memoria.
+
+Con le 4 FD rilevanti il caso peggiore sale a **5,9 milioni di archi** (4 FD al 40% di rumore), circa 0,9 GB stimati con lo stesso costo per arco: l'esecuzione riserva 1,5 GB a ogni processo parallelo.
 
 ### 3.3 Calcolo di IM/IP/IH
 
@@ -80,6 +85,22 @@ Il calcolo originale confrontava tutte le coppie di righe dentro ogni gruppo. La
 
 Il formato sparso dell'one-hot e il numero di thread del Random Forest cambiano solo memoria e velocità: verificato su un fold, le predizioni sono **identiche riga per riga** per tutti e 4 i modelli. L'esecuzione parallela sceglie il numero di processi in base alla RAM libera; ogni lavoro completato è salvato subito, e un'esecuzione interrotta riprende dai lavori mancanti.
 
+### 3.5 Le FD devono essere rilevanti per l'obiettivo
+
+Una FD valida nel mondo reale non è per questo utile all'esperimento: se le sue colonne portano poca informazione sulla durata del volo, o se quell'informazione resta disponibile in colonne pulite, sporcarla non misura l'effetto dell'inconsistenza sulle predizioni. `analisi_rilevanza_fd.py` sporca al 40% una configurazione alla volta (training sporco, test pulito, 3 repliche) e misura il calo di F1:
+
+| Configurazione | Calo F1 medio | Modelli con calo significativo |
+|---|---|---|
+| `Distance → DistanceGroup` | 7,9 punti | 4/4 |
+| `Origin+Dest → Distance` | 2,0 punti | 4/4 |
+| Aeroporto di origine, con città, stato, FIPS, nome dello stato, WAC | 1,3 punti | 4/4 |
+| Aeroporto di destinazione, con le stesse colonne | 1,1 punti | 4/4 |
+| Compagnia, orario di partenza, singole FD aeroporto → stato | 0,1–0,2 punti | 0 o 1 su 4 |
+
+Il Blocco 2 usa quindi le **4 FD rilevanti**, nell'ordine della tabella, con configurazioni da 1, 2 e 4 FD. Le FD sugli aeroporti vengono sporcate insieme alle colonne che ne ripetono l'informazione, come nel Blocco 1. Dieci FD rilevanti e indipendenti non esistono per questo obiettivo predittivo: raggiungerle avrebbe richiesto di aggiungere FD irrilevanti.
+
+La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima versione del Blocco 1, predice da sola la durata quasi quanto la distanza (F1 0,80 contro 0,83 con un albero su una sola colonna): era una via di fuga aperta. I risultati della prima versione sono conservati in `archivio_prima_revisione_fd/`.
+
 ## 4. Come funziona il progetto adesso
 
 ### La pipeline
@@ -87,11 +108,13 @@ Il formato sparso dell'one-hot e il numero di thread del Random Forest cambiano 
 1. **`creaCampione.py`** estrae 30.000 righe dal dataset completo (`flight_sample_30000.csv`).
 2. **`discoverFDs.py`** scopre empiricamente le dipendenze funzionali.
 3. Le FD candidate vengono **filtrate**: 0 violazioni sul campione usato, valide nel dominio reale (non artefatti del mese singolo o dei valori mancanti), con colonne che superano la blacklist.
-4. **`progettoTesi_v2.py`** è il motore: iniezione del rumore, calcolo di IM/IP/IH, preparazione dei dati, addestramento dei 4 modelli RAW in cross-validation e doppia valutazione.
-5. **`blocco1_esperimento.py`**: una FD (rotta → distanza) con le colonne ridondanti, 6 livelli di rumore, 5 repliche.
-6. **`blocco2_scaling_fd.py`**: 1, 5 e 10 FD, 6 livelli di rumore, 5 repliche.
-7. **`blocco1_analisi.py`**: controlli, aggregati, scomposizione del danno, correlazioni, significatività del degrado.
-8. **`genera_plot_finali.py`**: grafici e tabelle.
+4. **`analisi_rilevanza_fd.py`** misura quali FD contano per l'obiettivo predittivo e quali colonne ne ripetono l'informazione.
+5. **`progettoTesi_v2.py`** è il motore: iniezione del rumore, calcolo di IM/IP/IH, preparazione dei dati, addestramento dei 4 modelli RAW in cross-validation e doppia valutazione.
+6. **`blocco1_esperimento.py`**: una FD (rotta → distanza) con 17 colonne ridondanti, `DistanceGroup` compresa; 6 livelli di rumore, 5 repliche.
+7. **`blocco2_scaling_fd.py`**: 1, 2 e 4 FD rilevanti, 6 livelli di rumore, 5 repliche.
+8. **`blocco1_analisi.py`**: controlli, aggregati, scomposizione del danno, correlazioni, significatività del degrado.
+9. **`blocco2_analisi.py`**: le stesse analisi del Blocco 1 per ciascun numero di FD, più il confronto fra configurazioni a parità di livello e a parità di righe sporche e la misura del meccanismo di saturazione di IM.
+10. **`genera_plot_finali.py`**: grafici e tabelle, con figure speculari fra i due blocchi.
 
 ### Configurazione sperimentale
 
@@ -99,6 +122,8 @@ Il formato sparso dell'one-hot e il numero di thread del Random Forest cambiano 
 |---|---|
 | Obiettivo predittivo | `DurataBucket` — 5 fasce di durata schedulata del volo |
 | Campione | 30.000 righe; 8.090 dopo il bilanciamento delle classi |
+| FD del Blocco 1 | `Origin+Dest → Distance` + 17 colonne ridondanti |
+| FD del Blocco 2 | `Distance → DistanceGroup`; `Origin+Dest → Distance`; `OriginAirportID → Origin` e `DestAirportID → Dest`, ciascuna con 5 colonne ridondanti |
 | Livelli di rumore | 0, 5, 10, 20, 30, 40% |
 | Repliche per configurazione | 5, con seed diversi |
 | Cross-validation | stratificata, 5 fold (~6.470 righe di training per fold) |
@@ -111,34 +136,51 @@ Il formato sparso dell'one-hot e il numero di thread del Random Forest cambiano 
 |---|---|
 | `creaCampione.py` | Estrazione del campione di lavoro |
 | `discoverFDs.py` | Scoperta empirica delle dipendenze funzionali |
+| `analisi_rilevanza_fd.py` | Rilevanza delle FD per l'obiettivo predittivo |
 | `progettoTesi_v2.py` | Motore: rumore, indici di inconsistenza, valutazione ML |
 | `esecuzione_parallela.py` | Esecuzione parallela con checkpoint |
 | `blocco1_esperimento.py` | Blocco 1: una FD con le colonne ridondanti |
-| `blocco2_scaling_fd.py` | Blocco 2: 1, 5 e 10 FD |
+| `blocco2_scaling_fd.py` | Blocco 2: 1, 2 e 4 FD rilevanti |
 | `blocco1_analisi.py` | Analisi statistica del Blocco 1 |
+| `blocco2_analisi.py` | Analisi statistica del Blocco 2 |
 | `genera_plot_finali.py` | Grafici e tabelle finali |
 | `blocco1_risultati_raw.csv`, `blocco2_risultati_raw.csv` | Risultati grezzi |
-| `blocco2_verifica_fd.csv` | Certificazione delle 10 FD |
+| `rilevanza_colonne.csv`, `rilevanza_fd.csv` | Risultati dell'analisi di rilevanza |
+| `blocco2_verifica_fd.csv` | Certificazione delle 4 FD del Blocco 2 |
+| `archivio_prima_revisione_fd/` | Risultati, grafici e relazioni della versione con `DistanceGroup` pulita e 10 FD |
 | `relazione_finale_progetto.md` | Relazione scientifica |
 | `relazione_revisione_sperimentale.md` | Questo documento |
 
 ## 5. Cosa è cambiato nei risultati
 
-### Il danno era sovrastimato di circa quattro volte
+### Il danno misurato sul test sporco è sovrastimato
 
-È la conseguenza più importante della correzione richiesta ai punti 4 e 6. Con il metodo precedente — test sulle stesse righe sporcate — al 40% di rumore il calo di F1 risultava di **10,7 punti**. Valutando gli stessi modelli sul test pulito, il calo è di **2,9 punti**: tutto il resto era il costo di interrogare il modello su input corrotti, non un apprendimento peggiore. La proporzione è stabile a ogni livello di rumore: fra il 24% e il 27% del danno apparente riguarda davvero il modello.
+È la conseguenza della correzione richiesta ai punti 4 e 6. Nel Blocco 1, al 40% di rumore, il calo di F1 misurato sulle stesse righe sporcate è di **31,2 punti**; valutando gli stessi modelli sul test pulito è di **8,4 punti**. Il resto è il costo di interrogare il modello su input corrotti, non un apprendimento peggiore. La proporzione è stabile: a ogni livello il danno dovuto all'apprendimento è fra il 27% e il 32% di quello apparente. Nel Blocco 2, dove ogni riga sporca ha meno colonne corrotte, la quota sale al 36–55% e la sovrastima va da circa due volte (1 e 2 FD) a due volte e mezzo (4 FD).
 
-### Il degrado resta reale, regolare e significativo
+### Chiudere la via di fuga `DistanceGroup` triplica il danno
 
-Con una FD violata, l'F1 sul test pulito scende da 0,9233 a 0,8948 al 40% di rumore, in modo monotono su tutti e 4 i modelli; il calo è significativo in 19 confronti su 20. Le correlazioni fra inconsistenza misurata e qualità delle predizioni vanno da −0,91 a −0,99.
+Nella prima versione del Blocco 1 la F1 sul test pulito scendeva da 0,9233 a 0,8948 al 40% di rumore (−2,9 punti). Sporcando anche `DistanceGroup` scende a **0,8390 (−8,4 punti)**, in modo monotono e significativo in 20 confronti su 20. IM, IP e IH sono **identici** nelle due versioni, perché `DistanceGroup` non fa parte della FD dichiarata: gli indici non vedono le copie pulite dell'informazione corrotta.
 
-### Più FD violate, più danno
+Il calo varia molto fra modelli: 2,9 punti Random Forest, 3,0 Decision Tree, 4,9 Neural Network, 22,9 Logistic Regression, che usa la distanza come valore numerico.
 
-Il calo dal baseline al 40% passa da **0,0199** con una FD a **0,0333** con cinque e **0,0510** con dieci: l'ipotesi che il danno cresca col numero di vincoli violati è confermata, con l'ordine rispettato a ogni livello di rumore.
+### Con FD rilevanti, più FD fanno più danno a parità di livello
 
-### Un risultato nuovo: IM smette di misurare il danno oltre una soglia
+Il calo dal baseline al 40% passa da **7,8 punti** con 1 FD a **10,0** con 2 e **15,3** con 4. Nella prima versione, con 10 FD quasi tutte irrilevanti, il calo massimo era di 5,1 punti con il 99% delle righe sporche. A parità di livello di rumore il passaggio 1 → 2 FD è significativo in 18 confronti su 20, il passaggio 2 → 4 in 19 su 20.
 
-Con 10 FD corrotte, IM cresce fino al 20% di rumore (3.268.942 conflitti) e poi **cala** (2.917.019 al 40%), mentre l'F1 continua a peggiorare. Con 1 e 5 FD, invece, IM cresce sempre. Corrompendo anche il lato sinistro delle dipendenze i gruppi si frammentano e i conflitti rilevabili diminuiscono, pur essendo i dati sempre più corrotti: è un limite del campo di validità dell'indice, da dichiarare quando lo si usa come criterio di qualità dei dati.
+### A parità di righe sporche, il risultato dipende dal modello
+
+Nella prima versione, a parità di righe sporche, più FD facevano meno danno per tutti e 4 i modelli. Con le FD rilevanti non è più una regola generale. Nella regressione *F1 ~ quota + quota² + N_FD*, nell'intervallo di quota comune alle tre configurazioni, il coefficiente di N_FD è:
+- positivo per Logistic Regression e Decision Tree (p < 0,001), che soffrono soprattutto la distanza corrotta;
+- negativo per Neural Network (p < 0,001), che soffre di più gli aeroporti corrotti;
+- trascurabile per Random Forest.
+
+Conta quale informazione è inconsistente e quanto il modello ne dipende, non il numero di vincoli violati.
+
+### IM non è confrontabile fra insiemi di FD diversi
+
+Dentro ogni configurazione IM e IH correlano col danno (Spearman fra −0,91 e −0,99). Fra configurazioni diverse, invece, al 40% IM è 32 volte più grande con 4 FD che con 1 a fronte di un danno doppio, perché è dominato dalle FD sugli aeroporti, che hanno gruppi grandi e contano poco per la previsione. IH cresce di 1,7 volte, in proporzione al danno.
+
+Con 4 FD, inoltre, IM si satura: fra il 30% e il 40% cresce solo dello 0,9% mentre la F1 perde altri 3,7 punti. Il meccanismo, misurato, è lo stesso che nella prima versione con 10 FD faceva calare IM: sporcando l'ID dell'aeroporto i gruppi grandi si svuotano e il numero di coppie di righe che possono entrare in conflitto crolla.
 
 ### Il campione più grande alza il livello di partenza
 

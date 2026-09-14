@@ -100,5 +100,6 @@ def esegui_lavori(funzione, lavori, chiave_di, inizializzatore, file_risultati, 
             pd.DataFrame(righe).to_csv(file_risultati, mode='a', header=nuovo, index=False)
             completati += 1
             eta = (time.time() - t0) / completati * (len(da_fare) - completati)
+            im = f"IM={righe[0]['IM']:,}  " if 'IM' in righe[0] else ""
             log(f"{etichetta} {completati}/{len(da_fare)}  {chiave_di(argomenti)}  "
-                f"IM={righe[0]['IM']:,}  fine stimata tra {eta / 60:.0f} min")
+                f"{im}fine stimata tra {eta / 60:.0f} min")
