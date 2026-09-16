@@ -1,5 +1,5 @@
 N,FD,Significato_nel_mondo_reale,Gruppi,Colonne_ridondanti,Violazioni,Valori_mancanti,Colonne_al_modello
 1,Distance -> DistanceGroup,la fascia di distanza e' definita dalla distanza,1403,,0,0,True
-2,Origin+Dest -> Distance,la distanza fra due aeroporti e' una quantita' fisica fissa,4624,,0,0,True
+2,Origin+Dest -> Distance,la distanza fra due aeroporti e' una quantita' fisica fissa,4624,DistanceGroup,0,0,True
 3,OriginAirportID -> Origin,l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono,322,"OriginCityName, OriginState, OriginStateFips, OriginStateName, OriginWac",0,0,True
 4,DestAirportID -> Dest,l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono (arrivo),315,"DestCityName, DestState, DestStateFips, DestStateName, DestWac",0,0,True

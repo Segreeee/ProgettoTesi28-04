@@ -18,7 +18,6 @@ Uso:  python blocco1_esperimento.py [--workers N]
 """
 import os
 
-# Un thread BLAS per processo: il parallelismo e' fra processi, non dentro.
 for _var in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'NUMEXPR_NUM_THREADS'):
     os.environ.setdefault(_var, '1')
 
@@ -40,9 +39,6 @@ FILE_CAMPIONE = 'flight_sample_30000.csv'
 
 FDS_LIST = [(['Origin', 'Dest'], 'Distance')]
 
-# Colonne ridondanti: codificano la stessa informazione della rotta (a 0
-# violazioni con Origin/Dest) e vanno sporcate insieme a Distance, altrimenti
-# il modello le userebbe come via di fuga.
 REDUNDANT_COLS_MAP = {
     (('Origin', 'Dest'), 'Distance'): [
         'OriginAirportID', 'DestAirportID',
@@ -53,27 +49,19 @@ REDUNDANT_COLS_MAP = {
         'OriginWac', 'DestWac',
         'OriginCityMarketID', 'DestCityMarketID',
         'OriginAirportSeqID', 'DestAirportSeqID',
-        # Fasce di distanza: da sola predice la durata quasi quanto Distance
-        # (analisi_rilevanza_fd.py), quindi lasciarla pulita aggirava il rumore.
         'DistanceGroup',
     ]
 }
 
-# FD che giustificano le colonne ridondanti: devono avere 0 violazioni sul
-# campione pulito (controllato all'avvio).
 FD_RIDONDANTI = (
     [(['Origin'], c) for c in REDUNDANT_COLS_MAP[(('Origin', 'Dest'), 'Distance')] if c.startswith('Origin')]
     + [(['Dest'], c) for c in REDUNDANT_COLS_MAP[(('Origin', 'Dest'), 'Distance')] if c.startswith('Dest')]
     + [(['Distance'], 'DistanceGroup')]
 )
 
-# CRSElapsedTime e' la fonte diretta del target; CRSArrTime/ArrTimeBlk sono
-# leakage (CRSArrTime - CRSDepTime approssima CRSElapsedTime, a meno del fuso
-# orario tra origine e destinazione: corr. 0.67, errore medio ~44 min).
 EXTRA_BLACKLIST = ['CRSElapsedTime', 'CRSArrTime', 'ArrTimeBlk']
 
 TARGET_COL = 'DurataBucket'
-# Granularita' concentrata nell'intervallo di interesse (max 40%).
 NOISE_LEVELS = [0.0, 0.05, 0.10, 0.20, 0.30, 0.40]
 N_REPS = 5
 SEED_BASE = 100
@@ -104,9 +92,6 @@ def conta_violazioni(df, fds):
     return int(sum((df.groupby(list(lhs))[rhs].nunique() > 1).sum() for lhs, rhs in fds))
 
 
-# ---------------------------------------------------------------
-# Lato processo di lavoro
-# ---------------------------------------------------------------
 _DF = None
 
 
@@ -125,8 +110,6 @@ def esegui_lavoro(level, rep, n_jobs_rf):
     )
     im, ip, ih, _ = get_global_inconsistency_metrics(df_noisy, FDS_LIST)
 
-    # Training sulle righe sporcate di df_noisy, test sulle STESSE righe prese
-    # dal campione pulito (df_eval).
     ml_scores = ml_preparation(
         df_noisy, TARGET_COL,
         extra_blacklist=EXTRA_BLACKLIST,
@@ -150,9 +133,6 @@ def esegui_lavoro(level, rep, n_jobs_rf):
     return righe
 
 
-# ---------------------------------------------------------------
-# Lato processo principale
-# ---------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser()
@@ -188,8 +168,6 @@ def main():
     if (acc < 0.5).any():
         log("ATTENZIONE: baseline vicino al caso puro (0.20 per 5 classi): non interpretare l'effetto del rumore.")
 
-    # Sanity check: a rumore 0% i due dataset coincidono, quindi le due
-    # valutazioni devono essere identiche e il training non deve avere righe sporche.
     diff = (base['Accuracy_test_sporco'] - base['Accuracy_test_pulito']).abs().max()
     quota0 = base['Quota_train_sporca'].max()
     log(f"Sanity check (rumore 0%): max |test_sporco - test_pulito| = {diff:.6f}, quota training sporca = {quota0}")

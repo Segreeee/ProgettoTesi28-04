@@ -3,25 +3,25 @@
    N_FD           1       2       4
    Rumore_%                        
    0         0.0000  0.0000  0.0000
-   5         0.0495  0.0974  0.1826
-   10        0.0977  0.1881  0.3396
-   20        0.1977  0.3597  0.5896
+   5         0.0495  0.0974  0.1867
+   10        0.0977  0.1881  0.3424
+   20        0.1977  0.3597  0.5906
    30        0.2982  0.5085  0.7606
-   40        0.3976  0.6371  0.8705
+   40        0.3976  0.6371  0.8699
    rumore 0%: training pulito=True, test sporco = test pulito: True
    rumore > 0: training sporco=True; quota crescente col rumore=True e col numero di FD=True
-   scarto massimo dalla quota attesa 1-(1-p)^N: 0.0043 (tolleranza 0.01)
+   scarto massimo dalla quota attesa 1-(1-p)^N: 0.0029 (tolleranza 0.01)
    CONTROLLO SUPERATO.
 
 1. Aggregato salvato in 'blocco2_aggregato.csv'. F1 sul test pulito, media dei 4 modelli:
 N_FD           1       2       4
 Rumore_%                        
 0         0.9233  0.9233  0.9233
-5         0.9049  0.8985  0.8947
-10        0.8901  0.8816  0.8738
-20        0.8700  0.8578  0.8398
-30        0.8572  0.8397  0.8071
-40        0.8451  0.8238  0.7701
+5         0.9049  0.8933  0.8885
+10        0.8901  0.8728  0.8655
+20        0.8700  0.8490  0.8297
+30        0.8572  0.8291  0.7934
+40        0.8451  0.8137  0.7533
 
 2. Scomposizione del danno per N_FD, salvata in 'blocco2_scomposizione.csv':
  N_FD  Rumore_%  Quota_train_sporca  F1_test_pulito  F1_test_sporco  Perdita_apprendimento  Perdita_input_corrotto  Perdita_totale_test_sporco  Quota_apprendimento_%
@@ -32,17 +32,17 @@ Rumore_%
     1        30              0.2982          0.8572          0.7955                 0.0661                  0.0617                      0.1278                   51.8
     1        40              0.3976          0.8451          0.7753                 0.0782                  0.0698                      0.1481                   52.8
     2         0              0.0000          0.9233          0.9233                 0.0000                  0.0000                      0.0000                    NaN
-    2         5              0.0974          0.8985          0.8700                 0.0248                  0.0285                      0.0533                   46.5
-    2        10              0.1881          0.8816          0.8371                 0.0417                  0.0445                      0.0862                   48.3
-    2        20              0.3597          0.8578          0.7918                 0.0655                  0.0660                      0.1315                   49.8
-    2        30              0.5085          0.8397          0.7623                 0.0836                  0.0774                      0.1610                   51.9
-    2        40              0.6371          0.8238          0.7410                 0.0995                  0.0828                      0.1823                   54.6
+    2         5              0.0974          0.8933          0.8575                 0.0300                  0.0359                      0.0659                   45.5
+    2        10              0.1881          0.8728          0.8174                 0.0505                  0.0554                      0.1060                   47.7
+    2        20              0.3597          0.8490          0.7725                 0.0743                  0.0765                      0.1508                   49.3
+    2        30              0.5085          0.8291          0.7425                 0.0942                  0.0866                      0.1808                   52.1
+    2        40              0.6371          0.8137          0.7266                 0.1097                  0.0870                      0.1967                   55.8
     4         0              0.0000          0.9233          0.9233                 0.0000                  0.0000                      0.0000                    NaN
-    4         5              0.1826          0.8947          0.8504                 0.0287                  0.0443                      0.0729                   39.3
-    4        10              0.3396          0.8738          0.7945                 0.0496                  0.0793                      0.1288                   38.5
-    4        20              0.5896          0.8398          0.6923                 0.0835                  0.1475                      0.2310                   36.1
-    4        30              0.7606          0.8071          0.6086                 0.1162                  0.1986                      0.3148                   36.9
-    4        40              0.8705          0.7701          0.5322                 0.1532                  0.2380                      0.3912                   39.2
+    4         5              0.1867          0.8885          0.8346                 0.0348                  0.0539                      0.0887                   39.2
+    4        10              0.3424          0.8655          0.7708                 0.0578                  0.0947                      0.1525                   37.9
+    4        20              0.5906          0.8297          0.6640                 0.0936                  0.1657                      0.2593                   36.1
+    4        30              0.7606          0.7934          0.5689                 0.1299                  0.2246                      0.3545                   36.6
+    4        40              0.8699          0.7533          0.4944                 0.1700                  0.2589                      0.4289                   39.6
 
 3. Correlazioni salvate in 'blocco2_correlazioni.csv'. Spearman IM/IH vs F1 sul test pulito:
 Metrica_Inconsistenza                        IH     IM
@@ -51,14 +51,14 @@ N_FD Regime          Modello
                      Logistic Regression -0.990 -0.989
                      Neural Network      -0.925 -0.910
                      Random Forest       -0.976 -0.982
-2    tutti i livelli Decision Tree       -0.972 -0.969
-                     Logistic Regression -0.979 -0.982
-                     Neural Network      -0.977 -0.971
-                     Random Forest       -0.974 -0.980
-4    tutti i livelli Decision Tree       -0.980 -0.977
-                     Logistic Regression -0.979 -0.971
-                     Neural Network      -0.971 -0.971
-                     Random Forest       -0.970 -0.967
+2    tutti i livelli Decision Tree       -0.976 -0.975
+                     Logistic Regression -0.981 -0.977
+                     Neural Network      -0.970 -0.973
+                     Random Forest       -0.979 -0.978
+4    tutti i livelli Decision Tree       -0.973 -0.965
+                     Logistic Regression -0.970 -0.962
+                     Neural Network      -0.978 -0.975
+                     Random Forest       -0.967 -0.975
 
 4. Significativita' del degrado, salvata in 'blocco2_test_degrado.csv':
       significativi  confronti
@@ -70,26 +70,26 @@ N_FD
 5. Configurazioni a parita' di livello (t-test appaiato), salvato in 'blocco2_test_configurazioni.csv':
            significativi  confronti  delta_medio
 Confronto                                       
-1 -> 2 FD             18         20      -0.0132
-2 -> 4 FD             19         20      -0.0232
+1 -> 2 FD             20         20      -0.0219
+2 -> 4 FD             19         20      -0.0255
 
 6. Configurazioni a parita' di righe sporche, salvato in 'blocco2_quota_normalizzata.csv' e 'blocco2_quota_punti_confrontabili.csv':
             Modello                                 Intervallo  N_punti     R2  Coef_N_FD  t_N_FD       p_N_FD  Significativo
-      Decision Tree                              tutti i punti       80 0.9608   0.004380   7.537 8.425063e-11           True
-      Decision Tree quota <= 0.41 (comune alle configurazioni)       55 0.9290   0.003494   8.397 3.494945e-11           True
-Logistic Regression                              tutti i punti       80 0.9597   0.022782  12.121 1.942827e-19           True
-Logistic Regression quota <= 0.41 (comune alle configurazioni)       55 0.9911   0.027902  31.734 2.980209e-35           True
-     Neural Network                              tutti i punti       80 0.9497  -0.004877  -5.248 1.346821e-06           True
-     Neural Network quota <= 0.41 (comune alle configurazioni)       55 0.8573  -0.001815  -4.300 7.720852e-05           True
-      Random Forest                              tutti i punti       80 0.9568  -0.000385  -0.749 4.564619e-01          False
-      Random Forest quota <= 0.41 (comune alle configurazioni)       55 0.9701   0.000325   2.272 2.735195e-02           True
+      Decision Tree                              tutti i punti       80 0.9650   0.004513   6.968 1.008542e-09           True
+      Decision Tree quota <= 0.41 (comune alle configurazioni)       55 0.9297   0.002935   7.070 4.216504e-09           True
+Logistic Regression                              tutti i punti       80 0.9661   0.015897   8.599 7.828912e-13           True
+Logistic Regression quota <= 0.41 (comune alle configurazioni)       55 0.9870   0.020196  18.524 2.685767e-24           True
+     Neural Network                              tutti i punti       80 0.9473  -0.005394  -5.399 7.372618e-07           True
+     Neural Network quota <= 0.41 (comune alle configurazioni)       55 0.8736  -0.002180  -5.240 3.091129e-06           True
+      Random Forest                              tutti i punti       80 0.9643  -0.000503  -0.872 3.861944e-01          False
+      Random Forest quota <= 0.41 (comune alle configurazioni)       55 0.9586   0.000168   0.967 3.379687e-01          False
    punti a quota confrontabile:
  Meno_FD  Rumore_meno_FD_%  Quota_meno_FD  F1_meno_FD  Piu_FD  Rumore_piu_FD_%  Quota_piu_FD  F1_piu_FD  Delta_quota  Delta_F1_piu_meno Modelli_con_piu_FD_migliore
-       1                10         0.0977      0.8901       2                5        0.0974     0.8985      -0.0003             0.0084                         4/4
-       1                20         0.1977      0.8700       2               10        0.1881     0.8816      -0.0096             0.0117                         3/4
-       1                20         0.1977      0.8700       4                5        0.1826     0.8947      -0.0151             0.0247                         3/4
-       2                10         0.1881      0.8816       4                5        0.1826     0.8947      -0.0055             0.0130                         3/4
-       2                20         0.3597      0.8578       4               10        0.3396     0.8738      -0.0200             0.0160                         3/4
+       1                10         0.0977      0.8901       2                5        0.0974     0.8933      -0.0003             0.0032                         3/4
+       1                20         0.1977      0.8700       2               10        0.1881     0.8728      -0.0096             0.0028                         2/4
+       1                20         0.1977      0.8700       4                5        0.1867     0.8885      -0.0109             0.0185                         3/4
+       2                10         0.1881      0.8728       4                5        0.1867     0.8885      -0.0013             0.0157                         3/4
+       2                20         0.3597      0.8490       4               10        0.3424     0.8655      -0.0172             0.0165                         3/4
 
 7. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):
    meccanismo: 1 FD, rumore 0% misurato
@@ -108,14 +108,14 @@ Logistic Regression quota <= 0.41 (comune alle configurazioni)       55 0.9911  
    salvato in 'blocco2_meccanismo_im.csv'. Con 4 FD, per FD e livello:
 Rumore_%                         0         5          10         20         30         40
 FD_n FD                                                                                  
-1    Distance -> DistanceGroup  0.0   52547.0   101023.0   168119.0   217137.0   251761.0
-2    Origin+Dest -> Distance    0.0   18543.0    26851.0    27541.0    20289.0    13588.0
-3    OriginAirportID -> Origin  0.0  885729.0  1563847.0  2437564.0  2798752.0  2806140.0
-4    DestAirportID -> Dest      0.0  897752.0  1550172.0  2456554.0  2845958.0  2846277.0
+1    Distance -> DistanceGroup  0.0   54989.0   104086.0   172785.0   221349.0   255819.0
+2    Origin+Dest -> Distance    0.0   18857.0    27693.0    27640.0    20438.0    13421.0
+3    OriginAirportID -> Origin  0.0  876686.0  1533068.0  2459136.0  2794492.0  2816692.0
+4    DestAirportID -> Dest      0.0  889686.0  1518026.0  2444405.0  2839281.0  2862757.0
    dimensione massima dei gruppi del lato sinistro:
 Rumore_%                            0       5       10      20      30     40
 FD_n FD                                                                      
 1    Distance -> DistanceGroup   154.0   145.0   128.0   117.0    87.0   68.0
-2    Origin+Dest -> Distance      66.0    52.0    45.0    38.0    23.0   19.0
-3    OriginAirportID -> Origin  1419.0  1346.0  1283.0  1171.0  1001.0  901.0
-4    DestAirportID -> Dest      1398.0  1346.0  1267.0  1149.0   999.0  886.0
+2    Origin+Dest -> Distance      66.0    57.0    48.0    32.0    28.0   18.0
+3    OriginAirportID -> Origin  1419.0  1346.0  1299.0  1139.0  1017.0  908.0
+4    DestAirportID -> Dest      1398.0  1342.0  1262.0  1134.0   990.0  886.0

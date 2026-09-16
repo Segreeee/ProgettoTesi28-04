@@ -97,7 +97,7 @@ Una FD valida nel mondo reale non è per questo utile all'esperimento: se le sue
 | Aeroporto di destinazione, con le stesse colonne | 1,1 punti | 4/4 |
 | Compagnia, orario di partenza, singole FD aeroporto → stato | 0,1–0,2 punti | 0 o 1 su 4 |
 
-Il Blocco 2 usa quindi le **4 FD rilevanti**, nell'ordine della tabella, con configurazioni da 1, 2 e 4 FD. Le FD sugli aeroporti vengono sporcate insieme alle colonne che ne ripetono l'informazione, come nel Blocco 1. Dieci FD rilevanti e indipendenti non esistono per questo obiettivo predittivo: raggiungerle avrebbe richiesto di aggiungere FD irrilevanti.
+Il Blocco 2 usa quindi le **4 FD rilevanti**, nell'ordine della tabella, con configurazioni da 1, 2 e 4 FD. Ogni FD viene sporcata insieme alle colonne che ne ripetono l'informazione, come nel Blocco 1: le FD sugli aeroporti con città, stato, FIPS, nome dello stato e WAC, la FD sulla rotta con `DistanceGroup`. Dieci FD rilevanti e indipendenti non esistono per questo obiettivo predittivo: raggiungerle avrebbe richiesto di aggiungere FD irrilevanti.
 
 La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima versione del Blocco 1, predice da sola la durata quasi quanto la distanza (F1 0,80 contro 0,83 con un albero su una sola colonna): era una via di fuga aperta. I risultati della prima versione sono conservati in `archivio_prima_revisione_fd/`.
 
@@ -123,7 +123,7 @@ La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima vers
 | Obiettivo predittivo | `DurataBucket` — 5 fasce di durata schedulata del volo |
 | Campione | 30.000 righe; 8.090 dopo il bilanciamento delle classi |
 | FD del Blocco 1 | `Origin+Dest → Distance` + 17 colonne ridondanti |
-| FD del Blocco 2 | `Distance → DistanceGroup`; `Origin+Dest → Distance`; `OriginAirportID → Origin` e `DestAirportID → Dest`, ciascuna con 5 colonne ridondanti |
+| FD del Blocco 2 | `Distance → DistanceGroup`; `Origin+Dest → Distance` (+ `DistanceGroup`); `OriginAirportID → Origin` e `DestAirportID → Dest`, ciascuna con 5 colonne ridondanti |
 | Livelli di rumore | 0, 5, 10, 20, 30, 40% |
 | Repliche per configurazione | 5, con seed diversi |
 | Cross-validation | stratificata, 5 fold (~6.470 righe di training per fold) |
@@ -155,7 +155,7 @@ La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima vers
 
 ### Il danno misurato sul test sporco è sovrastimato
 
-È la conseguenza della correzione richiesta ai punti 4 e 6. Nel Blocco 1, al 40% di rumore, il calo di F1 misurato sulle stesse righe sporcate è di **31,2 punti**; valutando gli stessi modelli sul test pulito è di **8,4 punti**. Il resto è il costo di interrogare il modello su input corrotti, non un apprendimento peggiore. La proporzione è stabile: a ogni livello il danno dovuto all'apprendimento è fra il 27% e il 32% di quello apparente. Nel Blocco 2, dove ogni riga sporca ha meno colonne corrotte, la quota sale al 36–55% e la sovrastima va da circa due volte (1 e 2 FD) a due volte e mezzo (4 FD).
+È la conseguenza della correzione richiesta ai punti 4 e 6. Nel Blocco 1, al 40% di rumore, il calo di F1 misurato sulle stesse righe sporcate è di **31,2 punti**; valutando gli stessi modelli sul test pulito è di **8,4 punti**. Il resto è il costo di interrogare il modello su input corrotti, non un apprendimento peggiore. La proporzione è stabile: a ogni livello il danno dovuto all'apprendimento è fra il 27% e il 32% di quello apparente. Nel Blocco 2, dove ogni riga sporca ha meno colonne corrotte, la quota sale al 36–56% e la sovrastima va da circa due volte (1 e 2 FD) a due volte e mezzo (4 FD).
 
 ### Chiudere la via di fuga `DistanceGroup` triplica il danno
 
@@ -163,24 +163,26 @@ Nella prima versione del Blocco 1 la F1 sul test pulito scendeva da 0,9233 a 0,8
 
 Il calo varia molto fra modelli: 2,9 punti Random Forest, 3,0 Decision Tree, 4,9 Neural Network, 22,9 Logistic Regression, che usa la distanza come valore numerico.
 
+Nel Blocco 2 la stessa via di fuga era rimasta aperta in parte: `DistanceGroup` era sporcata solo dalla FD `Distance → DistanceGroup`, mentre la FD sulla rotta corrompeva la distanza su altre righe lasciando lì la fascia pulita (7.179 righe su 30.000 al 40%). Aggiungendo `DistanceGroup` alle colonne ridondanti della FD sulla rotta, il calo al 40% passa da 10,0 a **11,0 punti** con 2 FD e da 15,3 a **17,0** con 4.
+
 ### Con FD rilevanti, più FD fanno più danno a parità di livello
 
-Il calo dal baseline al 40% passa da **7,8 punti** con 1 FD a **10,0** con 2 e **15,3** con 4. Nella prima versione, con 10 FD quasi tutte irrilevanti, il calo massimo era di 5,1 punti con il 99% delle righe sporche. A parità di livello di rumore il passaggio 1 → 2 FD è significativo in 18 confronti su 20, il passaggio 2 → 4 in 19 su 20.
+Il calo dal baseline al 40% passa da **7,8 punti** con 1 FD a **11,0** con 2 e **17,0** con 4. Nella prima versione, con 10 FD quasi tutte irrilevanti, il calo massimo era di 5,1 punti con il 99% delle righe sporche. A parità di livello di rumore il passaggio 1 → 2 FD è significativo in 20 confronti su 20, il passaggio 2 → 4 in 19 su 20.
 
 ### A parità di righe sporche, il risultato dipende dal modello
 
 Nella prima versione, a parità di righe sporche, più FD facevano meno danno per tutti e 4 i modelli. Con le FD rilevanti non è più una regola generale. Nella regressione *F1 ~ quota + quota² + N_FD*, nell'intervallo di quota comune alle tre configurazioni, il coefficiente di N_FD è:
 - positivo per Logistic Regression e Decision Tree (p < 0,001), che soffrono soprattutto la distanza corrotta;
 - negativo per Neural Network (p < 0,001), che soffre di più gli aeroporti corrotti;
-- trascurabile per Random Forest.
+- non significativo per Random Forest (p = 0,34).
 
 Conta quale informazione è inconsistente e quanto il modello ne dipende, non il numero di vincoli violati.
 
 ### IM non è confrontabile fra insiemi di FD diversi
 
-Dentro ogni configurazione IM e IH correlano col danno (Spearman fra −0,91 e −0,99). Fra configurazioni diverse, invece, al 40% IM è 32 volte più grande con 4 FD che con 1 a fronte di un danno doppio, perché è dominato dalle FD sugli aeroporti, che hanno gruppi grandi e contano poco per la previsione. IH cresce di 1,7 volte, in proporzione al danno.
+Dentro ogni configurazione IM e IH correlano col danno (Spearman fra −0,91 e −0,99). Fra configurazioni diverse, invece, al 40% IM è 32 volte più grande con 4 FD che con 1 a fronte di un danno 2,2 volte maggiore, perché è dominato dalle FD sugli aeroporti, che hanno gruppi grandi e contano poco per la previsione. IH cresce di 1,7 volte, molto più vicino al rapporto fra i danni.
 
-Con 4 FD, inoltre, IM si satura: fra il 30% e il 40% cresce solo dello 0,9% mentre la F1 perde altri 3,7 punti. Il meccanismo, misurato, è lo stesso che nella prima versione con 10 FD faceva calare IM: sporcando l'ID dell'aeroporto i gruppi grandi si svuotano e il numero di coppie di righe che possono entrare in conflitto crolla.
+Con 4 FD, inoltre, IM si satura: fra il 30% e il 40% cresce solo dell'1,1% mentre la F1 perde altri 4,0 punti. Il meccanismo, misurato, è lo stesso che nella prima versione con 10 FD faceva calare IM: sporcando l'ID dell'aeroporto i gruppi grandi si svuotano e il numero di coppie di righe che possono entrare in conflitto crolla.
 
 ### Il campione più grande alza il livello di partenza
 

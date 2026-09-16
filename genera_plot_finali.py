@@ -22,7 +22,7 @@ import matplotlib.ticker as mticker
 BLUE, ORANGE, AQUA, YELLOW = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
 INK, INK_SECONDARY, INK_MUTED = "#0b0b0b", "#52514e", "#898781"
 GRID, AXIS, SURFACE = "#e1e0d9", "#c3c2b7", "#fcfcfb"
-PALETTE = [BLUE, ORANGE, AQUA, YELLOW]      # ordine fisso, mai ciclato
+PALETTE = [BLUE, ORANGE, AQUA, YELLOW]
 
 plt.rcParams.update({
     "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "axes.edgecolor": AXIS,
@@ -93,14 +93,10 @@ def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths):
     plt.close(fig)
 
 
-# =================================================================
-# BLOCCO 1
-# =================================================================
 df1 = pd.read_csv('blocco1_risultati_raw.csv')
 modelli = sorted(df1['Modello'].unique())
 COLORI_MODELLI = dict(zip(modelli, PALETTE))
 
-# --- F1 sul test pulito, per modello (banda = std sulle repliche dello stesso modello) ---
 fig, ax = plt.subplots(figsize=(8, 5.2))
 for m in modelli:
     s = df1[df1['Modello'] == m].groupby('Rumore_%')['F1_Score_test_pulito'].agg(['mean', 'std'])
@@ -116,7 +112,6 @@ fig.tight_layout()
 fig.savefig("plot_blocco1_f1_test_pulito.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-# --- Test sporco vs test pulito (media dei 4 modelli) ---
 fig, ax = plt.subplots(figsize=(8, 5.2))
 for tt, colore, marker, etichetta in [
         ('test_sporco', ORANGE, 's', 'Test su dati sporchi (il modello riceve input corrotti)'),
@@ -132,7 +127,6 @@ fig.tight_layout()
 fig.savefig("plot_blocco1_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-# --- Correlazioni IM/IH vs F1 (Spearman, test pulito), per modello ---
 corr1 = pd.read_csv('blocco1_correlazioni.csv')
 corr1 = corr1[corr1['Valutazione'] == 'test_pulito']
 fig, ax = plt.subplots(figsize=(8, 5.5))
@@ -144,7 +138,6 @@ fig.tight_layout()
 fig.savefig("plot_blocco1_correlazioni.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-# --- Tabella Blocco 1 ---
 tab1 = df1.groupby('Rumore_%').agg(
     IM=('IM', 'mean'), IH=('IH', 'mean'),
     F1_sporco=('F1_Score_test_sporco', 'mean'), F1_pulito=('F1_Score_test_pulito', 'mean'),
@@ -167,9 +160,6 @@ salva_tabella_immagine(
 print("Blocco 1: plot_blocco1_f1_test_pulito.png, plot_blocco1_sporco_vs_pulito.png, "
       "plot_blocco1_correlazioni.png, tabella_riassuntiva_blocco1.csv/.png")
 
-# =================================================================
-# BLOCCO 2 (dai CSV di blocco2_analisi.py)
-# =================================================================
 if not os.path.exists('blocco2_scomposizione.csv'):
     print("CSV di blocco2_analisi.py non presenti: eseguire prima blocco2_analisi.py. Sezione Blocco 2 saltata.")
 else:
@@ -178,9 +168,8 @@ else:
     corr2 = pd.read_csv('blocco2_correlazioni.csv')
     counts = sorted(scomp2['N_FD'].unique())
     colori = dict(zip(counts, PALETTE))
-    im2 = agg2.groupby(['N_FD', 'Rumore_%'])['IM'].mean()        # IM non dipende dal modello
+    im2 = agg2.groupby(['N_FD', 'Rumore_%'])['IM'].mean()
 
-    # --- F1 e IM al variare del numero di FD corrotte ---
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
     for n in counts:
         s = scomp2[scomp2['N_FD'] == n]
@@ -201,7 +190,6 @@ else:
     fig.savefig("plot_blocco2_scaling_fd.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- Test sporco vs test pulito, un pannello per configurazione (stessa scala) ---
     fig, axes = plt.subplots(1, len(counts), figsize=(12, 4.6), sharey=True)
     for ax, n in zip(axes, counts):
         s = scomp2[scomp2['N_FD'] == n]
@@ -219,9 +207,6 @@ else:
     fig.savefig("plot_blocco2_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- F1 contro la quota di righe di training sporcate ---
-    # A parita' di livello nominale piu' FD sporcano molte piu' righe: su questa
-    # ascissa le configurazioni si confrontano a parita' di righe sporche.
     fig, ax = plt.subplots(figsize=(8, 5.2))
     for n in counts:
         s = scomp2[scomp2['N_FD'] == n].sort_values('Quota_train_sporca')
@@ -235,7 +220,6 @@ else:
     fig.savefig("plot_blocco2_quota_sporca.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- IM e F1 con il numero massimo di FD (titolo e zona dipendono dai dati) ---
     n_max = counts[-1]
     s_f1 = scomp2[scomp2['N_FD'] == n_max].set_index('Rumore_%')['F1_test_pulito']
     s_im = im2.loc[n_max]
@@ -263,7 +247,6 @@ else:
     fig.savefig("plot_blocco2_im_e_f1.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- Correlazioni IM/IH vs F1 (Spearman, test pulito), per configurazione ---
     c2 = corr2[corr2['Valutazione'] == 'test_pulito']
     pannelli = [(n, 'tutti i livelli', f"{n} FD, tutti i livelli") for n in counts]
     regime_picco = c2[(c2['N_FD'] == n_max) & (c2['Regime'].str.startswith('dal picco'))]['Regime'].unique()
@@ -281,7 +264,6 @@ else:
     fig.savefig("plot_blocco2_correlazioni.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    # --- Tabella Blocco 2 ---
     piv = scomp2.pivot_table(index='Rumore_%', columns='N_FD', values=['F1_test_pulito', 'Quota_train_sporca'])
     tabella = pd.DataFrame({'Rumore_%': piv.index})
     for n in counts:

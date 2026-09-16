@@ -44,16 +44,13 @@ SEED_BASE = 100
 ORIGINE = ['Origin', 'OriginCityName', 'OriginState', 'OriginStateFips', 'OriginStateName', 'OriginWac']
 DESTINAZIONE = ['Dest', 'DestCityName', 'DestState', 'DestStateFips', 'DestStateName', 'DestWac']
 
-# Nome -> (FD, colonne ridondanti sporcate sulle stesse righe)
 CONFIGURAZIONI = {
-    # FD singole
     'FD Origin+Dest -> Distance':            ((['Origin', 'Dest'], 'Distance'), []),
     'FD Distance -> DistanceGroup':          ((['Distance'], 'DistanceGroup'), []),
     'FD CRSDepTime -> DepTimeBlk':           ((['CRSDepTime'], 'DepTimeBlk'), []),
     'FD Reporting_Airline -> IATA_CODE':     ((['Reporting_Airline'], 'IATA_CODE_Reporting_Airline'), []),
     'FD OriginAirportID -> OriginState':     ((['OriginAirportID'], 'OriginState'), []),
     'FD DestAirportID -> DestState':         ((['DestAirportID'], 'DestState'), []),
-    # Concetti, con tutte le copie ridondanti
     'Concetto distanza':                     ((['Distance'], 'DistanceGroup'), []),
     'Concetto aeroporto di origine':         ((['OriginAirportID'], 'Origin'), ORIGINE[1:]),
     'Concetto aeroporto di destinazione':    ((['DestAirportID'], 'Dest'), DESTINAZIONE[1:]),
@@ -61,8 +58,6 @@ CONFIGURAZIONI = {
                                               ['OriginAirportID', 'DestAirportID', 'DistanceGroup']
                                               + ORIGINE[1:] + DESTINAZIONE[1:]),
 }
-# 'Concetto distanza' coincide con la FD Distance -> DistanceGroup (entrambe le
-# colonne del concetto sono gia' nella FD): non viene rieseguito.
 DUPLICATI = {'Concetto distanza': 'FD Distance -> DistanceGroup'}
 
 COLONNE_UNIVARIATE = [
@@ -185,7 +180,6 @@ def main():
     for dup, orig in DUPLICATI.items():
         raw = pd.concat([raw, raw[raw['Configurazione'] == orig].assign(Configurazione=dup)])
 
-    # Controllo: il training e' davvero sporcato (quota ~ 40%), il test e' pulito.
     q = raw.groupby('Configurazione')['Quota_train_sporca'].mean()
     log("\nQuota di righe di training sporcate: " + ", ".join(f"{k} {v:.3f}" for k, v in q.items()))
     if ((q - LIVELLO).abs() > 0.01).any():

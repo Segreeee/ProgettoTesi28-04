@@ -281,7 +281,6 @@ def build_meccanismo_im(df):
             print(f"   meccanismo: {n_fd} FD, rumore {livello}% misurato", flush=True)
     tabella = pd.DataFrame(righe)
 
-    # Verifica di fedelta': con 1 FD i conflitti rigenerati = IM del CSV (replica 0).
     im_csv = df[(df['N_FD'] == 1) & (df['Rep'] == 0)].drop_duplicates('Rumore_%').set_index('Rumore_%')['IM']
     rigenerati = tabella[tabella['N_FD'] == 1].set_index('Rumore_%')['Conflitti_FD']
     fedele = bool((rigenerati.sort_index() == im_csv.sort_index()).all())

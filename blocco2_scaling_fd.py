@@ -40,16 +40,11 @@ from blocco1_esperimento import (
 )
 from esecuzione_parallela import numero_processi, esegui_lavori, Registro
 
-# Pool di FD: tutte verificate a 0 violazioni sul campione, valide nel
-# dominio reale e con TUTTE le colonne che superano la blacklist (verifica
-# automatica all'avvio, salvata in blocco2_verifica_fd.csv). Ordine per
-# rilevanza misurata (calo di F1 al 40%, media dei 4 modelli, in
-# rilevanza_fd.csv).
 FD_POOL = [
-    (['Distance'], 'DistanceGroup'),                  # 1  distanza -> fascia di distanza   (7,9 punti)
-    (['Origin', 'Dest'], 'Distance'),                 # 2  rotta -> distanza                (2,0 punti)
-    (['OriginAirportID'], 'Origin'),                  # 3  aeroporto di origine             (1,3 punti)
-    (['DestAirportID'], 'Dest'),                      # 4  aeroporto di destinazione        (1,1 punti)
+    (['Distance'], 'DistanceGroup'),
+    (['Origin', 'Dest'], 'Distance'),
+    (['OriginAirportID'], 'Origin'),
+    (['DestAirportID'], 'Dest'),
 ]
 
 SIGNIFICATO = [
@@ -59,9 +54,8 @@ SIGNIFICATO = [
     "l'ID identifica il codice IATA dell'aeroporto; citta' e stato ne seguono (arrivo)",
 ]
 
-# Colonne che ripetono l'informazione dell'aeroporto: sporcate sulle stesse
-# righe della FD corrispondente (vie di fuga chiuse, come nel Blocco 1).
 REDUNDANT_COLS_MAP = {
+    (('Origin', 'Dest'), 'Distance'): ['DistanceGroup'],
     (('OriginAirportID',), 'Origin'): ['OriginCityName', 'OriginState', 'OriginStateFips',
                                        'OriginStateName', 'OriginWac'],
     (('DestAirportID',), 'Dest'): ['DestCityName', 'DestState', 'DestStateFips',
@@ -77,7 +71,7 @@ SEED_BASE = 100
 RAW_RESULTS_FILE = 'blocco2_risultati_raw.csv'
 VERIFICA_FD_FILE = 'blocco2_verifica_fd.csv'
 LOG_FILE = 'blocco2_run.log'
-RAM_PER_PROCESSO_GB = 1.5   # il grafo di networkx supera 5 milioni di archi (~0,8 GB) con 4 FD
+RAM_PER_PROCESSO_GB = 1.5
 
 
 def verifica_fd(df, log):
@@ -124,9 +118,6 @@ def verifica_fd(df, log):
         f"sul campione. Salvata in {VERIFICA_FD_FILE}")
 
 
-# ---------------------------------------------------------------
-# Lato processo di lavoro
-# ---------------------------------------------------------------
 _DF = None
 
 
@@ -143,7 +134,6 @@ def esegui_lavoro(n_fd, level, rep, n_jobs_rf):
         _DF, fds, noise_level=level,
         corrupt_lhs=True, redundant_cols_map=REDUNDANT_COLS_MAP, seed=seed,
     )
-    # IM/IP/IH misurati sullo STESSO set di FD che viene corrotto.
     im, ip, ih, _ = get_global_inconsistency_metrics(df_noisy, fds)
 
     ml_scores = ml_preparation(
@@ -170,9 +160,6 @@ def esegui_lavoro(n_fd, level, rep, n_jobs_rf):
     return righe
 
 
-# ---------------------------------------------------------------
-# Lato processo principale
-# ---------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser()

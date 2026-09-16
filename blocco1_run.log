@@ -38,3 +38,83 @@
 [2026-09-14 15:27:58] Baseline (rumore 0%), accuracy sul test pulito: Decision Tree 0.9219, Logistic Regression 0.9222, Neural Network 0.9153, Random Forest 0.9347
 [2026-09-14 15:27:58] Sanity check (rumore 0%): max |test_sporco - test_pulito| = 0.000000, quota training sporca = 0.0
 [2026-09-14 15:27:58] FINE. Righe nel CSV: 120 (attese 120)
+[2026-09-15 21:35:03] ============================================================
+[2026-09-15 21:35:03] Blocco 1 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-15 21:35:03] Classi del target: {'90-150m': 11135, '150-210m': 7524, '<90m': 6346, '210-300m': 3377, '>300m': 1618}
+[2026-09-15 21:35:03] FD [(['Origin', 'Dest'], 'Distance')] e 17 colonne ridondanti: 0 violazioni sul campione pulito.
+[2026-09-15 21:35:03] RAM disponibile 2.4 GB -> 2 processi paralleli, Random Forest con 8 thread
+[2026-09-15 21:35:03] Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-15 21:35:03] Lavori totali 30, gia' completati 0, da eseguire 30
+[2026-09-15 21:36:26] LAVORO 1/30  (0, 1)  IM=0  fine stimata tra 40 min
+[2026-09-15 21:36:27] LAVORO 2/30  (0, 0)  IM=0  fine stimata tra 20 min
+[2026-09-15 21:37:44] LAVORO 3/30  (0, 3)  IM=0  fine stimata tra 24 min
+[2026-09-15 21:38:02] LAVORO 4/30  (0, 2)  IM=0  fine stimata tra 19 min
+[2026-09-15 21:39:08] LAVORO 5/30  (0, 4)  IM=0  fine stimata tra 20 min
+[2026-09-15 21:41:11] LAVORO 6/30  (5, 0)  IM=336  fine stimata tra 25 min
+[2026-09-15 21:42:16] LAVORO 7/30  (5, 1)  IM=353  fine stimata tra 24 min
+[2026-09-15 21:44:06] LAVORO 8/30  (5, 2)  IM=538  fine stimata tra 25 min
+[2026-09-15 21:45:19] LAVORO 9/30  (5, 3)  IM=455  fine stimata tra 24 min
+[2026-09-15 21:47:11] LAVORO 10/30  (5, 4)  IM=372  fine stimata tra 24 min
+[2026-09-15 21:48:31] LAVORO 11/30  (10, 0)  IM=809  fine stimata tra 23 min
+[2026-09-15 21:50:15] LAVORO 12/30  (10, 1)  IM=711  fine stimata tra 23 min
+[2026-09-15 21:51:33] LAVORO 13/30  (10, 2)  IM=693  fine stimata tra 22 min
+[2026-09-15 21:53:15] LAVORO 14/30  (10, 3)  IM=934  fine stimata tra 21 min
+[2026-09-15 21:54:40] LAVORO 15/30  (10, 4)  IM=788  fine stimata tra 20 min
+[2026-09-15 21:56:34] LAVORO 16/30  (20, 0)  IM=1,081  fine stimata tra 19 min
+[2026-09-15 21:58:18] LAVORO 17/30  (20, 1)  IM=1,619  fine stimata tra 18 min
+[2026-09-15 21:59:47] LAVORO 18/30  (20, 2)  IM=1,634  fine stimata tra 16 min
+[2026-09-15 22:01:44] LAVORO 19/30  (20, 3)  IM=1,757  fine stimata tra 15 min
+[2026-09-15 22:03:18] LAVORO 20/30  (20, 4)  IM=1,610  fine stimata tra 14 min
+[2026-09-15 22:05:24] LAVORO 21/30  (30, 0)  IM=2,096  fine stimata tra 13 min
+[2026-09-15 22:07:07] LAVORO 22/30  (30, 1)  IM=2,287  fine stimata tra 12 min
+[2026-09-15 22:09:01] LAVORO 23/30  (30, 2)  IM=2,367  fine stimata tra 10 min
+[2026-09-15 22:10:40] LAVORO 24/30  (30, 3)  IM=2,213  fine stimata tra 9 min
+[2026-09-15 22:12:22] LAVORO 25/30  (30, 4)  IM=2,324  fine stimata tra 7 min
+[2026-09-15 22:14:09] LAVORO 26/30  (40, 0)  IM=2,842  fine stimata tra 6 min
+[2026-09-15 22:16:02] LAVORO 27/30  (40, 1)  IM=2,905  fine stimata tra 5 min
+[2026-09-15 22:17:31] LAVORO 28/30  (40, 2)  IM=2,605  fine stimata tra 3 min
+[2026-09-15 22:19:42] LAVORO 29/30  (40, 3)  IM=2,847  fine stimata tra 2 min
+[2026-09-15 22:21:05] LAVORO 30/30  (40, 4)  IM=2,879  fine stimata tra 0 min
+[2026-09-15 22:21:05] Baseline (rumore 0%), accuracy sul test pulito: Decision Tree 0.9219, Logistic Regression 0.9222, Neural Network 0.9153, Random Forest 0.9347
+[2026-09-15 22:21:05] Sanity check (rumore 0%): max |test_sporco - test_pulito| = 0.000000, quota training sporca = 0.0
+[2026-09-15 22:21:05] FINE. Righe nel CSV: 120 (attese 120)
+[2026-09-16 17:19:41] ============================================================
+[2026-09-16 17:19:41] Blocco 1 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-16 17:19:41] Classi del target: {'90-150m': 11135, '150-210m': 7524, '<90m': 6346, '210-300m': 3377, '>300m': 1618}
+[2026-09-16 17:19:41] FD [(['Origin', 'Dest'], 'Distance')] e 17 colonne ridondanti: 0 violazioni sul campione pulito.
+[2026-09-16 17:19:41] RAM disponibile 1.6 GB -> 1 processi paralleli, Random Forest con 16 thread
+[2026-09-16 17:19:41] Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-16 17:19:41] Lavori totali 30, gia' completati 0, da eseguire 30
+[2026-09-16 17:20:27] LAVORO 1/30  (0, 0)  IM=0  fine stimata tra 22 min
+[2026-09-16 17:21:23] LAVORO 2/30  (0, 1)  IM=0  fine stimata tra 24 min
+[2026-09-16 17:22:08] LAVORO 3/30  (0, 2)  IM=0  fine stimata tra 22 min
+[2026-09-16 17:22:53] LAVORO 4/30  (0, 3)  IM=0  fine stimata tra 21 min
+[2026-09-16 17:23:36] LAVORO 5/30  (0, 4)  IM=0  fine stimata tra 20 min
+[2026-09-16 17:26:10] LAVORO 6/30  (5, 0)  IM=336  fine stimata tra 26 min
+[2026-09-16 17:28:28] LAVORO 7/30  (5, 1)  IM=353  fine stimata tra 29 min
+[2026-09-16 17:30:37] LAVORO 8/30  (5, 2)  IM=538  fine stimata tra 30 min
+[2026-09-16 17:32:55] LAVORO 9/30  (5, 3)  IM=455  fine stimata tra 31 min
+[2026-09-16 17:35:08] LAVORO 10/30  (5, 4)  IM=372  fine stimata tra 31 min
+[2026-09-16 17:37:34] LAVORO 11/30  (10, 0)  IM=809  fine stimata tra 31 min
+[2026-09-16 17:39:59] LAVORO 12/30  (10, 1)  IM=711  fine stimata tra 30 min
+[2026-09-16 17:42:22] LAVORO 13/30  (10, 2)  IM=693  fine stimata tra 30 min
+[2026-09-16 17:44:51] LAVORO 14/30  (10, 3)  IM=934  fine stimata tra 29 min
+[2026-09-16 17:47:26] LAVORO 15/30  (10, 4)  IM=788  fine stimata tra 28 min
+[2026-09-16 17:49:58] LAVORO 16/30  (20, 0)  IM=1,081  fine stimata tra 26 min
+[2026-09-16 17:52:36] LAVORO 17/30  (20, 1)  IM=1,619  fine stimata tra 25 min
+[2026-09-16 17:55:06] LAVORO 18/30  (20, 2)  IM=1,634  fine stimata tra 24 min
+[2026-09-16 17:57:40] LAVORO 19/30  (20, 3)  IM=1,757  fine stimata tra 22 min
+[2026-09-16 18:00:19] LAVORO 20/30  (20, 4)  IM=1,610  fine stimata tra 20 min
+[2026-09-16 18:03:02] LAVORO 21/30  (30, 0)  IM=2,096  fine stimata tra 19 min
+[2026-09-16 18:05:48] LAVORO 22/30  (30, 1)  IM=2,287  fine stimata tra 17 min
+[2026-09-16 18:08:31] LAVORO 23/30  (30, 2)  IM=2,367  fine stimata tra 15 min
+[2026-09-16 18:11:19] LAVORO 24/30  (30, 3)  IM=2,213  fine stimata tra 13 min
+[2026-09-16 18:14:05] LAVORO 25/30  (30, 4)  IM=2,324  fine stimata tra 11 min
+[2026-09-16 18:17:04] LAVORO 26/30  (40, 0)  IM=2,842  fine stimata tra 9 min
+[2026-09-16 18:20:00] LAVORO 27/30  (40, 1)  IM=2,905  fine stimata tra 7 min
+[2026-09-16 18:23:04] LAVORO 28/30  (40, 2)  IM=2,605  fine stimata tra 5 min
+[2026-09-16 18:26:03] LAVORO 29/30  (40, 3)  IM=2,847  fine stimata tra 2 min
+[2026-09-16 18:28:57] LAVORO 30/30  (40, 4)  IM=2,879  fine stimata tra 0 min
+[2026-09-16 18:28:58] Baseline (rumore 0%), accuracy sul test pulito: Decision Tree 0.9219, Logistic Regression 0.9222, Neural Network 0.9153, Random Forest 0.9347
+[2026-09-16 18:28:58] Sanity check (rumore 0%): max |test_sporco - test_pulito| = 0.000000, quota training sporca = 0.0
+[2026-09-16 18:28:58] FINE. Righe nel CSV: 120 (attese 120)

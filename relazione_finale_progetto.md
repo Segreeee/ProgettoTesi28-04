@@ -76,11 +76,11 @@ La certificazione delle FD usate è in `blocco2_verifica_fd.csv`.
 Per ogni livello di rumore e replica: si corrompono le colonne delle FD scelte sul campione, poi si addestrano i 4 modelli RAW in **cross-validation stratificata a 5 fold** sulle righe sporcate, e si valuta **sulle stesse righe di test prese dal campione pulito** (oltre che, per confronto, su quelle sporcate).
 
 - **Blocco 1** — una FD, `Origin + Dest → Distance`, sporcata insieme alle **17 colonne ridondanti** che codificano la stessa informazione (ID, codici di sequenza e di mercato, città, stato, FIPS, nome dello stato, WAC degli aeroporti, e `DistanceGroup`): tutte le vie di fuga sono chiuse.
-- **Blocco 2** — le 4 FD rilevanti, aggiunte in ordine di rilevanza: **1 FD** (distanza), **2 FD** (+ rotta), **4 FD** (+ aeroporto di origine e di destinazione, con le loro colonne ridondanti).
+- **Blocco 2** — le 4 FD rilevanti, aggiunte in ordine di rilevanza: **1 FD** (`Distance → DistanceGroup`), **2 FD** (+ `Origin+Dest → Distance`), **4 FD** (+ aeroporto di origine e di destinazione). Ogni FD sporca anche le colonne che ne ripetono l'informazione: la FD sulla rotta porta con sé `DistanceGroup`, quelle sugli aeroporti città, stato, FIPS, nome dello stato e WAC.
 
 Livelli di rumore: **0, 5, 10, 20, 30, 40%**; 5 repliche con seed diversi per livello. Il seed di ogni replica è lo stesso in tutte le configurazioni, e righe bilanciate e fold sono identici in ogni condizione: le configurazioni si confrontano a coppie.
 
-**Verifica della garanzia.** Ogni risultato riporta la quota di righe di training che differiscono dal campione pulito. Vale **0 a rumore 0%**, dove le due valutazioni coincidono. Nel Blocco 1 coincide con il livello richiesto (0,0495 · 0,0977 · 0,1977 · 0,2982 · 0,3976); nel Blocco 2, poiché ogni FD sceglie le proprie righe, vale 1 − (1 − p)^N, con uno scarto massimo di 0,004 dall'atteso. Le analisi di entrambi i blocchi si interrompono se uno di questi controlli fallisce.
+**Verifica della garanzia.** Ogni risultato riporta la quota di righe di training che differiscono dal campione pulito. Vale **0 a rumore 0%**, dove le due valutazioni coincidono. Nel Blocco 1 coincide con il livello richiesto (0,0495 · 0,0977 · 0,1977 · 0,2982 · 0,3976); nel Blocco 2, poiché ogni FD sceglie le proprie righe, vale 1 − (1 − p)^N, con uno scarto massimo di 0,003 dall'atteso. Le analisi di entrambi i blocchi si interrompono se uno di questi controlli fallisce.
 
 ---
 
@@ -137,19 +137,19 @@ F1 sul test pulito, media dei 4 modelli, e quota di righe di training effettivam
 | Rumore | F1 · 1 FD | F1 · 2 FD | F1 · 4 FD | Righe sporche · 1 FD | · 2 FD | · 4 FD |
 |---|---|---|---|---|---|---|
 | 0% | 0,9233 | 0,9233 | 0,9233 | 0,0% | 0,0% | 0,0% |
-| 5% | 0,9049 | 0,8985 | 0,8947 | 5,0% | 9,7% | 18,3% |
-| 10% | 0,8901 | 0,8816 | 0,8738 | 9,8% | 18,8% | 34,0% |
-| 20% | 0,8700 | 0,8578 | 0,8398 | 19,8% | 36,0% | 59,0% |
-| 30% | 0,8572 | 0,8397 | 0,8071 | 29,8% | 50,8% | 76,1% |
-| 40% | 0,8451 | 0,8238 | 0,7701 | 39,8% | 63,7% | 87,0% |
+| 5% | 0,9049 | 0,8933 | 0,8885 | 5,0% | 9,7% | 18,7% |
+| 10% | 0,8901 | 0,8728 | 0,8655 | 9,8% | 18,8% | 34,2% |
+| 20% | 0,8700 | 0,8490 | 0,8297 | 19,8% | 36,0% | 59,1% |
+| 30% | 0,8572 | 0,8291 | 0,7934 | 29,8% | 50,9% | 76,1% |
+| 40% | 0,8451 | 0,8137 | 0,7533 | 39,8% | 63,7% | 87,0% |
 
 Il degrado è significativo in **60 confronti su 60**. Calo dal baseline al 40%, per modello:
 
 | Configurazione | Decision Tree | Logistic Regression | Neural Network | Random Forest | Media |
 |---|---|---|---|---|---|
 | 1 FD | 3,7 | 23,6 | 2,1 | 1,9 | 7,8 |
-| 2 FD | 6,3 | 25,9 | 4,3 | 3,4 | 10,0 |
-| 4 FD | 9,3 | 29,1 | 14,3 | 8,6 | 15,3 |
+| 2 FD | 7,4 | 28,1 | 4,3 | 4,1 | 11,0 |
+| 4 FD | 11,0 | 31,6 | 15,0 | 10,5 | 17,0 |
 
 **Una sola FD da due colonne fa quasi quanto il Blocco 1 con venti.** Sporcando solo `Distance` e `DistanceGroup` al 40% la media perde 7,8 punti, contro gli 8,4 del Blocco 1, che sporca anche rotta, aeroporti, città e stati sulle stesse righe. Nella versione precedente del Blocco 2, con 10 FD sugli attributi geografici degli aeroporti, il calo massimo era di 5,1 punti con il **99%** delle righe sporche.
 
@@ -158,10 +158,10 @@ Il degrado è significativo in **60 confronti su 60**. Calo dal baseline al 40%,
 | Configurazione (40%) | Perdita da apprendimento | Perdita da input corrotto | Quota da apprendimento |
 |---|---|---|---|
 | 1 FD | 0,0782 | 0,0698 | 52,8% |
-| 2 FD | 0,0995 | 0,0828 | 54,6% |
-| 4 FD | 0,1532 | 0,2380 | 39,2% |
+| 2 FD | 0,1097 | 0,0870 | 55,8% |
+| 4 FD | 0,1700 | 0,2589 | 39,6% |
 
-La quota di danno dovuta all'apprendimento sta fra il **46% e il 55%** con 1 e 2 FD e fra il **36% e il 39%** con 4 FD, a ogni livello: misurare sul test sporco sovrastima il danno di **circa due volte** con 1 e 2 FD e di **due volte e mezzo** con 4 FD, contro quasi quattro del Blocco 1. La sovrastima cresce con il numero di colonne corrotte per riga.
+La quota di danno dovuta all'apprendimento sta fra il **45% e il 56%** con 1 e 2 FD e fra il **36% e il 40%** con 4 FD, a ogni livello: misurare sul test sporco sovrastima il danno di **circa due volte** con 1 e 2 FD e di **due volte e mezzo** con 4 FD, contro quasi quattro del Blocco 1. La sovrastima cresce con il numero di colonne corrotte per riga.
 
 ## 7.3 Correlazioni
 
@@ -171,28 +171,28 @@ Correlazione di Spearman con F1 sul test pulito:
 |---|---|---|---|---|---|
 | 1 FD | IM | −0,975 | −0,989 | −0,910 | −0,982 |
 | 1 FD | IH | −0,980 | −0,990 | −0,925 | −0,976 |
-| 2 FD | IM | −0,969 | −0,982 | −0,971 | −0,980 |
-| 2 FD | IH | −0,972 | −0,979 | −0,977 | −0,974 |
-| 4 FD | IM | −0,977 | −0,971 | −0,971 | −0,967 |
-| 4 FD | IH | −0,980 | −0,979 | −0,971 | −0,970 |
+| 2 FD | IM | −0,975 | −0,977 | −0,973 | −0,978 |
+| 2 FD | IH | −0,976 | −0,981 | −0,970 | −0,979 |
+| 4 FD | IM | −0,965 | −0,962 | −0,975 | −0,975 |
+| 4 FD | IH | −0,973 | −0,970 | −0,978 | −0,967 |
 
 **Dentro ogni configurazione** IM e IH ordinano i livelli di rumore come il danno. Due limiti però emergono.
 
-**Primo: con 4 FD gli indici si saturano.** Fra il 30% e il 40% di rumore la F1 perde altri 3,7 punti, mentre IM cresce solo dello 0,9% (da 5.845.795 a 5.896.878) e IH del 4,5% (da 27.996 a 29.251). La correlazione di Spearman, che guarda solo l'ordine, non lo rivela.
+**Primo: con 4 FD gli indici si saturano.** Fra il 30% e il 40% di rumore la F1 perde altri 4,0 punti, mentre IM cresce solo dell'1,1% (da 5.862.349 a 5.924.540) e IH del 4,3% (da 28.099 a 29.316). La correlazione di Spearman, che guarda solo l'ordine, non lo rivela.
 
 **Secondo: fra configurazioni diverse IM non è confrontabile col danno.**
 
 | Al 40% | 1 FD | 4 FD | Rapporto |
 |---|---|---|---|
-| IM | 186.614 | 5.896.878 | ×31,6 |
-| IH | 17.498 | 29.251 | ×1,7 |
-| Calo di F1 | 7,8 punti | 15,3 punti | ×2,0 |
+| IM | 186.614 | 5.924.540 | ×31,7 |
+| IH | 17.498 | 29.316 | ×1,7 |
+| Calo di F1 | 7,8 punti | 17,0 punti | ×2,2 |
 
-IM è dominato dalle due FD sugli aeroporti, che hanno gruppi grandi (fino a 1.419 righe per aeroporto) e quindi moltissime coppie in conflitto: nella replica 0 al 40% producono **5,65 milioni** dei 5,92 milioni di conflitti, ma sono le FD che contano meno per la previsione. IH, che conta le righe da correggere e non le coppie, resta proporzionato al danno.
+IM è dominato dalle due FD sugli aeroporti, che hanno gruppi grandi (fino a 1.419 righe per aeroporto) e quindi moltissime coppie in conflitto: nella replica 0 al 40% producono **5,68 milioni** dei 5,92 milioni di conflitti, ma sono le FD che contano meno per la previsione. IH, che conta le righe da correggere e non le coppie, resta proporzionato al danno.
 
 ## 7.4 A parità di livello: più FD, più danno
 
-T-test appaiato per replica fra configurazioni allo stesso livello di rumore: passando da 1 a 2 FD la F1 cala in media di **1,3 punti** (significativo in 18 confronti su 20), da 2 a 4 FD di **2,3 punti** (19 su 20).
+T-test appaiato per replica fra configurazioni allo stesso livello di rumore: passando da 1 a 2 FD la F1 cala in media di **2,2 punti** (significativo in 20 confronti su 20), da 2 a 4 FD di **2,6 punti** (19 su 20).
 
 A parità di livello, però, più FD sporcano anche più righe (al 20%: il 20% con una FD, il 59% con quattro). Il confronto va quindi ripetuto a parità di righe sporche.
 
@@ -202,27 +202,27 @@ Coppie di configurazioni con quota di righe sporche confrontabile (entro 3,5 pun
 
 | Meno FD | Più FD | Righe sporche | F1 meno FD | F1 più FD | Modelli con più FD migliore |
 |---|---|---|---|---|---|
-| 1 FD al 10% | 2 FD al 5% | 9,8% / 9,7% | 0,8901 | 0,8985 | 4/4 |
-| 1 FD al 20% | 2 FD al 10% | 19,8% / 18,8% | 0,8700 | 0,8816 | 3/4 |
-| 1 FD al 20% | 4 FD al 5% | 19,8% / 18,3% | 0,8700 | 0,8947 | 3/4 |
-| 2 FD al 10% | 4 FD al 5% | 18,8% / 18,3% | 0,8816 | 0,8947 | 3/4 |
-| 2 FD al 20% | 4 FD al 10% | 36,0% / 34,0% | 0,8578 | 0,8738 | 3/4 |
+| 1 FD al 10% | 2 FD al 5% | 9,8% / 9,7% | 0,8901 | 0,8933 | 3/4 |
+| 1 FD al 20% | 2 FD al 10% | 19,8% / 18,8% | 0,8700 | 0,8728 | 2/4 |
+| 1 FD al 20% | 4 FD al 5% | 19,8% / 18,7% | 0,8700 | 0,8885 | 3/4 |
+| 2 FD al 10% | 4 FD al 5% | 18,8% / 18,7% | 0,8728 | 0,8885 | 3/4 |
+| 2 FD al 20% | 4 FD al 10% | 36,0% / 34,2% | 0,8490 | 0,8655 | 3/4 |
 
 Regressione per modello *F1 ~ quota di righe sporche + quota² + N_FD*, nell'intervallo di quota comune alle tre configurazioni (≤ 0,41, 55 punti):
 
 | Modello | Coefficiente di N_FD | t | p | Lettura |
 |---|---|---|---|---|
-| Logistic Regression | +0,0279 | 31,7 | < 0,001 | più FD, meno danno |
-| Decision Tree | +0,0035 | 8,4 | < 0,001 | più FD, meno danno |
-| Random Forest | +0,0003 | 2,3 | 0,027 | effetto trascurabile |
-| Neural Network | −0,0018 | −4,3 | < 0,001 | più FD, **più** danno |
+| Logistic Regression | +0,0202 | 18,5 | < 0,001 | più FD, meno danno |
+| Decision Tree | +0,0029 | 7,1 | < 0,001 | più FD, meno danno |
+| Random Forest | +0,0002 | 1,0 | 0,34 | nessun effetto |
+| Neural Network | −0,0022 | −5,2 | < 0,001 | più FD, **più** danno |
 
-Sull'intero intervallo il segno è lo stesso per Logistic Regression, Decision Tree e Neural Network (p < 0,001), mentre per Random Forest il coefficiente non è significativo (p = 0,46).
+Sull'intero intervallo il segno è lo stesso per Logistic Regression, Decision Tree e Neural Network (p < 0,001), mentre per Random Forest il coefficiente resta non significativo (p = 0,39).
 
 **Interpretazione.** A parità di righe sporche, aggiungere FD significa sporcare meno la FD sulla distanza e più quelle su rotta e aeroporti. Il risultato dipende da quanto ciascun modello è sensibile a ciascuna informazione:
 - **Logistic Regression e Decision Tree** soffrono soprattutto la distanza corrotta (rispettivamente 23,6 e 3,7 punti con la sola FD sulla distanza al 40%), quindi diluirla con altre FD riduce il danno;
-- **Neural Network** soffre di più gli aeroporti corrotti: il suo calo al 40% passa da 4,3 punti con 2 FD a 14,3 con 4, quindi aggiungere le FD sugli aeroporti aumenta il danno anche a parità di righe;
-- **Random Forest** è quasi indifferente.
+- **Neural Network** soffre di più gli aeroporti corrotti: il suo calo al 40% passa da 4,3 punti con 2 FD a 15,0 con 4, quindi aggiungere le FD sugli aeroporti aumenta il danno anche a parità di righe;
+- **Random Forest** non mostra alcun effetto del numero di FD a parità di righe sporche.
 
 Non esiste quindi una regola generale "più vincoli violati, più (o meno) danno": **conta quale informazione è inconsistente, e quanto il modello dipende da quell'informazione.**
 
@@ -231,9 +231,9 @@ Non esiste quindi una regola generale "più vincoli violati, più (o meno) danno
 Rigenerando i training sporcati con lo stesso seed (verificato: con 1 FD i conflitti ricalcolati coincidono con IM a ogni livello), per 4 FD e replica 0:
 
 - le due FD sugli aeroporti producono **oltre il 95%** dei conflitti a ogni livello;
-- sporcando l'ID dell'aeroporto le righe si ridistribuiscono fra gli aeroporti e i gruppi più grandi si svuotano (da 1.419 a 901 righe): le coppie di righe con lo stesso aeroporto di origine, cioè il massimo numero di conflitti possibili, scendono da 8,4 a 3,9 milioni;
-- intanto la quota di quelle coppie in conflitto sale fino al 72%: i due effetti si compensano e i conflitti delle FD sugli aeroporti smettono di crescere (da 2,80 a 2,81 milioni per l'origine fra il 30% e il 40%);
-- i conflitti della FD sulla rotta arrivano al massimo al 20% e poi calano (da 27.541 a 13.588), perché le rotte si frammentano.
+- sporcando l'ID dell'aeroporto le righe si ridistribuiscono fra gli aeroporti e i gruppi più grandi si svuotano (da 1.419 a 908 righe): le coppie di righe con lo stesso aeroporto di origine, cioè il massimo numero di conflitti possibili, scendono da 8,4 a 3,9 milioni;
+- intanto la quota di quelle coppie in conflitto sale fino al 72%: i due effetti si compensano e i conflitti delle FD sugli aeroporti quasi smettono di crescere (da 2,794 a 2,817 milioni per l'origine fra il 30% e il 40%, cioè +0,8%);
+- i conflitti della FD sulla rotta arrivano al massimo al 10% e poi calano (da 27.693 a 13.421), perché le rotte si frammentano: da 4.624 combinazioni distinte a 22.000.
 
 Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD / IM = 1,01): la saturazione dipende dal tetto dei conflitti possibili, non dalla sovrapposizione fra FD. Rispetto al Blocco 2 precedente, con 10 FD, IM non arriva a calare, ma il meccanismo è lo stesso.
 
@@ -243,7 +243,7 @@ Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD
 
 > **Sì: l'inconsistenza dei dati di training riduce la qualità delle predizioni su dati corretti, in modo regolare, significativo e — quando colpisce informazione predittiva — rilevante. L'entità non dipende da quanta inconsistenza si misura, ma da quale informazione è inconsistente, da quante copie pulite di quell'informazione restano disponibili e da quanto il modello ne dipende.**
 
-**1. L'effetto esiste ed è sistematico.** In entrambi i blocchi il degrado è monotono e significativo in tutti gli 80 confronti col baseline. Con le vie di fuga chiuse, il 40% di righe inconsistenti costa **8,4 punti di F1** nel Blocco 1 e fino a **15,3 punti** nel Blocco 2 con 4 FD.
+**1. L'effetto esiste ed è sistematico.** In entrambi i blocchi il degrado è monotono e significativo in tutti gli 80 confronti col baseline. Con le vie di fuga chiuse, il 40% di righe inconsistenti costa **8,4 punti di F1** nel Blocco 1 e fino a **17,0 punti** nel Blocco 2 con 4 FD.
 
 **2. Conta quale informazione è inconsistente.** Due colonne sulla distanza fanno quasi il danno di venti colonne geografiche; FD valide ma irrilevanti per l'obiettivo, anche su quasi tutte le righe, fanno poco danno. Selezionare le FD per rilevanza è una condizione necessaria per studiare l'effetto dell'inconsistenza.
 
@@ -253,7 +253,7 @@ Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD
 
 **5. Dove si misura conta.** Valutare sul test sporcato confonde l'apprendimento peggiore con il costo di predire da input corrotti, e sovrastima il danno **da due a quasi quattro volte**.
 
-**6. Le misure di inconsistenza tracciano il danno solo entro una configurazione, e IH è più affidabile di IM.** Con un insieme di FD fissato, IM e IH correlano col degrado fra −0,91 e −0,99. Ma IM non è confrontabile fra insiemi di FD diversi (×32 fra 1 e 4 FD a fronte di un danno ×2), perché è dominato dalle FD con gruppi grandi, e con 4 FD smette di crescere oltre il 30% di rumore mentre il danno continua. IH resta proporzionato al danno fra configurazioni.
+**6. Le misure di inconsistenza tracciano il danno solo entro una configurazione, e IH è più affidabile di IM.** Con un insieme di FD fissato, IM e IH correlano col degrado fra −0,91 e −0,99. Ma IM non è confrontabile fra insiemi di FD diversi (×32 fra 1 e 4 FD a fronte di un danno ×2,2), perché è dominato dalle FD con gruppi grandi, e con 4 FD quasi smette di crescere oltre il 30% di rumore mentre il danno continua. IH resta proporzionato al danno fra configurazioni.
 
 ## 9. Limiti
 
@@ -262,6 +262,7 @@ Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD
 - **Rumore casuale uniforme**: gli errori reali tendono a essere sistematici (refusi, codici scambiati, valori vicini al vero). Una distanza sostituita con un valore qualsiasi è un errore più grave di uno realistico, e pesa soprattutto sui modelli che la usano come numero.
 - **Poche FD rilevanti**: con questo obiettivo predittivo le FD rilevanti e indipendenti sono 4, non 10. La rilevanza è stata misurata a un solo livello di rumore (40%) con 3 repliche.
 - **Nel Blocco 2 ogni FD sceglie righe diverse**: il confronto a parità di righe sporche (§7.5) separa i due effetti per via statistica, non per costruzione, e assume una relazione quadratica fra quota di righe sporche e F1.
+- **Nel Blocco 2 le vie di fuga sono chiuse dentro ogni FD, non fra FD diverse.** Ogni FD sporca le proprie colonne e le proprie copie sulle righe che sceglie: sulle righe toccate solo dalla FD sulla distanza la rotta resta pulita, e il modello può in parte ricostruire la distanza da lì. Nel Blocco 1, dove tutte le colonne del concetto sono sporcate sulle stesse righe, questo non accade: è una delle ragioni per cui i due blocchi non sono confrontabili riga per riga.
 - **IP satura nel Blocco 2**: conta le righe coinvolte in almeno un conflitto, e con 4 FD vale 30.000 — tutte le righe — già al 5% di rumore; con 1 FD ci arriva al 30%. Per questo le analisi del Blocco 2 si concentrano su IM e IH.
 - **Modelli con iperparametri di default**, come richiesto: un modello ottimizzato potrebbe reagire diversamente.
 - **Il disegno non separa incoerenza e perdita di informazione**: corrompere i dati produce sempre entrambe, e un confronto con dati altrettanto sbagliati ma coerenti richiederebbe un gruppo di controllo.
