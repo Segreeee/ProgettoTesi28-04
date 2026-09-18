@@ -112,7 +112,7 @@ La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima vers
 5. **`progettoTesi_v2.py`** è il motore: iniezione del rumore, calcolo di IM/IP/IH, preparazione dei dati, addestramento dei 4 modelli RAW in cross-validation e doppia valutazione.
 6. **`blocco1_esperimento.py`**: una FD (rotta → distanza) con 17 colonne ridondanti, `DistanceGroup` compresa; 6 livelli di rumore, 5 repliche.
 7. **`blocco2_scaling_fd.py`**: 1, 2 e 4 FD rilevanti, 6 livelli di rumore, 5 repliche.
-8. **`blocco1_analisi.py`**: controlli, aggregati, scomposizione del danno, correlazioni, significatività del degrado.
+8. **`blocco1_analisi.py`**: controlli, aggregati, scomposizione del danno, significatività del degrado.
 9. **`blocco2_analisi.py`**: le stesse analisi del Blocco 1 per ciascun numero di FD, più il confronto fra configurazioni a parità di livello e a parità di righe sporche e la misura del meccanismo di saturazione di IM.
 10. **`genera_plot_finali.py`**: grafici e tabelle, con figure speculari fra i due blocchi.
 
@@ -180,7 +180,7 @@ Conta quale informazione è inconsistente e quanto il modello ne dipende, non il
 
 ### IM non è confrontabile fra insiemi di FD diversi
 
-Dentro ogni configurazione IM e IH correlano col danno (Spearman fra −0,91 e −0,99). Fra configurazioni diverse, invece, al 40% IM è 32 volte più grande con 4 FD che con 1 a fronte di un danno 2,2 volte maggiore, perché è dominato dalle FD sugli aeroporti, che hanno gruppi grandi e contano poco per la previsione. IH cresce di 1,7 volte, molto più vicino al rapporto fra i danni.
+Dentro ogni configurazione IM e IH crescono a ogni livello di rumore, mentre la F1 cala. Fra configurazioni diverse, invece, al 40% IM è 32 volte più grande con 4 FD che con 1 a fronte di un danno 2,2 volte maggiore, perché è dominato dalle FD sugli aeroporti, che hanno gruppi grandi e contano poco per la previsione. IH cresce di 1,7 volte, molto più vicino al rapporto fra i danni.
 
 Con 4 FD, inoltre, IM si satura: fra il 30% e il 40% cresce solo dell'1,1% mentre la F1 perde altri 4,0 punti. Il meccanismo, misurato, è lo stesso che nella prima versione con 10 FD faceva calare IM: sporcando l'ID dell'aeroporto i gruppi grandi si svuotano e il numero di coppie di righe che possono entrare in conflitto crolla.
 

@@ -6,9 +6,9 @@ Blocco 1 (blocco1_risultati_raw.csv + CSV di blocco1_analisi.py): una FD
 (rotta -> distanza) con le colonne ridondanti.
 Blocco 2 (CSV di blocco2_analisi.py): 1, 2 e 4 FD corrotte.
 
-Ogni blocco ha: F1 sul test pulito, test sporco contro test pulito,
-correlazioni fra inconsistenza e F1, tabella riassuntiva. Il Blocco 2 ha in
-piu' il confronto a parita' di righe sporche e la saturazione di IM.
+Ogni blocco ha: F1 sul test pulito, test sporco contro test pulito e tabella
+riassuntiva. Il Blocco 2 ha in piu' il confronto a parita' di righe sporche e
+la saturazione di IM.
 
 Palette e regole di stile seguono lo skill "dataviz" (palette categoriale
 validata assegnata in ordine fisso, niente doppio asse, griglia recessiva,
@@ -51,22 +51,6 @@ def linea(ax, x, y, colore, etichetta=None, marker='o'):
 
 def formato_migliaia(ax):
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
-
-
-def barre_correlazioni(ax, corr, modelli, titolo):
-    """Spearman IM e IH contro F1 sul test pulito, una coppia di barre per modello."""
-    x = range(len(modelli))
-    for i, (metrica, colore, etichetta) in enumerate([('IM', BLUE, "IM (conflitti a coppie)"),
-                                                      ('IH', AQUA, "IH (tuple minime da correggere)")]):
-        valori = [corr[(corr['Modello'] == m) & (corr['Metrica_Inconsistenza'] == metrica)]['Spearman_rho'].iloc[0]
-                  for m in modelli]
-        ax.bar([j + (i - 0.5) * 0.35 for j in x], valori, width=0.35, color=colore, label=etichetta, zorder=3)
-    ax.axhline(0, color=AXIS, linewidth=0.8)
-    ax.set_xticks(list(x))
-    ax.set_xticklabels([m.replace(' ', '\n') for m in modelli])
-    ax.set_ylim(-1.05, 1.05)
-    ax.set_title(titolo, loc="left", fontsize=11)
-    stile(ax)
 
 
 def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths):
@@ -127,17 +111,6 @@ fig.tight_layout()
 fig.savefig("plot_blocco1_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
-corr1 = pd.read_csv('blocco1_correlazioni.csv')
-corr1 = corr1[corr1['Valutazione'] == 'test_pulito']
-fig, ax = plt.subplots(figsize=(8, 5.5))
-barre_correlazioni(ax, corr1, modelli, "")
-ax.set_ylabel("Correlazione di Spearman con F1 sul test pulito")
-ax.set_title("Inconsistenza del training e qualita' delle predizioni", loc="left", pad=48, fontsize=12)
-ax.legend(frameon=False, loc="upper left", ncols=2, bbox_to_anchor=(0, 1.14))
-fig.tight_layout()
-fig.savefig("plot_blocco1_correlazioni.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-
 tab1 = df1.groupby('Rumore_%').agg(
     IM=('IM', 'mean'), IH=('IH', 'mean'),
     F1_sporco=('F1_Score_test_sporco', 'mean'), F1_pulito=('F1_Score_test_pulito', 'mean'),
@@ -158,14 +131,13 @@ salva_tabella_immagine(
     [0.7, 0.9, 0.9, 1.0, 1.0, 1.0],
 )
 print("Blocco 1: plot_blocco1_f1_test_pulito.png, plot_blocco1_sporco_vs_pulito.png, "
-      "plot_blocco1_correlazioni.png, tabella_riassuntiva_blocco1.csv/.png")
+      "tabella_riassuntiva_blocco1.csv/.png")
 
 if not os.path.exists('blocco2_scomposizione.csv'):
     print("CSV di blocco2_analisi.py non presenti: eseguire prima blocco2_analisi.py. Sezione Blocco 2 saltata.")
 else:
     agg2 = pd.read_csv('blocco2_aggregato.csv')
     scomp2 = pd.read_csv('blocco2_scomposizione.csv')
-    corr2 = pd.read_csv('blocco2_correlazioni.csv')
     counts = sorted(scomp2['N_FD'].unique())
     colori = dict(zip(counts, PALETTE))
     im2 = agg2.groupby(['N_FD', 'Rumore_%'])['IM'].mean()
@@ -247,23 +219,6 @@ else:
     fig.savefig("plot_blocco2_im_e_f1.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    c2 = corr2[corr2['Valutazione'] == 'test_pulito']
-    pannelli = [(n, 'tutti i livelli', f"{n} FD, tutti i livelli") for n in counts]
-    regime_picco = c2[(c2['N_FD'] == n_max) & (c2['Regime'].str.startswith('dal picco'))]['Regime'].unique()
-    if len(regime_picco):
-        pannelli.append((n_max, regime_picco[0], f"{n_max} FD, {regime_picco[0]}"))
-    fig, axes = plt.subplots(1, len(pannelli), figsize=(4.2 * len(pannelli), 5), sharey=True)
-    for ax, (n, regime, titolo) in zip(axes, pannelli):
-        barre_correlazioni(ax, c2[(c2['N_FD'] == n) & (c2['Regime'] == regime)], modelli, titolo)
-    axes[0].set_ylabel("Correlazione di Spearman con F1 sul test pulito")
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, frameon=False, loc="upper center", ncols=2, bbox_to_anchor=(0.5, 1.06))
-    fig.suptitle("Blocco 2 — inconsistenza del training e qualita' delle predizioni",
-                 x=0.02, ha="left", fontsize=13, y=1.13)
-    fig.tight_layout()
-    fig.savefig("plot_blocco2_correlazioni.png", dpi=300, bbox_inches="tight")
-    plt.close(fig)
-
     piv = scomp2.pivot_table(index='Rumore_%', columns='N_FD', values=['F1_test_pulito', 'Quota_train_sporca'])
     tabella = pd.DataFrame({'Rumore_%': piv.index})
     for n in counts:
@@ -286,4 +241,4 @@ else:
         [0.6] + [0.8] * len(counts) + [0.9] * len(counts) + [1.0] * len(counts),
     )
     print("Blocco 2: plot_blocco2_scaling_fd.png, plot_blocco2_sporco_vs_pulito.png, plot_blocco2_quota_sporca.png, "
-          "plot_blocco2_im_e_f1.png, plot_blocco2_correlazioni.png, tabella_riassuntiva_blocco2.csv/.png")
+          "plot_blocco2_im_e_f1.png, tabella_riassuntiva_blocco2.csv/.png")

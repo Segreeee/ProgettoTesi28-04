@@ -44,36 +44,20 @@ Rumore_%
     4        30              0.7606          0.7934          0.5689                 0.1299                  0.2246                      0.3545                   36.6
     4        40              0.8699          0.7533          0.4944                 0.1700                  0.2589                      0.4289                   39.6
 
-3. Correlazioni salvate in 'blocco2_correlazioni.csv'. Spearman IM/IH vs F1 sul test pulito:
-Metrica_Inconsistenza                        IH     IM
-N_FD Regime          Modello                          
-1    tutti i livelli Decision Tree       -0.980 -0.975
-                     Logistic Regression -0.990 -0.989
-                     Neural Network      -0.925 -0.910
-                     Random Forest       -0.976 -0.982
-2    tutti i livelli Decision Tree       -0.976 -0.975
-                     Logistic Regression -0.981 -0.977
-                     Neural Network      -0.970 -0.973
-                     Random Forest       -0.979 -0.978
-4    tutti i livelli Decision Tree       -0.973 -0.965
-                     Logistic Regression -0.970 -0.962
-                     Neural Network      -0.978 -0.975
-                     Random Forest       -0.967 -0.975
-
-4. Significativita' del degrado, salvata in 'blocco2_test_degrado.csv':
+3. Significativita' del degrado, salvata in 'blocco2_test_degrado.csv':
       significativi  confronti
 N_FD                          
 1                20         20
 2                20         20
 4                20         20
 
-5. Configurazioni a parita' di livello (t-test appaiato), salvato in 'blocco2_test_configurazioni.csv':
+4. Configurazioni a parita' di livello (t-test appaiato), salvato in 'blocco2_test_configurazioni.csv':
            significativi  confronti  delta_medio
 Confronto                                       
 1 -> 2 FD             20         20      -0.0219
 2 -> 4 FD             19         20      -0.0255
 
-6. Configurazioni a parita' di righe sporche, salvato in 'blocco2_quota_normalizzata.csv' e 'blocco2_quota_punti_confrontabili.csv':
+5. Configurazioni a parita' di righe sporche, salvato in 'blocco2_quota_normalizzata.csv' e 'blocco2_quota_punti_confrontabili.csv':
             Modello                                 Intervallo  N_punti     R2  Coef_N_FD  t_N_FD       p_N_FD  Significativo
       Decision Tree                              tutti i punti       80 0.9650   0.004513   6.968 1.008542e-09           True
       Decision Tree quota <= 0.41 (comune alle configurazioni)       55 0.9297   0.002935   7.070 4.216504e-09           True
@@ -91,7 +75,7 @@ Logistic Regression quota <= 0.41 (comune alle configurazioni)       55 0.9870  
        2                10         0.1881      0.8728       4                5        0.1867     0.8885      -0.0013             0.0157                         3/4
        2                20         0.3597      0.8490       4               10        0.3424     0.8655      -0.0172             0.0165                         3/4
 
-7. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):
+6. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):
    meccanismo: 1 FD, rumore 0% misurato
    meccanismo: 1 FD, rumore 5% misurato
    meccanismo: 1 FD, rumore 10% misurato

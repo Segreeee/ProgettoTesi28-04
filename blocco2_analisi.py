@@ -9,20 +9,18 @@ Parte comune, speculare a blocco1_analisi.py (stratificata per numero di FD):
    repliche), per il test sporco e per il test pulito.
 2. Scomposizione del danno per N_FD: apprendimento peggiore (baseline - test
    pulito) contro input corrotto (test pulito - test sporco).
-3. Correlazioni di Pearson e Spearman fra IM/IP/IH e F1, per modello e N_FD,
-   anche nel solo regime successivo al picco di IM, dove IM inverte la rotta.
-4. Significativita' del degrado: t-test a un campione delle repliche di F1
+3. Significativita' del degrado: t-test a un campione delle repliche di F1
    (test pulito) contro il baseline, per N_FD x modello x livello.
 
 Parte specifica del Blocco 2:
-5. Configurazioni a parita' di LIVELLO di rumore: t-test appaiato per replica
+4. Configurazioni a parita' di LIVELLO di rumore: t-test appaiato per replica
    (stesso seed, stesse righe bilanciate, stessi fold) fra configurazioni
    consecutive (1 -> 2 e 2 -> 4 FD).
-6. Configurazioni a parita' di RIGHE SPORCHE: a parita' di livello, piu' FD
-   sporcano molte piu' righe, quindi il confronto del punto 5 mescola "piu' FD"
+5. Configurazioni a parita' di RIGHE SPORCHE: a parita' di livello, piu' FD
+   sporcano molte piu' righe, quindi il confronto del punto 4 mescola "piu' FD"
    e "piu' righe sporche". Si separano i due effetti con una regressione
    F1 ~ quota + quota^2 + N_FD, e confrontando i punti a quota simile.
-7. Meccanismo della saturazione di IM: si rigenerano i training sporcati
+6. Meccanismo della saturazione di IM: si rigenerano i training sporcati
    (stesso seed della replica 0) e si misura, per ogni FD, come cambiano i
    gruppi del lato sinistro e le coppie di righe in conflitto.
 
@@ -32,13 +30,12 @@ import sys
 import argparse
 import numpy as np
 import pandas as pd
-from scipy.stats import pearsonr, spearmanr, ttest_1samp, ttest_rel
+from scipy.stats import ttest_1samp, ttest_rel
 from scipy.stats import t as distribuzione_t
 
 RAW_RESULTS_FILE = 'blocco2_risultati_raw.csv'
 AGGREGATO_FILE = 'blocco2_aggregato.csv'
 SCOMPOSIZIONE_FILE = 'blocco2_scomposizione.csv'
-CORRELAZIONI_FILE = 'blocco2_correlazioni.csv'
 TEST_DEGRADO_FILE = 'blocco2_test_degrado.csv'
 TEST_CONFIGURAZIONI_FILE = 'blocco2_test_configurazioni.csv'
 QUOTA_REGRESSIONE_FILE = 'blocco2_quota_normalizzata.csv'
@@ -109,33 +106,6 @@ def build_scomposizione(df):
                           'Perdita_input_corrotto': round(input_corrotto, 4),
                           'Perdita_totale_test_sporco': round(totale, 4),
                           'Quota_apprendimento_%': round(100 * apprendimento / totale, 1) if totale > 0 else np.nan})
-    return pd.DataFrame(righe)
-
-
-def build_correlazioni(df):
-    """Per modello e N_FD, su tutti i livelli e — se IM raggiunge il massimo prima
-    dell'ultimo livello — anche sul solo regime dal picco in poi."""
-    righe = []
-    for n_fd, sub_fd in df.groupby('N_FD'):
-        im_medio = sub_fd.drop_duplicates(['Rumore_%', 'Rep']).groupby('Rumore_%')['IM'].mean()
-        picco = int(im_medio.idxmax())
-        regimi = [('tutti i livelli', sub_fd)]
-        if picco < sub_fd['Rumore_%'].max():
-            regimi.append((f'dal picco di IM ({picco}%) in poi', sub_fd[sub_fd['Rumore_%'] >= picco]))
-        for regime, dati in regimi:
-            for modello, sub in dati.groupby('Modello'):
-                for tt in TEST_TYPES:
-                    for metrica in ['IM', 'IP', 'IH']:
-                        if sub[metrica].nunique() < 2:
-                            continue
-                        pearson_r, pearson_p = pearsonr(sub[metrica], sub[f'F1_Score_{tt}'])
-                        spearman_rho, spearman_p = spearmanr(sub[metrica], sub[f'F1_Score_{tt}'])
-                        righe.append({
-                            'N_FD': n_fd, 'Regime': regime, 'Modello': modello, 'Valutazione': tt,
-                            'Metrica_Inconsistenza': metrica, 'N_punti': len(sub),
-                            'Pearson_r': round(pearson_r, 4), 'Pearson_p': pearson_p,
-                            'Spearman_rho': round(spearman_rho, 4), 'Spearman_p': spearman_p,
-                        })
     return pd.DataFrame(righe)
 
 
@@ -310,22 +280,15 @@ if __name__ == "__main__":
     print(f"\n2. Scomposizione del danno per N_FD, salvata in '{SCOMPOSIZIONE_FILE}':")
     print(scomp.to_string(index=False))
 
-    corr = build_correlazioni(df)
-    corr.to_csv(CORRELAZIONI_FILE, index=False)
-    print(f"\n3. Correlazioni salvate in '{CORRELAZIONI_FILE}'. Spearman IM/IH vs F1 sul test pulito:")
-    vista = corr[(corr['Valutazione'] == 'test_pulito') & (corr['Metrica_Inconsistenza'].isin(['IM', 'IH']))]
-    print(vista.pivot_table(index=['N_FD', 'Regime', 'Modello'], columns='Metrica_Inconsistenza',
-                            values='Spearman_rho').round(3).to_string())
-
     test = build_test_degrado(df)
     test.to_csv(TEST_DEGRADO_FILE, index=False)
-    print(f"\n4. Significativita' del degrado, salvata in '{TEST_DEGRADO_FILE}':")
+    print(f"\n3. Significativita' del degrado, salvata in '{TEST_DEGRADO_FILE}':")
     print(test.groupby('N_FD')['Significativo'].agg(['sum', 'count']).rename(
         columns={'sum': 'significativi', 'count': 'confronti'}).to_string())
 
     conf = build_test_configurazioni(df)
     conf.to_csv(TEST_CONFIGURAZIONI_FILE, index=False)
-    print(f"\n5. Configurazioni a parita' di livello (t-test appaiato), salvato in '{TEST_CONFIGURAZIONI_FILE}':")
+    print(f"\n4. Configurazioni a parita' di livello (t-test appaiato), salvato in '{TEST_CONFIGURAZIONI_FILE}':")
     print(conf.groupby('Confronto').agg(significativi=('Significativo', 'sum'), confronti=('Significativo', 'count'),
                                         delta_medio=('Delta_F1', 'mean')).round(4).to_string())
 
@@ -333,7 +296,7 @@ if __name__ == "__main__":
     reg.to_csv(QUOTA_REGRESSIONE_FILE, index=False)
     punti = build_punti_confrontabili(df)
     punti.to_csv(QUOTA_PUNTI_FILE, index=False)
-    print(f"\n6. Configurazioni a parita' di righe sporche, salvato in '{QUOTA_REGRESSIONE_FILE}' "
+    print(f"\n5. Configurazioni a parita' di righe sporche, salvato in '{QUOTA_REGRESSIONE_FILE}' "
           f"e '{QUOTA_PUNTI_FILE}':")
     print(reg[['Modello', 'Intervallo', 'N_punti', 'R2', 'Coef_N_FD', 't_N_FD', 'p_N_FD', 'Significativo']]
           .to_string(index=False))
@@ -341,7 +304,7 @@ if __name__ == "__main__":
     print(punti.to_string(index=False))
 
     if not args.senza_meccanismo:
-        print("\n7. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):")
+        print("\n6. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):")
         mecc = build_meccanismo_im(df)
         mecc.to_csv(MECCANISMO_FILE, index=False)
         print(f"   salvato in '{MECCANISMO_FILE}'. Con {mecc['N_FD'].max()} FD, per FD e livello:")

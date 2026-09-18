@@ -113,18 +113,9 @@ Livelli di rumore: **0, 5, 10, 20, 30, 40%**; 5 repliche con seed diversi per li
 
 Al 40% il calo misurato sul test sporcato è di **31,2 punti**, di cui **8,4 dovuti a un apprendimento peggiore**: misurare sul test sporco sovrastima il danno di **quasi quattro volte** (3,7). Su ogni riga sporca sono corrotte 20 colonne, e un input così degradato costa molto più dell'apprendimento peggiore.
 
-## 6.3 Correlazioni
+## 6.3 Gli indici di inconsistenza seguono il degrado
 
-Correlazione di Spearman fra inconsistenza e F1 sul test pulito:
-
-| Modello | IM | IP | IH |
-|---|---|---|---|
-| Logistic Regression | −0,975 | −0,977 | −0,974 |
-| Neural Network | −0,973 | −0,974 | −0,975 |
-| Random Forest | −0,966 | −0,963 | −0,962 |
-| Decision Tree | −0,945 | −0,949 | −0,950 |
-
-Con una sola FD, i tre indici tracciano il degrado allo stesso modo.
+Con una sola FD dichiarata, IM, IP e IH crescono a ogni aumento del rumore (IM da 411 a 2.816, IH da 117 a 1.421) mentre la F1 sul test pulito cala a ogni livello, per tutti e 4 i modelli: i tre indici ordinano i livelli di rumore esattamente come li ordina il danno.
 
 ---
 
@@ -163,22 +154,11 @@ Il degrado è significativo in **60 confronti su 60**. Calo dal baseline al 40%,
 
 La quota di danno dovuta all'apprendimento sta fra il **45% e il 56%** con 1 e 2 FD e fra il **36% e il 40%** con 4 FD, a ogni livello: misurare sul test sporco sovrastima il danno di **circa due volte** con 1 e 2 FD e di **due volte e mezzo** con 4 FD, contro quasi quattro del Blocco 1. La sovrastima cresce con il numero di colonne corrotte per riga.
 
-## 7.3 Correlazioni
+## 7.3 Quanto gli indici seguono il danno
 
-Correlazione di Spearman con F1 sul test pulito:
+**Dentro ogni configurazione** IM e IH crescono a ogni livello di rumore, mentre la F1 cala: ordinano i livelli come li ordina il danno. Due limiti però emergono.
 
-| Configurazione | Indice | Decision Tree | Logistic Regression | Neural Network | Random Forest |
-|---|---|---|---|---|---|
-| 1 FD | IM | −0,975 | −0,989 | −0,910 | −0,982 |
-| 1 FD | IH | −0,980 | −0,990 | −0,925 | −0,976 |
-| 2 FD | IM | −0,975 | −0,977 | −0,973 | −0,978 |
-| 2 FD | IH | −0,976 | −0,981 | −0,970 | −0,979 |
-| 4 FD | IM | −0,965 | −0,962 | −0,975 | −0,975 |
-| 4 FD | IH | −0,973 | −0,970 | −0,978 | −0,967 |
-
-**Dentro ogni configurazione** IM e IH ordinano i livelli di rumore come il danno. Due limiti però emergono.
-
-**Primo: con 4 FD gli indici si saturano.** Fra il 30% e il 40% di rumore la F1 perde altri 4,0 punti, mentre IM cresce solo dell'1,1% (da 5.862.349 a 5.924.540) e IH del 4,3% (da 28.099 a 29.316). La correlazione di Spearman, che guarda solo l'ordine, non lo rivela.
+**Primo: con 4 FD gli indici si saturano.** Fra il 30% e il 40% di rumore la F1 perde altri 4,0 punti, mentre IM cresce solo dell'1,1% (da 5.862.349 a 5.924.540) e IH del 4,3% (da 28.099 a 29.316). L'ordine dei livelli resta corretto, ma la dimensione dell'aumento non dice più nulla sull'entità del danno.
 
 **Secondo: fra configurazioni diverse IM non è confrontabile col danno.**
 
@@ -253,7 +233,7 @@ Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD
 
 **5. Dove si misura conta.** Valutare sul test sporcato confonde l'apprendimento peggiore con il costo di predire da input corrotti, e sovrastima il danno **da due a quasi quattro volte**.
 
-**6. Le misure di inconsistenza tracciano il danno solo entro una configurazione, e IH è più affidabile di IM.** Con un insieme di FD fissato, IM e IH correlano col degrado fra −0,91 e −0,99. Ma IM non è confrontabile fra insiemi di FD diversi (×32 fra 1 e 4 FD a fronte di un danno ×2,2), perché è dominato dalle FD con gruppi grandi, e con 4 FD quasi smette di crescere oltre il 30% di rumore mentre il danno continua. IH resta proporzionato al danno fra configurazioni.
+**6. Le misure di inconsistenza tracciano il danno solo entro una configurazione, e IH è più affidabile di IM.** Con un insieme di FD fissato, IM e IH crescono a ogni livello di rumore mentre la F1 cala. Ma IM non è confrontabile fra insiemi di FD diversi (×32 fra 1 e 4 FD a fronte di un danno ×2,2), perché è dominato dalle FD con gruppi grandi, e con 4 FD quasi smette di crescere oltre il 30% di rumore mentre il danno continua. IH resta proporzionato al danno fra configurazioni.
 
 ## 9. Limiti
 
@@ -273,11 +253,10 @@ Le coppie in conflitto su più FD insieme sono poche (somma dei conflitti per FD
 |---|---|---|
 | `plot_blocco1_f1_test_pulito.png` | `plot_blocco2_scaling_fd.png` | Degrado al crescere del rumore |
 | `plot_blocco1_sporco_vs_pulito.png` | `plot_blocco2_sporco_vs_pulito.png` | Test sporco contro test pulito |
-| `plot_blocco1_correlazioni.png` | `plot_blocco2_correlazioni.png` | Correlazioni IM/IH ↔ F1 |
 | `tabella_riassuntiva_blocco1.csv` / `.png` | `tabella_riassuntiva_blocco2.csv` / `.png` | Tabella riassuntiva |
 | — | `plot_blocco2_quota_sporca.png` | F1 a parità di righe sporche |
 | — | `plot_blocco2_im_e_f1.png` | Andamento di IM con 4 FD |
-| `blocco1_aggregato.csv`, `blocco1_scomposizione.csv`, `blocco1_correlazioni.csv`, `blocco1_test_degrado.csv` | `blocco2_aggregato.csv`, `blocco2_scomposizione.csv`, `blocco2_correlazioni.csv`, `blocco2_test_degrado.csv` | Analisi statistica comune |
+| `blocco1_aggregato.csv`, `blocco1_scomposizione.csv`, `blocco1_test_degrado.csv` | `blocco2_aggregato.csv`, `blocco2_scomposizione.csv`, `blocco2_test_degrado.csv` | Analisi statistica comune |
 | — | `blocco2_test_configurazioni.csv`, `blocco2_quota_normalizzata.csv`, `blocco2_quota_punti_confrontabili.csv`, `blocco2_meccanismo_im.csv`, `blocco2_verifica_fd.csv` | Analisi specifiche del Blocco 2 |
 | `rilevanza_colonne.csv`, `rilevanza_fd.csv`, `rilevanza_fd.log` | | Selezione delle FD per rilevanza (§4) |
 | `archivio_prima_revisione_fd/` | | Risultati con `DistanceGroup` pulita e 10 FD irrilevanti, per confronto |

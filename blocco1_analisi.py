@@ -9,18 +9,16 @@ Blocco 1 — analisi statistica dei risultati.
 2. Scomposizione del danno: quanto e' dovuto a un apprendimento peggiore
    (baseline - test pulito) e quanto al dare al modello input corrotti
    (test pulito - test sporco).
-3. Correlazioni di Pearson e Spearman fra IM/IP/IH e F1, per modello.
-4. Significativita' del degrado: per ogni modello e livello, t-test a un
+3. Significativita' del degrado: per ogni modello e livello, t-test a un
    campione delle repliche di F1 (test pulito) contro il valore di baseline.
 """
 import sys
 import numpy as np
 import pandas as pd
-from scipy.stats import pearsonr, spearmanr, ttest_1samp
+from scipy.stats import ttest_1samp
 
 RAW_RESULTS_FILE = 'blocco1_risultati_raw.csv'
 AGGREGATO_FILE = 'blocco1_aggregato.csv'
-CORRELAZIONI_FILE = 'blocco1_correlazioni.csv'
 SCOMPOSIZIONE_FILE = 'blocco1_scomposizione.csv'
 TEST_DEGRADO_FILE = 'blocco1_test_degrado.csv'
 TEST_TYPES = ['test_sporco', 'test_pulito']
@@ -72,21 +70,6 @@ def build_scomposizione(df):
     return pd.DataFrame(righe)
 
 
-def build_correlazioni(df):
-    righe = []
-    for modello, sub in df.groupby('Modello'):
-        for tt in TEST_TYPES:
-            for metrica in ['IM', 'IP', 'IH']:
-                pearson_r, pearson_p = pearsonr(sub[metrica], sub[f'F1_Score_{tt}'])
-                spearman_rho, spearman_p = spearmanr(sub[metrica], sub[f'F1_Score_{tt}'])
-                righe.append({
-                    'Modello': modello, 'Valutazione': tt, 'Metrica_Inconsistenza': metrica,
-                    'Pearson_r': round(pearson_r, 4), 'Pearson_p': pearson_p,
-                    'Spearman_rho': round(spearman_rho, 4), 'Spearman_p': spearman_p,
-                })
-    return pd.DataFrame(righe)
-
-
 def build_test_degrado(df):
     """Il calo di F1 sul test pulito rispetto al baseline e' significativo?
     A rumore 0% le repliche sono identiche (nessuna corruzione): il baseline e'
@@ -120,13 +103,8 @@ if __name__ == "__main__":
     print(f"\n2. Scomposizione del danno (media dei 4 modelli), salvata in '{SCOMPOSIZIONE_FILE}':")
     print(scomp.to_string(index=False))
 
-    corr = build_correlazioni(df)
-    corr.to_csv(CORRELAZIONI_FILE, index=False)
-    print(f"\n3. Correlazioni salvate in '{CORRELAZIONI_FILE}' (test pulito):")
-    print(corr[corr['Valutazione'] == 'test_pulito'].to_string(index=False))
-
     test = build_test_degrado(df)
     test.to_csv(TEST_DEGRADO_FILE, index=False)
-    print(f"\n4. Significativita' del degrado (t-test a un campione), salvata in '{TEST_DEGRADO_FILE}':")
+    print(f"\n3. Significativita' del degrado (t-test a un campione), salvata in '{TEST_DEGRADO_FILE}':")
     print(test.to_string(index=False))
     print(f"   Livelli con calo significativo: {int(test['Significativo'].sum())}/{len(test)}")
