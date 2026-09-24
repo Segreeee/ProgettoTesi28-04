@@ -30,7 +30,8 @@ import pandas as pd
 
 from progettoTesi_v2 import (
     ml_preparation,
-    get_global_inconsistency_metrics,
+    fold_di_valutazione,
+    indici_per_fold,
     inject_multiple_fd_noise,
 )
 from esecuzione_parallela import numero_processi, esegui_lavori, Registro
@@ -108,13 +109,18 @@ def esegui_lavoro(level, rep, n_jobs_rf):
         _DF, FDS_LIST, noise_level=level,
         corrupt_lhs=True, redundant_cols_map=REDUNDANT_COLS_MAP, seed=seed,
     )
-    im, ip, ih, _ = get_global_inconsistency_metrics(df_noisy, FDS_LIST)
+    # Indici misurati sulle righe di training di ciascun fold, cioe' le stesse
+    # righe che i modelli vedono: indici e metriche descrivono la stessa
+    # popolazione e sono quindi confrontabili.
+    fold_train = fold_di_valutazione(_DF, TARGET_COL, EXTRA_BLACKLIST, seed_valutazione=seed)
+    indici = indici_per_fold(df_noisy, fold_train, FDS_LIST)
 
     ml_scores = ml_preparation(
         df_noisy, TARGET_COL,
         extra_blacklist=EXTRA_BLACKLIST,
         df_eval=_DF,
         n_jobs_rf=n_jobs_rf,
+        seed_valutazione=seed,
     )
 
     righe = []
@@ -124,10 +130,8 @@ def esegui_lavoro(level, rep, n_jobs_rf):
             'Rep': rep,
             'Seed': seed,
             'Modello': model_name,
-            'IM': im,
-            'IP': ip,
-            'IH': ih,
         }
+        row.update({k: (round(v, 2) if isinstance(v, float) else v) for k, v in indici.items()})
         row.update({k: round(v, 4) for k, v in metrics.items()})
         righe.append(row)
     return righe

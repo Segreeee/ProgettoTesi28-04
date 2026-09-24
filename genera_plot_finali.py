@@ -53,8 +53,8 @@ def formato_migliaia(ax):
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
 
 
-def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths):
-    fig, ax = plt.subplots(figsize=(11, 0.9 + 0.5 * len(df)))
+def salva_tabella_immagine(df, filename, titolo, col_labels, col_widths, larghezza=11):
+    fig, ax = plt.subplots(figsize=(larghezza, 0.9 + 0.5 * len(df)))
     ax.axis("off")
     ax.set_title(titolo, loc="left", fontsize=12, pad=16)
     table = ax.table(cellText=df.values, colLabels=col_labels, loc="center", cellLoc="center")
@@ -112,13 +112,14 @@ fig.savefig("plot_blocco1_sporco_vs_pulito.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 
 tab1 = df1.groupby('Rumore_%').agg(
-    IM=('IM', 'mean'), IH=('IH', 'mean'),
+    IM=('IM_mean', 'mean'), IP=('IP_mean', 'mean'),
+    IH_approx=('IH_approx_mean', 'mean'), IH_esatto=('IH_esatto_mean', 'mean'),
     F1_sporco=('F1_Score_test_sporco', 'mean'), F1_pulito=('F1_Score_test_pulito', 'mean'),
 ).reset_index()
 base1 = tab1.loc[tab1['Rumore_%'] == 0, 'F1_pulito'].iloc[0]
 tab1['Calo'] = base1 - tab1['F1_pulito']
-tab1['IM'] = tab1['IM'].round(0).astype(int)
-tab1['IH'] = tab1['IH'].round(0).astype(int)
+for c in ['IM', 'IP', 'IH_approx', 'IH_esatto']:
+    tab1[c] = tab1[c].round(0).astype(int)
 tab1[['F1_sporco', 'F1_pulito', 'Calo']] = tab1[['F1_sporco', 'F1_pulito', 'Calo']].round(4)
 tab1.to_csv('tabella_riassuntiva_blocco1.csv', index=False)
 vista1 = tab1.copy()
@@ -126,9 +127,10 @@ for c in ['F1_sporco', 'F1_pulito', 'Calo']:
     vista1[c] = [f"{v:.4f}" for v in tab1[c]]
 salva_tabella_immagine(
     vista1, "tabella_riassuntiva_blocco1.png",
-    "Blocco 1 — inconsistenza e F1 (media dei 4 modelli) per livello di rumore",
-    ["Rumore\n%", "IM", "IH", "F1\ntest sporco", "F1\ntest pulito", "Calo\n(test pulito)"],
-    [0.7, 0.9, 0.9, 1.0, 1.0, 1.0],
+    "Blocco 1 — indici osservati e F1 (media dei 4 modelli) per livello di rumore",
+    ["Rumore\n%", "IM", "IP", "IH\n2-approx", "IH\nesatto", "F1\ntest sporco", "F1\ntest pulito",
+     "Calo\n(test pulito)"],
+    [0.6, 0.8, 0.8, 0.8, 0.8, 1.0, 1.0, 1.0],
 )
 print("Blocco 1: plot_blocco1_f1_test_pulito.png, plot_blocco1_sporco_vs_pulito.png, "
       "tabella_riassuntiva_blocco1.csv/.png")
@@ -140,24 +142,54 @@ else:
     scomp2 = pd.read_csv('blocco2_scomposizione.csv')
     counts = sorted(scomp2['N_FD'].unique())
     colori = dict(zip(counts, PALETTE))
-    im2 = agg2.groupby(['N_FD', 'Rumore_%'])['IM'].mean()
+    INDICI = [('IM_mean', "IM — conflitti a coppie"), ('IP_mean', "IP — tuple coinvolte"),
+              ('IH_approx_mean', "IH — tuple da correggere (2-approx)")]
+    indici2 = {colonna: agg2.groupby(['N_FD', 'Rumore_%'])[colonna].mean() for colonna, _ in INDICI}
 
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
+    # IH esatto: con 1 FD dalla formula chiusa (risultati del Blocco 2), con 2 e
+    # 4 FD dall'ILP di ih_esatto_blocco2.py. Un livello e' disegnato solo se
+    # tutte le sue istanze (repliche x fold) sono state risolte all'ottimo:
+    # una media sulle sole istanze facili sarebbe distorta.
+    def ih_esatto_serie(n):
+        if n == 1:
+            return agg2[agg2['N_FD'] == 1].groupby('Rumore_%')['IH_esatto_mean'].mean()
+        if not os.path.exists('blocco2_ih_esatto.csv'):
+            return None
+        e = pd.read_csv('blocco2_ih_esatto.csv')
+        e = e[e['N_FD'] == n]
+        completi = e.groupby('Rumore_%')['Risolto'].all()
+        serie = e[e['Rumore_%'].isin(completi[completi].index)].groupby('Rumore_%')['IH_esatto'].mean()
+        return pd.concat([pd.Series({0: 0.0}), serie]) if len(serie) else None
+
+    def linea_ih_esatto(ax, n, colore, etichetta):
+        serie = ih_esatto_serie(n)
+        if serie is not None:
+            ax.plot(serie.index, serie.values, color=colore, linewidth=1.6, linestyle='--',
+                    marker='o', markersize=4, markerfacecolor=SURFACE, label=etichetta, zorder=3)
+
+    fig, axes = plt.subplots(1, 4, figsize=(19, 4.6))
     for n in counts:
         s = scomp2[scomp2['N_FD'] == n]
         linea(axes[0], s['Rumore_%'], s['F1_test_pulito'], colori[n], f'{n} FD corrotte')
-        linea(axes[1], im2.loc[n].index, im2.loc[n].values, colori[n], f'{n} FD corrotte', marker='s')
+        for ax, (colonna, _) in zip(axes[1:], INDICI):
+            serie = indici2[colonna].loc[n]
+            linea(ax, serie.index, serie.values, colori[n], f'{n} FD corrotte', marker='s')
+        linea_ih_esatto(axes[3], n, colori[n], f'{n} FD, esatto')
     axes[0].set_ylabel("F1 sul test pulito (media dei 4 modelli)")
     axes[0].set_title("Effetto sul modello", loc="left", fontsize=11)
-    axes[1].set_ylabel("IM — conflitti a coppie")
-    axes[1].set_title("Inconsistenza misurata", loc="left", fontsize=11)
-    formato_migliaia(axes[1])
+    for ax, (_, etichetta) in zip(axes[1:], INDICI):
+        ax.set_ylabel(etichetta)
+        ax.set_title(etichetta.split(' — ')[0] + " osservato", loc="left", fontsize=11)
+        formato_migliaia(ax)
     for ax in axes:
         ax.set_xlabel("Rumore nel training (%)")
         ax.legend(frameon=False)
         stile(ax)
-    fig.suptitle("Blocco 2 — cosa succede aumentando il numero di FD corrotte",
-                 x=0.02, ha="left", fontsize=13, y=1.04)
+    axes[3].set_ylabel("IH — tuple da correggere")
+    axes[3].set_title("IH: 2-approssimato (continuo) ed esatto (tratteggiato)", loc="left", fontsize=11)
+    axes[3].legend(frameon=False, fontsize=8, ncols=2, loc="upper left")
+    fig.suptitle("Blocco 2 — effetto sul modello e indici osservati, per numero di FD corrotte",
+                 x=0.01, ha="left", fontsize=13, y=1.04)
     fig.tight_layout()
     fig.savefig("plot_blocco2_scaling_fd.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
@@ -192,31 +224,31 @@ else:
     fig.savefig("plot_blocco2_quota_sporca.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
+    # Le tre misure a confronto con il danno, alla configurazione piu' corrotta:
+    # il rumore e' la variabile controllata, gli indici sono osservati.
     n_max = counts[-1]
     s_f1 = scomp2[scomp2['N_FD'] == n_max].set_index('Rumore_%')['F1_test_pulito']
-    s_im = im2.loc[n_max]
-    picco = int(s_im.idxmax())
-    ultimo = int(s_im.index.max())
-    inversione = picco < ultimo
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.8))
-    if inversione:
-        for ax in axes:
-            ax.axvspan(picco, ultimo, color=INK_MUTED, alpha=0.08, linewidth=0)
+    fig, axes = plt.subplots(1, 4, figsize=(19, 4.6))
     linea(axes[0], s_f1.index, s_f1.values, BLUE)
     axes[0].set_ylabel("F1 sul test pulito (media dei 4 modelli)")
     axes[0].set_title("Danno sul modello", loc="left", fontsize=11)
-    linea(axes[1], s_im.index, s_im.values, ORANGE, marker='s')
-    axes[1].set_ylabel("IM — conflitti a coppie")
-    axes[1].set_title("Inconsistenza misurata", loc="left", fontsize=11)
-    formato_migliaia(axes[1])
+    for ax, (colonna, etichetta) in zip(axes[1:], INDICI):
+        serie = indici2[colonna].loc[n_max]
+        linea(ax, serie.index, serie.values, ORANGE, marker='s',
+              etichetta='2-approssimato' if colonna == 'IH_approx_mean' else None)
+        ax.set_ylabel(etichetta)
+        ax.set_title(etichetta.split(' — ')[0], loc="left", fontsize=11)
+        formato_migliaia(ax)
+    linea_ih_esatto(axes[3], n_max, BLUE, 'esatto (ILP, livelli risolti)')
+    axes[3].set_ylabel("IH — tuple da correggere")
+    axes[3].legend(frameon=False, loc="lower right")
     for ax in axes:
         ax.set_xlabel("Rumore nel training (%)")
         stile(ax)
-    titolo = (f"Con {n_max} FD corrotte, oltre il {picco}% di rumore IM cala mentre il danno cresce"
-              if inversione else f"Con {n_max} FD corrotte, IM e danno crescono insieme con il rumore")
-    fig.suptitle(titolo, x=0.02, ha="left", fontsize=13, y=1.04)
+    fig.suptitle(f"Con {n_max} FD corrotte: danno sul modello e andamento delle tre misure",
+                 x=0.01, ha="left", fontsize=13, y=1.04)
     fig.tight_layout()
-    fig.savefig("plot_blocco2_im_e_f1.png", dpi=300, bbox_inches="tight")
+    fig.savefig("plot_blocco2_indici_e_f1.png", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
     piv = scomp2.pivot_table(index='Rumore_%', columns='N_FD', values=['F1_test_pulito', 'Quota_train_sporca'])
@@ -225,20 +257,23 @@ else:
         tabella[f'F1_{n}FD'] = piv[('F1_test_pulito', n)].round(4).values
     for n in counts:
         tabella[f'Quota_sporca_{n}FD'] = piv[('Quota_train_sporca', n)].round(3).values
-    for n in counts:
-        tabella[f'IM_{n}FD'] = im2.loc[n].round(0).astype(int).values
+    for sigla, colonna in [('IM', 'IM_mean'), ('IP', 'IP_mean'), ('IH', 'IH_approx_mean')]:
+        for n in counts:
+            tabella[f'{sigla}_{n}FD'] = indici2[colonna].loc[n].round(0).astype(int).values
     tabella.to_csv('tabella_riassuntiva_blocco2.csv', index=False)
     vista2 = tabella.copy()
     for n in counts:
         vista2[f'F1_{n}FD'] = [f"{v:.4f}" for v in tabella[f'F1_{n}FD']]
         vista2[f'Quota_sporca_{n}FD'] = [f"{100 * v:.1f}%" for v in tabella[f'Quota_sporca_{n}FD']]
-        vista2[f'IM_{n}FD'] = [f"{v:,}".replace(",", ".") for v in tabella[f'IM_{n}FD']]
+        for sigla in ['IM', 'IP', 'IH']:
+            vista2[f'{sigla}_{n}FD'] = [f"{v:,}".replace(",", ".") for v in tabella[f'{sigla}_{n}FD']]
     salva_tabella_immagine(
         vista2, "tabella_riassuntiva_blocco2.png",
-        "Blocco 2 — F1 sul test pulito, righe sporche e inconsistenza, per numero di FD corrotte",
-        ["Rumore\n%"] + [f"F1\n{n} FD" for n in counts] + [f"% righe sp.\n{n} FD" for n in counts]
-        + [f"IM\n{n} FD" for n in counts],
-        [0.6] + [0.8] * len(counts) + [0.9] * len(counts) + [1.0] * len(counts),
+        "Blocco 2 — F1 sul test pulito, quota di righe di training sporche e indici osservati, per numero di FD",
+        ["Rumore\n%"] + [f"F1\n{n} FD" for n in counts] + [f"Sporche\n{n} FD" for n in counts]
+        + [f"{sigla}\n{n} FD" for sigla in ['IM', 'IP', 'IH'] for n in counts],
+        [0.7] + [0.8] * len(counts) + [0.8] * len(counts) + [0.9] * (3 * len(counts)),
+        larghezza=18,
     )
     print("Blocco 2: plot_blocco2_scaling_fd.png, plot_blocco2_sporco_vs_pulito.png, plot_blocco2_quota_sporca.png, "
-          "plot_blocco2_im_e_f1.png, tabella_riassuntiva_blocco2.csv/.png")
+          "plot_blocco2_indici_e_f1.png, tabella_riassuntiva_blocco2.csv/.png")

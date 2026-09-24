@@ -9,8 +9,9 @@ Parte comune, speculare a blocco1_analisi.py (stratificata per numero di FD):
    repliche), per il test sporco e per il test pulito.
 2. Scomposizione del danno per N_FD: apprendimento peggiore (baseline - test
    pulito) contro input corrotto (test pulito - test sporco).
-3. Significativita' del degrado: t-test a un campione delle repliche di F1
-   (test pulito) contro il baseline, per N_FD x modello x livello.
+3. Significativita' del degrado: t-test di Welch a due campioni fra le
+   repliche del livello e quelle del baseline, per N_FD x modello x livello.
+   Il baseline e' una stima con una sua varianza, non una costante.
 
 Parte specifica del Blocco 2:
 4. Configurazioni a parita' di LIVELLO di rumore: t-test appaiato per replica
@@ -20,9 +21,10 @@ Parte specifica del Blocco 2:
    sporcano molte piu' righe, quindi il confronto del punto 4 mescola "piu' FD"
    e "piu' righe sporche". Si separano i due effetti con una regressione
    F1 ~ quota + quota^2 + N_FD, e confrontando i punti a quota simile.
-6. Meccanismo della saturazione di IM: si rigenerano i training sporcati
-   (stesso seed della replica 0) e si misura, per ogni FD, come cambiano i
-   gruppi del lato sinistro e le coppie di righe in conflitto.
+6. Comportamento di IM, IP e IH al crescere del rumore: si rigenerano i
+   training sporcati (stesso seed della replica 0) e si misura, per ogni FD,
+   come cambiano i gruppi del lato sinistro, le coppie in conflitto e le tuple
+   coinvolte, e come si comportano di conseguenza le tre misure.
 
 Uso:  python blocco2_analisi.py [--senza-meccanismo]
 """
@@ -30,7 +32,7 @@ import sys
 import argparse
 import numpy as np
 import pandas as pd
-from scipy.stats import ttest_1samp, ttest_rel
+from scipy.stats import ttest_ind, ttest_rel
 from scipy.stats import t as distribuzione_t
 
 RAW_RESULTS_FILE = 'blocco2_risultati_raw.csv'
@@ -40,7 +42,8 @@ TEST_DEGRADO_FILE = 'blocco2_test_degrado.csv'
 TEST_CONFIGURAZIONI_FILE = 'blocco2_test_configurazioni.csv'
 QUOTA_REGRESSIONE_FILE = 'blocco2_quota_normalizzata.csv'
 QUOTA_PUNTI_FILE = 'blocco2_quota_punti_confrontabili.csv'
-MECCANISMO_FILE = 'blocco2_meccanismo_im.csv'
+MECCANISMO_FILE = 'blocco2_meccanismo_indici.csv'
+INDICI = ['IM_mean', 'IP_mean', 'IH_approx_mean', 'IH_esatto_mean']
 TEST_TYPES = ['test_sporco', 'test_pulito']
 TOLLERANZA_QUOTA_TEORICA = 0.01
 TOLLERANZA_PUNTI_CONFRONTABILI = 0.035
@@ -71,15 +74,23 @@ def controlla_training_e_test(df):
     print(f"   rumore > 0: training sporco={positivo}; quota crescente col rumore={cresce_col_rumore} "
           f"e col numero di FD={cresce_con_fd}")
     print(f"   scarto massimo dalla quota attesa 1-(1-p)^N: {scarto:.4f} (tolleranza {TOLLERANZA_QUOTA_TEORICA})")
+    righe_indici = sorted(df['Righe_indici'].unique())
+    print(f"   righe su cui sono calcolati gli indici (training di ogni fold): {righe_indici}")
+    sd_baseline = base.groupby(['N_FD', 'Modello'])['F1_Score_test_pulito'].std()
+    baseline_variabile = bool((sd_baseline > 0).all())
+    print(f"   baseline variabile fra repliche: {baseline_variabile} "
+          f"(deviazione standard da {sd_baseline.min():.4f} a {sd_baseline.max():.4f})")
+
     if not (zero_pulito and positivo and cresce_col_rumore and cresce_con_fd and diff == 0
-            and scarto <= TOLLERANZA_QUOTA_TEORICA):
+            and baseline_variabile and scarto <= TOLLERANZA_QUOTA_TEORICA):
         print("   CONTROLLO FALLITO: i risultati non possono essere interpretati.")
         sys.exit(1)
     print("   CONTROLLO SUPERATO.\n")
 
 
 def build_aggregato(df):
-    spec = {'Quota_train_sporca': ('Quota_train_sporca', 'mean'), 'IM': ('IM', 'mean'), 'IH': ('IH', 'mean')}
+    spec = {'Quota_train_sporca': ('Quota_train_sporca', 'mean')}
+    spec.update({i: (i, 'mean') for i in INDICI})
     for tt in TEST_TYPES:
         spec[f'Accuracy_{tt}_mean'] = (f'Accuracy_{tt}', 'mean')
         spec[f'Accuracy_{tt}_sd'] = (f'Accuracy_{tt}', 'std')
@@ -110,18 +121,21 @@ def build_scomposizione(df):
 
 
 def build_test_degrado(df):
-    """A rumore 0% le repliche sono identiche: il baseline e' un valore fisso,
-    quindi si usa un t-test a un campione."""
+    """Ogni replica ha righe bilanciate e fold propri, quindi anche il baseline
+    a rumore 0% varia: si confrontano due campioni di repliche con il t-test di
+    Welch, che non assume varianze uguali."""
     righe = []
     for (n_fd, modello), sub in df.groupby(['N_FD', 'Modello']):
-        base = sub[sub['Rumore_%'] == 0]['F1_Score_test_pulito'].mean()
+        base = sub[sub['Rumore_%'] == 0]['F1_Score_test_pulito']
         for livello in sorted(sub['Rumore_%'].unique()):
             if livello == 0:
                 continue
             valori = sub[sub['Rumore_%'] == livello]['F1_Score_test_pulito']
-            t, p = ttest_1samp(valori, base) if valori.std() > 0 else (np.nan, np.nan)
-            righe.append({'N_FD': n_fd, 'Modello': modello, 'Rumore_%': livello, 'F1_baseline': round(base, 4),
-                          'F1_medio': round(valori.mean(), 4), 'Calo': round(base - valori.mean(), 4),
+            t, p = ttest_ind(valori, base, equal_var=False)
+            righe.append({'N_FD': n_fd, 'Modello': modello, 'Rumore_%': livello,
+                          'F1_baseline': round(base.mean(), 4), 'F1_baseline_sd': round(base.std(), 4),
+                          'F1_medio': round(valori.mean(), 4), 'F1_sd': round(valori.std(), 4),
+                          'Calo': round(base.mean() - valori.mean(), 4),
                           't': t, 'p_value': p, 'Significativo': bool(p < 0.05) if p == p else False})
     return pd.DataFrame(righe)
 
@@ -212,49 +226,67 @@ def build_punti_confrontabili(df):
     return pd.DataFrame(righe)
 
 
-def build_meccanismo_im(df):
+def build_meccanismo_indici(df):
     """
-    Rigenera i training sporcati della replica 0 (stesso seed dell'esperimento)
-    con 1 FD e con il numero massimo di FD a ogni livello, e misura per ogni FD:
-      - gruppi del lato sinistro, dimensione media e massima;
-      - coppie di righe con lo stesso lato sinistro (i conflitti possibili);
-      - coppie in conflitto (stesso lato sinistro, lato destro diverso).
-    Con 1 FD i conflitti coincidono per costruzione con IM del CSV: e' la
+    Come si comportano IM, IP e IH al crescere del rumore, e perche'.
+
+    Rigenera il training sporcato della replica 0 (stesso seed
+    dell'esperimento) con 1 FD e con il numero massimo di FD, e misura sulle
+    righe del primo fold — le stesse su cui l'esperimento calcola gli indici:
+      - per ogni FD: gruppi del lato sinistro, dimensione media e massima,
+        coppie di righe con lo stesso lato sinistro (i conflitti possibili),
+        coppie in conflitto e tuple coinvolte;
+      - per l'insieme delle FD: IM, IP, IH approssimato ed esatto.
+    Serve a distinguere il comportamento delle tre misure: la frammentazione
+    dei gruppi riduce le coppie in conflitto, ma non necessariamente il numero
+    di tuple coinvolte.
+
+    Con 1 FD i conflitti della FD coincidono per costruzione con IM: e' la
     verifica che la rigenerazione sia fedele all'esperimento.
     """
-    from progettoTesi_v2 import inject_multiple_fd_noise
-    from blocco1_esperimento import carica_campione
+    from progettoTesi_v2 import inject_multiple_fd_noise, fold_di_valutazione, indici_inconsistenza
+    from blocco1_esperimento import carica_campione, EXTRA_BLACKLIST, TARGET_COL
     from blocco2_scaling_fd import FD_POOL, SEED_BASE, REDUNDANT_COLS_MAP
 
     campione = carica_campione()
     seed = SEED_BASE + 0
+    righe_fold = fold_di_valutazione(campione, TARGET_COL, EXTRA_BLACKLIST, seed_valutazione=seed)[0]
     righe = []
     for n_fd in [1, max(df['N_FD'])]:
         fds = FD_POOL[:n_fd]
         for livello in sorted(df['Rumore_%'].unique()):
             sporco = inject_multiple_fd_noise(campione, fds, noise_level=livello / 100,
                                               corrupt_lhs=True, redundant_cols_map=REDUNDANT_COLS_MAP,
-                                              seed=seed)
+                                              seed=seed).loc[righe_fold]
+            complessivi = indici_inconsistenza(sporco, fds) if livello > 0 else {
+                'IM': 0, 'IP': 0, 'IH_approx': 0, 'IH_esatto': 0 if n_fd == 1 else np.nan}
             for i, (lhs, rhs) in enumerate(fds, 1):
                 dim = sporco.groupby(lhs).size().to_numpy(np.int64)
                 dim_valore = sporco.groupby(lhs + [rhs]).size().to_numpy(np.int64)
                 coppie = int((dim * (dim - 1) // 2).sum())
                 coppie_stesso_valore = int((dim_valore * (dim_valore - 1) // 2).sum())
+                conflitti = coppie - coppie_stesso_valore
+                # Tuple coinvolte in almeno un conflitto di QUESTA FD: tutte le
+                # righe dei gruppi con piu' di un valore del lato destro.
+                gruppi_misti = sporco.groupby(lhs)[rhs].nunique() > 1
+                tuple_coinvolte = int(sporco.groupby(lhs).size()[gruppi_misti].sum())
                 righe.append({
                     'N_FD': n_fd, 'Rumore_%': livello, 'FD_n': i, 'FD': f"{'+'.join(lhs)} -> {rhs}",
                     'Gruppi_LHS': len(dim), 'Dimensione_media': round(dim.mean(), 1),
                     'Dimensione_massima': int(dim.max()),
                     'Coppie_stesso_LHS': coppie,
-                    'Conflitti_FD': coppie - coppie_stesso_valore,
-                    'Quota_coppie_in_conflitto': round((coppie - coppie_stesso_valore) / coppie, 4) if coppie else 0.0,
+                    'Conflitti_FD': conflitti,
+                    'Quota_coppie_in_conflitto': round(conflitti / coppie, 4) if coppie else 0.0,
+                    'Tuple_coinvolte_FD': tuple_coinvolte,
+                    'IM_totale': complessivi['IM'], 'IP_totale': complessivi['IP'],
+                    'IH_approx_totale': complessivi['IH_approx'], 'IH_esatto_totale': complessivi['IH_esatto'],
                 })
             print(f"   meccanismo: {n_fd} FD, rumore {livello}% misurato", flush=True)
     tabella = pd.DataFrame(righe)
 
-    im_csv = df[(df['N_FD'] == 1) & (df['Rep'] == 0)].drop_duplicates('Rumore_%').set_index('Rumore_%')['IM']
-    rigenerati = tabella[tabella['N_FD'] == 1].set_index('Rumore_%')['Conflitti_FD']
-    fedele = bool((rigenerati.sort_index() == im_csv.sort_index()).all())
-    print(f"   verifica di fedelta' (1 FD, replica 0): conflitti rigenerati = IM del CSV a ogni livello: {fedele}")
+    una_fd = tabella[tabella['N_FD'] == 1]
+    fedele = bool((una_fd['Conflitti_FD'] == una_fd['IM_totale']).all())
+    print(f"   verifica di fedelta' (1 FD, replica 0): conflitti della FD = IM a ogni livello: {fedele}")
     if not fedele:
         print("   VERIFICA FALLITA: la rigenerazione non riproduce l'esperimento.")
         sys.exit(1)
@@ -274,6 +306,10 @@ if __name__ == "__main__":
     print(f"1. Aggregato salvato in '{AGGREGATO_FILE}'. F1 sul test pulito, media dei 4 modelli:")
     print(df.pivot_table(index='Rumore_%', columns='N_FD', values='F1_Score_test_pulito',
                          aggfunc='mean').round(4).to_string())
+    for indice in INDICI[:3]:
+        print(f"\n   {indice.replace('_mean', '')} osservato (media sulle repliche, training di ogni fold):")
+        print(df.pivot_table(index='Rumore_%', columns='N_FD', values=indice, aggfunc='mean')
+              .round(1).to_string())
 
     scomp = build_scomposizione(df)
     scomp.to_csv(SCOMPOSIZIONE_FILE, index=False)
@@ -304,12 +340,15 @@ if __name__ == "__main__":
     print(punti.to_string(index=False))
 
     if not args.senza_meccanismo:
-        print("\n6. Meccanismo della saturazione di IM (rigenerazione dei training sporcati):")
-        mecc = build_meccanismo_im(df)
+        print("\n6. Comportamento di IM, IP e IH (rigenerazione dei training sporcati):")
+        mecc = build_meccanismo_indici(df)
         mecc.to_csv(MECCANISMO_FILE, index=False)
-        print(f"   salvato in '{MECCANISMO_FILE}'. Con {mecc['N_FD'].max()} FD, per FD e livello:")
-        print(mecc[mecc['N_FD'] == mecc['N_FD'].max()].pivot_table(
-            index=['FD_n', 'FD'], columns='Rumore_%', values='Conflitti_FD').to_string())
-        print("   dimensione massima dei gruppi del lato sinistro:")
-        print(mecc[mecc['N_FD'] == mecc['N_FD'].max()].pivot_table(
-            index=['FD_n', 'FD'], columns='Rumore_%', values='Dimensione_massima').to_string())
+        massimo = mecc['N_FD'].max()
+        vista = mecc[mecc['N_FD'] == massimo]
+        print(f"   salvato in '{MECCANISMO_FILE}'. Con {massimo} FD, per FD e livello:")
+        for grandezza in ['Conflitti_FD', 'Tuple_coinvolte_FD', 'Dimensione_massima']:
+            print(f"   {grandezza}:")
+            print(vista.pivot_table(index=['FD_n', 'FD'], columns='Rumore_%', values=grandezza).to_string())
+        print("   misure complessive sulle stesse righe:")
+        print(vista.drop_duplicates('Rumore_%').set_index('Rumore_%')[
+            ['IM_totale', 'IP_totale', 'IH_approx_totale']].to_string())

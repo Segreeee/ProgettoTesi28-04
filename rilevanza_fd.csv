@@ -1,41 +1,41 @@
 Configurazione,Modello,Colonne_sporcate,F1_baseline,F1_test_pulito,Calo_F1,p_value,Significativo,Quota_train_sporca
-Concetto aeroporto di destinazione,Decision Tree,7,0.9218,0.9146,0.0072,0.0021801966943589264,True,0.3979
-Concetto aeroporto di destinazione,Logistic Regression,7,0.9218,0.9115,0.0103,0.013528946580353762,True,0.3979
-Concetto aeroporto di destinazione,Neural Network,7,0.9152,0.9011,0.0141,0.006676543850641383,True,0.3979
-Concetto aeroporto di destinazione,Random Forest,7,0.9345,0.9225,0.012,0.0036705772793076226,True,0.3979
-Concetto aeroporto di origine,Decision Tree,7,0.9218,0.9115,0.0103,0.0018160606503771408,True,0.3979
-Concetto aeroporto di origine,Logistic Regression,7,0.9218,0.91,0.0118,0.006303794583665573,True,0.3979
-Concetto aeroporto di origine,Neural Network,7,0.9152,0.8997,0.0155,0.006353360003179353,True,0.3979
-Concetto aeroporto di origine,Random Forest,7,0.9345,0.9199,0.0146,0.0010309841902395736,True,0.3979
-Concetto distanza,Decision Tree,2,0.9218,0.8854,0.0364,0.0018040060922074766,True,0.3979
-Concetto distanza,Logistic Regression,2,0.9218,0.6845,0.2373,3.4597395809308175e-05,True,0.3979
-Concetto distanza,Neural Network,2,0.9152,0.894,0.0212,0.000917976658334546,True,0.3979
-Concetto distanza,Random Forest,2,0.9345,0.9153,0.0192,0.0023358356127367455,True,0.3979
-Concetto rotta e distanza,Decision Tree,16,0.9218,0.8972,0.0246,0.010119190879704868,True,0.3979
-Concetto rotta e distanza,Logistic Regression,16,0.9218,0.6908,0.231,0.00020782734967548502,True,0.3979
-Concetto rotta e distanza,Neural Network,16,0.9152,0.8651,0.0501,0.001514474827869497,True,0.3979
-Concetto rotta e distanza,Random Forest,16,0.9345,0.9056,0.0289,0.001449570470802966,True,0.3979
-FD CRSDepTime -> DepTimeBlk,Decision Tree,2,0.9218,0.9206,0.0012,0.43976689453214013,False,0.3979
-FD CRSDepTime -> DepTimeBlk,Logistic Regression,2,0.9218,0.9244,-0.0026,0.055836404268600134,False,0.3979
-FD CRSDepTime -> DepTimeBlk,Neural Network,2,0.9152,0.9134,0.0018,0.30189328282753636,False,0.3979
-FD CRSDepTime -> DepTimeBlk,Random Forest,2,0.9345,0.9316,0.0029,0.010047949641185817,True,0.3979
-FD DestAirportID -> DestState,Decision Tree,2,0.9218,0.9225,-0.0007,0.6348516283298716,False,0.3979
-FD DestAirportID -> DestState,Logistic Regression,2,0.9218,0.9205,0.0013,0.09369544807397133,False,0.3979
-FD DestAirportID -> DestState,Neural Network,2,0.9152,0.9121,0.0031,0.27299413368146486,False,0.3979
-FD DestAirportID -> DestState,Random Forest,2,0.9345,0.9314,0.0031,0.07078949353822053,False,0.3979
-FD Distance -> DistanceGroup,Decision Tree,2,0.9218,0.8854,0.0364,0.0018040060922074766,True,0.3979
-FD Distance -> DistanceGroup,Logistic Regression,2,0.9218,0.6845,0.2373,3.4597395809308175e-05,True,0.3979
-FD Distance -> DistanceGroup,Neural Network,2,0.9152,0.894,0.0212,0.000917976658334546,True,0.3979
-FD Distance -> DistanceGroup,Random Forest,2,0.9345,0.9153,0.0192,0.0023358356127367455,True,0.3979
-FD Origin+Dest -> Distance,Decision Tree,3,0.9218,0.9093,0.0125,0.007891244234542733,True,0.3979
-FD Origin+Dest -> Distance,Logistic Regression,3,0.9218,0.892,0.0298,3.8871692707612565e-05,True,0.3979
-FD Origin+Dest -> Distance,Neural Network,3,0.9152,0.8946,0.0206,0.0023559924560038257,True,0.3979
-FD Origin+Dest -> Distance,Random Forest,3,0.9345,0.9184,0.0161,0.0010272041241823561,True,0.3979
-FD OriginAirportID -> OriginState,Decision Tree,2,0.9218,0.9221,-0.0003,0.5896950300688186,False,0.3979
-FD OriginAirportID -> OriginState,Logistic Regression,2,0.9218,0.9212,0.0006,0.4438164075437685,False,0.3979
-FD OriginAirportID -> OriginState,Neural Network,2,0.9152,0.914,0.0012,0.31372549019608376,False,0.3979
-FD OriginAirportID -> OriginState,Random Forest,2,0.9345,0.9309,0.0036,0.03637878498156454,True,0.3979
-FD Reporting_Airline -> IATA_CODE,Decision Tree,2,0.9218,0.9183,0.0035,0.26179843144012593,False,0.3979
-FD Reporting_Airline -> IATA_CODE,Logistic Regression,2,0.9218,0.9209,0.0009,0.21320420753061767,False,0.3979
-FD Reporting_Airline -> IATA_CODE,Neural Network,2,0.9152,0.9136,0.0016,0.07282735005446933,False,0.3979
-FD Reporting_Airline -> IATA_CODE,Random Forest,2,0.9345,0.9318,0.0027,0.04509034219455867,True,0.3979
+Concetto aeroporto di destinazione,Decision Tree,7,0.9212,0.914,0.0072,0.025451419414625365,True,0.3967
+Concetto aeroporto di destinazione,Logistic Regression,7,0.9231,0.9111,0.012,4.7041008464152765e-05,True,0.3967
+Concetto aeroporto di destinazione,Neural Network,7,0.9107,0.8953,0.0155,0.0014805555551584326,True,0.3967
+Concetto aeroporto di destinazione,Random Forest,7,0.9306,0.9205,0.0101,0.003875323710280713,True,0.3967
+Concetto aeroporto di origine,Decision Tree,7,0.9212,0.9123,0.0089,0.13200216295100445,False,0.3967
+Concetto aeroporto di origine,Logistic Regression,7,0.9231,0.9116,0.0114,0.0015563348016255007,True,0.3967
+Concetto aeroporto di origine,Neural Network,7,0.9107,0.8941,0.0167,6.286230622251528e-06,True,0.3967
+Concetto aeroporto di origine,Random Forest,7,0.9306,0.9199,0.0107,0.028184895261098845,True,0.3967
+Concetto distanza,Decision Tree,2,0.9212,0.8822,0.0391,2.9645960257484504e-06,True,0.3967
+Concetto distanza,Logistic Regression,2,0.9231,0.6785,0.2446,1.8313806874255902e-05,True,0.3967
+Concetto distanza,Neural Network,2,0.9107,0.8911,0.0196,5.3292229039653316e-05,True,0.3967
+Concetto distanza,Random Forest,2,0.9306,0.9149,0.0157,0.0008574166622550639,True,0.3967
+Concetto rotta e distanza,Decision Tree,16,0.9212,0.8958,0.0254,0.002912464379655709,True,0.3967
+Concetto rotta e distanza,Logistic Regression,16,0.9231,0.687,0.236,0.00015321367215397644,True,0.3967
+Concetto rotta e distanza,Neural Network,16,0.9107,0.8639,0.0468,9.122014387055237e-09,True,0.3967
+Concetto rotta e distanza,Random Forest,16,0.9306,0.9058,0.0248,0.0043019505915056445,True,0.3967
+FD CRSDepTime -> DepTimeBlk,Decision Tree,2,0.9212,0.9194,0.0019,0.6215821847449642,False,0.3967
+FD CRSDepTime -> DepTimeBlk,Logistic Regression,2,0.9231,0.9219,0.0011,0.5233237885821374,False,0.3967
+FD CRSDepTime -> DepTimeBlk,Neural Network,2,0.9107,0.9107,0.0001,0.9773615527257454,False,0.3967
+FD CRSDepTime -> DepTimeBlk,Random Forest,2,0.9306,0.9284,0.0022,0.0638878864203772,False,0.3967
+FD DestAirportID -> DestState,Decision Tree,2,0.9212,0.9209,0.0004,0.877992975176979,False,0.3967
+FD DestAirportID -> DestState,Logistic Regression,2,0.9231,0.9213,0.0018,0.16574625935975779,False,0.3967
+FD DestAirportID -> DestState,Neural Network,2,0.9107,0.9115,-0.0008,0.6575864629633009,False,0.3967
+FD DestAirportID -> DestState,Random Forest,2,0.9306,0.9286,0.002,0.23029916438058978,False,0.3967
+FD Distance -> DistanceGroup,Decision Tree,2,0.9212,0.8822,0.0391,2.9645960257484504e-06,True,0.3967
+FD Distance -> DistanceGroup,Logistic Regression,2,0.9231,0.6785,0.2446,1.8313806874255902e-05,True,0.3967
+FD Distance -> DistanceGroup,Neural Network,2,0.9107,0.8911,0.0196,5.3292229039653316e-05,True,0.3967
+FD Distance -> DistanceGroup,Random Forest,2,0.9306,0.9149,0.0157,0.0008574166622550639,True,0.3967
+FD Origin+Dest -> Distance,Decision Tree,3,0.9212,0.9075,0.0137,0.0032348602363660734,True,0.3967
+FD Origin+Dest -> Distance,Logistic Regression,3,0.9231,0.8914,0.0317,2.0556927202053516e-05,True,0.3967
+FD Origin+Dest -> Distance,Neural Network,3,0.9107,0.8893,0.0215,5.917015533193559e-06,True,0.3967
+FD Origin+Dest -> Distance,Random Forest,3,0.9306,0.918,0.0126,0.004899004773873865,True,0.3967
+FD OriginAirportID -> OriginState,Decision Tree,2,0.9212,0.9226,-0.0014,0.6142635709345454,False,0.3967
+FD OriginAirportID -> OriginState,Logistic Regression,2,0.9231,0.9218,0.0012,0.521802018454778,False,0.3967
+FD OriginAirportID -> OriginState,Neural Network,2,0.9107,0.9113,-0.0005,0.6318374145300375,False,0.3967
+FD OriginAirportID -> OriginState,Random Forest,2,0.9306,0.9308,-0.0002,0.935418998321206,False,0.3967
+FD Reporting_Airline -> IATA_CODE,Decision Tree,2,0.9212,0.9161,0.0051,0.2366406125180108,False,0.3967
+FD Reporting_Airline -> IATA_CODE,Logistic Regression,2,0.9231,0.9217,0.0014,0.2549233003527448,False,0.3967
+FD Reporting_Airline -> IATA_CODE,Neural Network,2,0.9107,0.908,0.0027,0.06232178656096168,False,0.3967
+FD Reporting_Airline -> IATA_CODE,Random Forest,2,0.9306,0.9284,0.0022,0.10443444261150182,False,0.3967

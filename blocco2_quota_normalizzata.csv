@@ -1,9 +1,9 @@
 Modello,Intervallo,N_punti,R2,Coef_quota,Coef_quota2,Coef_N_FD,SE_N_FD,t_N_FD,p_N_FD,Significativo
-Decision Tree,tutti i punti,80,0.965,-0.05258,-0.08864,0.004513,0.000648,6.968,1.0085420253798845e-09,True
-Decision Tree,quota <= 0.41 (comune alle configurazioni),55,0.9297,-0.09082,0.00397,0.002935,0.000415,7.07,4.216503903061472e-09,True
-Logistic Regression,tutti i punti,80,0.9661,-0.66278,0.35569,0.015897,0.001849,8.599,7.828911869864805e-13,True
-Logistic Regression,quota <= 0.41 (comune alle configurazioni),55,0.987,-1.11842,1.37391,0.020196,0.00109,18.524,2.6857674621444245e-24,True
-Neural Network,tutti i punti,80,0.9473,0.07078,-0.22334,-0.005394,0.000999,-5.399,7.37261759203056e-07,True
-Neural Network,quota <= 0.41 (comune alle configurazioni),55,0.8736,-0.10208,0.12359,-0.00218,0.000416,-5.24,3.0911291961119265e-06,True
-Random Forest,tutti i punti,80,0.9643,0.02836,-0.14708,-0.000503,0.000577,-0.872,0.3861943723418655,False
-Random Forest,quota <= 0.41 (comune alle configurazioni),55,0.9586,-0.05527,0.01797,0.000168,0.000174,0.967,0.3379686930178081,False
+Decision Tree,tutti i punti,80,0.9519,-0.04844,-0.09716,0.004573,0.000787,5.812,1.3635596064072166e-07,True
+Decision Tree,quota <= 0.41 (comune alle configurazioni),55,0.9134,-0.078,-0.03158,0.002894,0.000474,6.101,1.425377798810746e-07,True
+Logistic Regression,tutti i punti,80,0.9544,-0.66032,0.36399,0.014536,0.002121,6.854,1.650713891137997e-09,True
+Logistic Regression,quota <= 0.41 (comune alle configurazioni),55,0.9762,-1.15631,1.48026,0.018769,0.001478,12.703,2.020505631337352e-17,True
+Neural Network,tutti i punti,80,0.9453,0.07416,-0.2223,-0.005703,0.001001,-5.698,2.1819066216408742e-07,True
+Neural Network,quota <= 0.41 (comune alle configurazioni),55,0.823,-0.09637,0.11898,-0.002257,0.000481,-4.696,2.039943239112738e-05,True
+Random Forest,tutti i punti,80,0.9547,0.04066,-0.15766,-0.000725,0.000645,-1.125,0.2642589672348015,False
+Random Forest,quota <= 0.41 (comune alle configurazioni),55,0.8554,-0.03638,-0.00955,-7e-05,0.000291,-0.24,0.8109135715745212,False

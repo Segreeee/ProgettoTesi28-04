@@ -44,10 +44,56 @@ def get_global_inconsistency_metrics(df, fds_list):
     IM = G.number_of_edges()
     IP = len([n for n in G.nodes() if G.degree(n) > 0])
 
+    # min_weighted_vertex_cover e' 2-approssimato: IH_approx e' un LIMITE
+    # SUPERIORE del minimo, che nel caso peggiore ne vale il doppio.
     vc_set = nx.algorithms.approximation.min_weighted_vertex_cover(G)
-    IH = len(vc_set)
+    IH_approx = len(vc_set)
 
-    return IM, IP, IH, G
+    return IM, IP, IH_approx, G
+
+
+def ih_esatto_una_fd(df, lhs, rhs):
+    """
+    Vertex cover minimo ESATTO del grafo dei conflitti di UNA sola FD.
+
+    Con una sola FD il grafo e' l'unione disgiunta, sui gruppi del lato
+    sinistro, di grafi multipartiti completi: le parti sono i valori distinti
+    del lato destro dentro il gruppo. Il massimo insieme indipendente di un
+    multipartito completo e' la parte piu' numerosa, quindi il vertex cover
+    minimo di ogni gruppo vale (righe del gruppo - righe della classe piu'
+    numerosa) e il minimo globale e' la loro somma.
+    """
+    totale = 0
+    for _, gruppo in df.groupby(list(lhs)):
+        conteggi = gruppo[rhs].value_counts()
+        if len(conteggi) > 1:
+            totale += int(len(gruppo) - conteggi.iloc[0])
+    return totale
+
+
+def indici_inconsistenza(df, fds_list):
+    """
+    IM, IP e IH sulle righe di `df`. IH e' riportato sia nella versione
+    2-approssimata sia, quando le FD sono una sola, nel valore esatto.
+    """
+    IM, IP, IH_approx, _ = get_global_inconsistency_metrics(df, fds_list)
+    IH_esatto = ih_esatto_una_fd(df, fds_list[0][0], fds_list[0][1]) if len(fds_list) == 1 else np.nan
+    return {'IM': IM, 'IP': IP, 'IH_approx': IH_approx, 'IH_esatto': IH_esatto}
+
+
+def indici_per_fold(df_sporco, fold_train_index, fds_list):
+    """
+    Indici di inconsistenza calcolati sulle righe di training di ciascun fold,
+    cioe' esattamente le righe che i modelli vedono. Restituisce media e
+    deviazione standard sui fold, piu' il numero di righe su cui sono calcolati.
+    """
+    per_fold = [indici_inconsistenza(df_sporco.loc[idx], fds_list) for idx in fold_train_index]
+    tabella = pd.DataFrame(per_fold)
+    risultato = {'Righe_indici': int(np.mean([len(idx) for idx in fold_train_index]))}
+    for colonna in ['IM', 'IP', 'IH_approx', 'IH_esatto']:
+        risultato[f'{colonna}_mean'] = float(tabella[colonna].mean())
+        risultato[f'{colonna}_sd'] = float(tabella[colonna].std())
+    return risultato
 
 def inject_multiple_fd_noise(df, fds_list, noise_level, corrupt_lhs=True, redundant_cols_map=None, seed=42):
     """
@@ -89,7 +135,7 @@ def inject_multiple_fd_noise(df, fds_list, noise_level, corrupt_lhs=True, redund
     return df_noisy
 
 
-def _prepare_xy(df, target_col, extra_blacklist=None):
+def _prepare_xy(df, target_col, extra_blacklist=None, seed_valutazione=42):
     """
     Applica blacklist anti-leakage, encoding del target e bilanciamento delle
     classi, restituendo (X, y) con l'INDICE ORIGINALE del dataframe preservato.
@@ -138,8 +184,8 @@ def _prepare_xy(df, target_col, extra_blacklist=None):
     class_groups = [group for _, group in df_temp.groupby('TARGET_TEMP')]
     n_minimo = min(len(group) for group in class_groups)
 
-    balanced_samples = [group.sample(n=n_minimo, random_state=42) for group in class_groups]
-    df_balanced = pd.concat(balanced_samples).sample(frac=1, random_state=42)
+    balanced_samples = [group.sample(n=n_minimo, random_state=seed_valutazione) for group in class_groups]
+    df_balanced = pd.concat(balanced_samples).sample(frac=1, random_state=seed_valutazione)
 
     X_bal = df_balanced.drop(columns=['TARGET_TEMP'])
     y_bal = df_balanced['TARGET_TEMP']
@@ -166,12 +212,31 @@ def _righe_diverse(a, b):
     return diverse
 
 
-def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None, n_jobs_rf=None) -> dict:
+def fold_di_valutazione(df, target_col, extra_blacklist=None, seed_valutazione=42):
+    """
+    Righe di training di ciascun fold, con l'indice originale del dataframe.
+
+    E' la stessa partizione usata da ml_preparation con lo stesso
+    seed_valutazione: serve a calcolare gli indici di inconsistenza esattamente
+    sulle righe che i modelli vedono in addestramento.
+    """
+    X, y = _prepare_xy(df, target_col, extra_blacklist, seed_valutazione)
+    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=seed_valutazione)
+    return [X.index[train_idx] for train_idx, _ in skf.split(X, y)]
+
+
+def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None, n_jobs_rf=None,
+                   seed_valutazione=42) -> dict:
     """
     Addestra 4 modelli RAW in cross-validation stratificata a N_SPLITS fold e
     ne restituisce le metriche medie (e la deviazione standard sui fold).
 
     df       : dataset di TRAINING, eventualmente sporcato.
+    seed_valutazione: governa il sottocampionamento di bilanciamento e la
+               partizione in fold. Passando il seed della replica, ogni replica
+               lavora su righe e fold propri: anche il baseline a rumore 0%
+               acquista variabilita', condizione necessaria per confrontarlo
+               con un test a due campioni.
     df_eval  : dataset opzionale da cui prendere il test set — tipicamente il
                dataset PULITO. Se fornito, ogni fold viene valutato DUE volte:
                  - 'test_sporco': righe di test prese da `df` (confronto);
@@ -188,12 +253,12 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None, n_jobs_rf
       Quota_train_sporca: quota media di righe di training che differiscono
       dal dataset pulito (0 a rumore 0%, cresce con il rumore).
     """
-    X, y = _prepare_xy(df, target_col, extra_blacklist)
+    X, y = _prepare_xy(df, target_col, extra_blacklist, seed_valutazione)
 
     X_eval = None
     righe_sporche = None
     if df_eval is not None:
-        X_eval, y_eval = _prepare_xy(df_eval, target_col, extra_blacklist)
+        X_eval, y_eval = _prepare_xy(df_eval, target_col, extra_blacklist, seed_valutazione)
         if not X.index.equals(X_eval.index):
             raise ValueError(
                 "Indici disallineati tra dataset di training e dataset di valutazione: "
@@ -234,7 +299,7 @@ def ml_preparation(df, target_col, extra_blacklist=None, df_eval=None, n_jobs_rf
         "Neural Network": MLPClassifier(max_iter=1000, random_state=42)
     }
 
-    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=42)
+    skf = StratifiedKFold(n_splits=N_SPLITS, shuffle=True, random_state=seed_valutazione)
     fold_scores = {name: {'test_sporco': [], 'test_pulito': []} for name in models}
     quote_train_sporche = []
 

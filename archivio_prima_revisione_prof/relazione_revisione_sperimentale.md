@@ -153,8 +153,6 @@ La stessa analisi ha mostrato che `DistanceGroup`, non sporcata nella prima vers
 
 ## 5. Cosa è cambiato nei risultati
 
-*I numeri di questa sezione si riferiscono alla prima revisione (indici sull'intero campione, baseline a seed fisso). I valori attuali, dopo la seconda revisione descritta nella §6, sono in `relazione_finale_progetto.md` e `numeri_tesi.md`.*
-
 ### Il danno misurato sul test sporco è sovrastimato
 
 È la conseguenza della correzione richiesta ai punti 4 e 6. Nel Blocco 1, al 40% di rumore, il calo di F1 misurato sulle stesse righe sporcate è di **31,2 punti**; valutando gli stessi modelli sul test pulito è di **8,4 punti**. Il resto è il costo di interrogare il modello su input corrotti, non un apprendimento peggiore. La proporzione è stabile: a ogni livello il danno dovuto all'apprendimento è fra il 27% e il 32% di quello apparente. Nel Blocco 2, dove ogni riga sporca ha meno colonne corrotte, la quota sale al 36–56% e la sovrastima va da circa due volte (1 e 2 FD) a due volte e mezzo (4 FD).
@@ -189,50 +187,3 @@ Con 4 FD, inoltre, IM si satura: fra il 30% e il 40% cresce solo dell'1,1% mentr
 ### Il campione più grande alza il livello di partenza
 
 Con 30.000 righe il baseline è 0,9233 di F1 (8.090 righe dopo il bilanciamento, circa 6.470 di training per fold). Prima della revisione, sul campione da 10.000 righe, era intorno a 0,87: con più dati i modelli predicono meglio la durata del volo, e il degrado va letto su questa base più alta.
-
-## 6. Seconda revisione: le osservazioni del relatore (settembre 2026)
-
-Dopo la lettura della tesi il relatore ha sollevato otto osservazioni. Tre riguardavano difetti metodologici reali, verificati nel codice e corretti; le altre riguardano l'interpretazione, la copertura delle misure e la redazione.
-
-| # | Osservazione | Esito | Dove |
-|---|---|---|---|
-| 1 | IM, IP e IH sono variabili osservate, non manipolate; il calo di IM è un comportamento corretto della misura | Riformulato il rapporto fra misure e degrado in tutti i documenti | `relazione_finale_progetto.md` §1, §7.6, §8; `correzioni_tesi.md` |
-| 2 | Le misure erano calcolate sulle 30.000 righe, i modelli su ~6.470 per fold | **Difetto reale.** Ora le misure sono calcolate sulle righe di training di ciascun fold (6.472), con media e deviazione standard | `progettoTesi_v2.py`: `fold_di_valutazione`, `indici_per_fold` |
-| 3 | IH è un 2-approssimato, quindi un limite superiore | **Confermato.** Minimo esatto in forma chiusa per una FD, ottimo ILP su istanze ridotte (rapporto 1,00–1,47) e sulle istanze reali del Blocco 2 (rapporto 1,45–1,70, livelli risolvibili) | `progettoTesi_v2.py`: `ih_esatto_una_fd`; `verifica_ih.py`, `ih_esatto_blocco2.py` |
-| 4 | La validazione di Torchia riguardava i tempi, non la qualità dell'approssimazione | Rinvio corretto; la qualità è misurata direttamente (punto 3) | `correzioni_tesi.md` |
-| 5 | Il t-test a un campione tratta il baseline come costante | **Difetto reale.** Il seed della replica governa ora anche bilanciamento e fold, quindi il baseline varia; test di Welch a due campioni | `ml_preparation(seed_valutazione=...)`; `blocco1_analisi.py`, `blocco2_analisi.py`, `analisi_rilevanza_fd.py` |
-| 6 | IP e IH assenti dai risultati | Analisi, tabelle e grafici riportano tutte e tre le misure; il meccanismo misura anche le tuple coinvolte | `blocco2_analisi.py`: `build_meccanismo_indici`; `plot_blocco2_indici_e_f1.png` |
-| 7 | Bibliografia insufficiente | 24 voci verificate, con indicazione di dove citarle | `bibliografia.bib`, `correzioni_tesi.md` |
-| 8 | Refusi, rinvii errati, numeri discordanti | 135 correzioni elencate dopo una rilettura completa; strumenti di controllo dei numeri | `correzioni_tesi.md`, `numeri_tesi.py`, `controllo_tesi.py` |
-
-### Cosa cambia nei risultati
-
-| | Prima | Dopo |
-|---|---|---|
-| Baseline F1 medio | 0,9233, identico in tutte le repliche | 0,9214, deviazione standard 0,0013–0,0044 |
-| Blocco 1, calo al 40% | 8,4 punti | 8,3 punti |
-| Blocco 1, confronti significativi | 20 su 20 (un campione) | **18 su 20** (Welch) |
-| Blocco 2, calo al 40% con 1 / 2 / 4 FD | 7,8 / 11,0 / 17,0 | 7,8 / 11,2 / 17,1 |
-| Blocco 2, confronti significativi | 60 su 60 | **58 su 60** |
-| Rilevanza, aeroporto di origine | significativo per 4 modelli su 4 | **3 su 4**: criterio di rilevanza riformulato |
-| IM al 40% nel Blocco 1 | 2.816 (30.000 righe) | 135 (6.472 righe per fold) |
-| IP con 4 FD | 30.000 righe già al 5% | 6.472 righe, cioè tutte, dal 10% |
-| IH | presentato come minimo | limite superiore: sulle istanze reali l'approssimato supera l'esatto del 12–44% (Blocco 1) e del 45–70% (Blocco 2) |
-
-Le grandezze del danno, la sua scomposizione e la fragilità di Logistic Regression non dipendevano dai difetti corretti. Cambiano la significatività a rumore basso, la scala e la lettura delle misure di inconsistenza, e il criterio di selezione delle FD.
-
-### File nuovi o modificati
-
-| File | Ruolo |
-|---|---|
-| `verifica_ih.py`, `verifica_ih.csv`, `verifica_ih.log` | Confronto fra IH approssimato ed esatto |
-| `ih_esatto_blocco2.py`, `blocco2_ih_esatto.csv`, `ih_esatto_blocco2.log` | IH esatto sulle istanze reali del Blocco 2 (ILP per 2 e 4 FD) |
-| `numeri_tesi.py`, `numeri_tesi.md` | Unica fonte dei numeri da citare in tesi |
-| `controllo_tesi.py` | Confronto fra i numeri del PDF della tesi e quelli delle analisi |
-| `correzioni_tesi.md` | Correzioni da riportare nel testo della tesi, sezione per sezione |
-| `bibliografia.bib` | Bibliografia estesa |
-| `blocco2_meccanismo_indici.csv` | Sostituisce `blocco2_meccanismo_im.csv`: include tuple coinvolte e le tre misure |
-| `plot_blocco2_indici_e_f1.png` | Sostituisce `plot_blocco2_im_e_f1.png` |
-| `archivio_prima_revisione_prof/` | Risultati precedenti alla seconda revisione |
-
-**Nota sul limite di 30.000 righe (§3.2).** Il motivo esposto nella §3.2, cioè la memoria del grafo costruito sull'intero campione, non vale più: il grafo è ora costruito sui fold di training e il più grande ha circa 290.000 archi. La dimensione del campione è stata mantenuta per confrontabilità con i risultati precedenti.

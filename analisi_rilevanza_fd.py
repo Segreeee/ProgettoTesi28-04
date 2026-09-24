@@ -109,7 +109,7 @@ def esegui_lavoro(nome, rep, n_jobs_rf):
         redundant_cols_map={(tuple(fd[0]), fd[1]): extra}, seed=seed,
     )
     scores = ml_preparation(df_noisy, TARGET_COL, extra_blacklist=EXTRA_BLACKLIST,
-                            df_eval=_DF, n_jobs_rf=n_jobs_rf)
+                            df_eval=_DF, n_jobs_rf=n_jobs_rf, seed_valutazione=seed)
     righe = []
     for modello, m in scores.items():
         righe.append({'Configurazione': nome, 'Rep': rep, 'Seed': seed, 'Modello': modello,
@@ -121,13 +121,16 @@ def esegui_lavoro(nome, rep, n_jobs_rf):
 
 
 def build_sintesi(raw, baseline):
+    """Il baseline e' un campione di repliche, non una costante: il confronto e'
+    un t-test a due campioni di Welch, che tiene conto anche della sua varianza."""
     righe = []
     for (nome, modello), g in raw.groupby(['Configurazione', 'Modello']):
-        base = baseline[modello]
+        valori_base = baseline[modello]
+        base = float(np.mean(valori_base))
         calo = base - g['F1_test_pulito']
-        t, p = stats.ttest_1samp(g['F1_test_pulito'], base) if g['F1_test_pulito'].std() > 0 else (np.nan, np.nan)
+        t, p = stats.ttest_ind(g['F1_test_pulito'], valori_base, equal_var=False)
         righe.append({'Configurazione': nome, 'Modello': modello, 'Colonne_sporcate': g['Colonne_sporcate'].iloc[0],
-                      'F1_baseline': base, 'F1_test_pulito': round(g['F1_test_pulito'].mean(), 4),
+                      'F1_baseline': round(base, 4), 'F1_test_pulito': round(g['F1_test_pulito'].mean(), 4),
                       'Calo_F1': round(calo.mean(), 4), 'p_value': p,
                       'Significativo': bool(p < 0.05) if not np.isnan(p) else False,
                       'Quota_train_sporca': round(g['Quota_train_sporca'].mean(), 4)})
@@ -187,7 +190,8 @@ def main():
         sys.exit(1)
 
     b = pd.read_csv('blocco1_risultati_raw.csv')
-    baseline = b[b['Rumore_%'] == 0].groupby('Modello')['F1_Score_test_pulito'].mean().round(4).to_dict()
+    baseline = {m: g['F1_Score_test_pulito'].to_numpy()
+                for m, g in b[b['Rumore_%'] == 0].groupby('Modello')}
     per_modello, media = build_sintesi(raw, baseline)
     per_modello.to_csv('rilevanza_fd.csv', index=False)
     log("\nCalo di F1 sul test pulito al 40% (media 4 modelli)")

@@ -7,9 +7,10 @@ funzionali: 1, 2 e 4.
 
 Si usano solo FD RILEVANTI per l'obiettivo predittivo, individuate da
 analisi_rilevanza_fd.py: sporcate al 40%, fanno calare la F1 sul test pulito
-in modo significativo per tutti e 4 i modelli. Le altre FD valide del dataset
-(stato, citta', WAC dell'aeroporto presi singolarmente, compagnia, orario)
-hanno un effetto nullo o non significativo e sono escluse. L'ordine segue la
+di almeno un punto in media, in modo significativo (t-test di Welch) per la
+maggioranza dei modelli. Le altre FD valide del dataset (stato, citta', WAC
+dell'aeroporto presi singolarmente, compagnia, orario) calano di al piu' 0,3
+punti e non sono significative per nessun modello. L'ordine segue la
 rilevanza misurata.
 
 Le FD sugli aeroporti sporcano anche le colonne che ripetono la stessa
@@ -33,6 +34,8 @@ import pandas as pd
 from progettoTesi_v2 import (
     ml_preparation,
     get_global_inconsistency_metrics,
+    fold_di_valutazione,
+    indici_per_fold,
     inject_multiple_fd_noise,
 )
 from blocco1_esperimento import (
@@ -134,13 +137,17 @@ def esegui_lavoro(n_fd, level, rep, n_jobs_rf):
         _DF, fds, noise_level=level,
         corrupt_lhs=True, redundant_cols_map=REDUNDANT_COLS_MAP, seed=seed,
     )
-    im, ip, ih, _ = get_global_inconsistency_metrics(df_noisy, fds)
+    # Indici sulle righe di training di ciascun fold, le stesse che i modelli
+    # vedono: indici e metriche descrivono la stessa popolazione.
+    fold_train = fold_di_valutazione(_DF, TARGET_COL, EXTRA_BLACKLIST, seed_valutazione=seed)
+    indici = indici_per_fold(df_noisy, fold_train, fds)
 
     ml_scores = ml_preparation(
         df_noisy, TARGET_COL,
         extra_blacklist=EXTRA_BLACKLIST,
         df_eval=_DF,
         n_jobs_rf=n_jobs_rf,
+        seed_valutazione=seed,
     )
 
     righe = []
@@ -151,10 +158,8 @@ def esegui_lavoro(n_fd, level, rep, n_jobs_rf):
             'Rep': rep,
             'Seed': seed,
             'Modello': model_name,
-            'IM': im,
-            'IP': ip,
-            'IH': ih,
         }
+        row.update({k: (round(v, 2) if isinstance(v, float) else v) for k, v in indici.items()})
         row.update({k: round(v, 4) for k, v in metrics.items()})
         righe.append(row)
     return righe
