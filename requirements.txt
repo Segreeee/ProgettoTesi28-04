@@ -1,0 +1,8 @@
+# Versioni usate per produrre i risultati del progetto (Python 3.13.2).
+pandas==3.0.2
+numpy==2.4.4
+scikit-learn==1.8.0
+networkx==3.6.1
+scipy==1.17.1
+matplotlib==3.10.9
+psutil==7.2.2

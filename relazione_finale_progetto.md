@@ -101,7 +101,7 @@ Livelli di rumore: **0, 5, 10, 20, 30, 40%**; 5 repliche.
 
 **Le misure sono calcolate sulle righe di training di ciascun fold** (6.472 righe), le stesse su cui si addestrano i modelli; se ne riportano media e deviazione standard sui 5 fold. Indici e metriche descrivono così la stessa popolazione.
 
-**Verifiche automatiche.** Ogni risultato riporta la quota di righe di training che differiscono dal campione pulito: vale **0 a rumore 0%**, dove le due valutazioni coincidono, e cresce con il rumore (nel Blocco 2 segue 1 − (1 − p)^N, scarto massimo 0,004). Le analisi si interrompono anche se gli indici non risultano calcolati sulle righe di training, o se il baseline non ha varianza.
+**Verifiche automatiche.** Ogni risultato riporta la quota di righe di training che differiscono dal campione pulito: vale **0 a rumore 0%**, dove le due valutazioni coincidono, e cresce con il rumore (nel Blocco 2 segue 1 − (1 − p)^N, scarto massimo 0,004). Le analisi si interrompono anche se il baseline non ha varianza, e riportano nel log il numero di righe su cui sono calcolati gli indici (6.472 in tutte le esecuzioni).
 
 ---
 
