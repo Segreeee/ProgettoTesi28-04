@@ -1,0 +1,133 @@
+[2026-09-21 22:48:04] ============================================================
+[2026-09-21 22:48:04] Blocco 2 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-21 22:48:04]   FD # 1 Distance -> DistanceGroup                gruppi= 1403 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-21 22:48:04]   FD # 2 Origin+Dest -> Distance                  gruppi= 4624 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-21 22:48:04]   FD # 3 OriginAirportID -> Origin                gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-21 22:48:04]   FD # 4 DestAirportID -> Dest                    gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-21 22:48:04] Verifica superata: le 4 FD e le loro colonne ridondanti hanno 0 violazioni sul campione. Salvata in blocco2_verifica_fd.csv
+[2026-09-21 22:48:05] Campione di valutazione sulle 4 FD: IM=0 (pulito, OK)
+[2026-09-21 22:48:05] RAM disponibile 3.6 GB -> 1 processi paralleli, Random Forest con 16 thread
+[2026-09-21 22:48:05] Configurazioni: [1, 2, 4] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-21 22:48:05] Lavori totali 90, gia' completati 0, da eseguire 90
+[2026-09-21 22:48:57] LAVORO 1/90  (1, 0, 0)  fine stimata tra 76 min
+[2026-09-21 22:49:51] LAVORO 2/90  (1, 0, 1)  fine stimata tra 77 min
+[2026-09-21 22:50:40] LAVORO 3/90  (1, 0, 2)  fine stimata tra 75 min
+[2026-09-21 22:51:48] LAVORO 4/90  (1, 0, 3)  fine stimata tra 80 min
+[2026-09-21 22:52:37] LAVORO 5/90  (1, 0, 4)  fine stimata tra 77 min
+[2026-09-21 22:53:27] LAVORO 6/90  (2, 0, 0)  fine stimata tra 75 min
+[2026-09-21 22:54:16] LAVORO 7/90  (2, 0, 1)  fine stimata tra 73 min
+[2026-09-21 22:55:05] LAVORO 8/90  (2, 0, 2)  fine stimata tra 72 min
+[2026-09-21 22:56:17] LAVORO 9/90  (2, 0, 3)  fine stimata tra 74 min
+[2026-09-21 22:57:10] LAVORO 10/90  (2, 0, 4)  fine stimata tra 73 min
+[2026-09-21 22:58:03] LAVORO 11/90  (4, 0, 0)  fine stimata tra 71 min
+[2026-09-21 22:58:54] LAVORO 12/90  (4, 0, 1)  fine stimata tra 70 min
+[2026-09-21 22:59:44] LAVORO 13/90  (4, 0, 2)  fine stimata tra 69 min
+[2026-09-21 23:00:49] LAVORO 14/90  (4, 0, 3)  fine stimata tra 69 min
+[2026-09-21 23:01:45] LAVORO 15/90  (4, 0, 4)  fine stimata tra 68 min
+[2026-09-21 23:02:35] LAVORO 16/90  (1, 5, 0)  fine stimata tra 67 min
+[2026-09-21 23:03:26] LAVORO 17/90  (1, 5, 1)  fine stimata tra 66 min
+[2026-09-21 23:04:15] LAVORO 18/90  (1, 5, 2)  fine stimata tra 65 min
+[2026-09-21 23:05:29] LAVORO 19/90  (1, 5, 3)  fine stimata tra 65 min
+[2026-09-21 23:06:18] LAVORO 20/90  (1, 5, 4)  fine stimata tra 64 min
+[2026-09-21 23:08:25] LAVORO 21/90  (2, 5, 0)  fine stimata tra 67 min
+[2026-09-21 23:10:35] LAVORO 22/90  (2, 5, 1)  fine stimata tra 70 min
+[2026-09-21 23:12:35] LAVORO 23/90  (2, 5, 2)  fine stimata tra 71 min
+[2026-09-22 04:00:13] ============================================================
+[2026-09-22 04:00:13] Blocco 2 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-22 04:00:13]   FD # 1 Distance -> DistanceGroup                gruppi= 1403 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:00:13]   FD # 2 Origin+Dest -> Distance                  gruppi= 4624 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:00:13]   FD # 3 OriginAirportID -> Origin                gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:00:13]   FD # 4 DestAirportID -> Dest                    gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:00:13] Verifica superata: le 4 FD e le loro colonne ridondanti hanno 0 violazioni sul campione. Salvata in blocco2_verifica_fd.csv
+[2026-09-22 04:00:14] Campione di valutazione sulle 4 FD: IM=0 (pulito, OK)
+[2026-09-22 04:00:14] RAM disponibile 1.1 GB -> 1 processi paralleli, Random Forest con 16 thread
+[2026-09-22 04:00:14] Configurazioni: [1, 2, 4] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-22 04:00:14] Lavori totali 90, gia' completati 23, da eseguire 67
+[2026-09-22 04:07:00] ============================================================
+[2026-09-22 04:07:00] Blocco 2 — campione flight_sample_30000.csv: 30,000 righe
+[2026-09-22 04:07:00]   FD # 1 Distance -> DistanceGroup                gruppi= 1403 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:07:00]   FD # 2 Origin+Dest -> Distance                  gruppi= 4624 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:07:00]   FD # 3 OriginAirportID -> Origin                gruppi=  322 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:07:00]   FD # 4 DestAirportID -> Dest                    gruppi=  315 violazioni=0 NaN=0 colonne al modello=True
+[2026-09-22 04:07:00] Verifica superata: le 4 FD e le loro colonne ridondanti hanno 0 violazioni sul campione. Salvata in blocco2_verifica_fd.csv
+[2026-09-22 04:07:01] Campione di valutazione sulle 4 FD: IM=0 (pulito, OK)
+[2026-09-22 04:07:01] RAM disponibile 7.8 GB -> 4 processi paralleli, Random Forest con 4 thread
+[2026-09-22 04:07:01] Configurazioni: [1, 2, 4] FD | Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-22 04:07:01] Lavori totali 90, gia' completati 23, da eseguire 67
+[2026-09-22 04:10:24] LAVORO 1/67  (2, 5, 4)  fine stimata tra 223 min
+[2026-09-22 04:10:30] LAVORO 2/67  (2, 5, 3)  fine stimata tra 113 min
+[2026-09-22 04:10:42] LAVORO 3/67  (4, 5, 0)  fine stimata tra 79 min
+[2026-09-22 04:10:45] LAVORO 4/67  (4, 5, 1)  fine stimata tra 59 min
+[2026-09-22 04:12:26] LAVORO 5/67  (1, 10, 0)  fine stimata tra 67 min
+[2026-09-22 04:13:49] LAVORO 6/67  (4, 5, 2)  fine stimata tra 69 min
+[2026-09-22 04:14:14] LAVORO 7/67  (4, 5, 3)  fine stimata tra 62 min
+[2026-09-22 04:14:20] LAVORO 8/67  (1, 10, 1)  fine stimata tra 54 min
+[2026-09-22 04:14:42] LAVORO 9/67  (4, 5, 4)  fine stimata tra 49 min
+[2026-09-22 04:15:35] LAVORO 10/67  (1, 10, 2)  fine stimata tra 49 min
+[2026-09-22 04:16:05] LAVORO 11/67  (1, 10, 4)  fine stimata tra 46 min
+[2026-09-22 04:16:27] LAVORO 12/67  (1, 10, 3)  fine stimata tra 43 min
+[2026-09-22 04:18:07] LAVORO 13/67  (2, 10, 0)  fine stimata tra 46 min
+[2026-09-22 04:18:51] LAVORO 14/67  (2, 10, 1)  fine stimata tra 45 min
+[2026-09-22 04:19:17] LAVORO 15/67  (2, 10, 2)  fine stimata tra 42 min
+[2026-09-22 04:19:49] LAVORO 16/67  (2, 10, 3)  fine stimata tra 41 min
+[2026-09-22 04:21:29] LAVORO 17/67  (2, 10, 4)  fine stimata tra 43 min
+[2026-09-22 04:22:10] LAVORO 18/67  (4, 10, 0)  fine stimata tra 41 min
+[2026-09-22 04:22:47] LAVORO 19/67  (4, 10, 1)  fine stimata tra 40 min
+[2026-09-22 04:23:23] LAVORO 20/67  (4, 10, 2)  fine stimata tra 38 min
+[2026-09-22 04:24:34] LAVORO 21/67  (1, 20, 0)  fine stimata tra 38 min
+[2026-09-22 04:25:10] LAVORO 22/67  (1, 20, 1)  fine stimata tra 37 min
+[2026-09-22 04:25:16] LAVORO 23/67  (4, 10, 3)  fine stimata tra 35 min
+[2026-09-22 04:26:14] LAVORO 24/67  (1, 20, 2)  fine stimata tra 34 min
+[2026-09-22 04:26:16] LAVORO 25/67  (4, 10, 4)  fine stimata tra 32 min
+[2026-09-22 04:26:59] LAVORO 26/67  (1, 20, 4)  fine stimata tra 31 min
+[2026-09-22 04:27:14] LAVORO 27/67  (1, 20, 3)  fine stimata tra 30 min
+[2026-09-22 04:29:22] LAVORO 28/67  (2, 20, 0)  fine stimata tra 31 min
+[2026-09-22 04:29:40] LAVORO 29/67  (2, 20, 1)  fine stimata tra 30 min
+[2026-09-22 04:30:05] LAVORO 30/67  (2, 20, 2)  fine stimata tra 28 min
+[2026-09-22 04:30:31] LAVORO 31/67  (2, 20, 3)  fine stimata tra 27 min
+[2026-09-22 04:32:44] LAVORO 32/67  (2, 20, 4)  fine stimata tra 28 min
+[2026-09-22 04:32:55] LAVORO 33/67  (4, 20, 0)  fine stimata tra 27 min
+[2026-09-22 04:33:49] LAVORO 34/67  (4, 20, 2)  fine stimata tra 26 min
+[2026-09-22 04:33:57] LAVORO 35/67  (4, 20, 1)  fine stimata tra 25 min
+[2026-09-22 04:35:24] LAVORO 36/67  (1, 30, 0)  fine stimata tra 24 min
+[2026-09-22 04:35:44] LAVORO 37/67  (1, 30, 1)  fine stimata tra 23 min
+[2026-09-22 04:36:30] LAVORO 38/67  (4, 20, 3)  fine stimata tra 22 min
+[2026-09-22 04:36:48] LAVORO 39/67  (4, 20, 4)  fine stimata tra 21 min
+[2026-09-22 04:37:02] LAVORO 40/67  (1, 30, 2)  fine stimata tra 20 min
+[2026-09-22 04:37:42] LAVORO 41/67  (1, 30, 3)  fine stimata tra 19 min
+[2026-09-22 04:38:04] LAVORO 42/67  (1, 30, 4)  fine stimata tra 18 min
+[2026-09-22 04:39:55] LAVORO 43/67  (2, 30, 0)  fine stimata tra 18 min
+[2026-09-22 04:40:10] LAVORO 44/67  (2, 30, 1)  fine stimata tra 17 min
+[2026-09-22 04:40:43] LAVORO 45/67  (2, 30, 2)  fine stimata tra 16 min
+[2026-09-22 04:41:18] LAVORO 46/67  (2, 30, 3)  fine stimata tra 16 min
+[2026-09-22 04:42:50] LAVORO 47/67  (2, 30, 4)  fine stimata tra 15 min
+[2026-09-22 04:43:40] LAVORO 48/67  (4, 30, 0)  fine stimata tra 15 min
+[2026-09-22 04:44:03] LAVORO 49/67  (4, 30, 1)  fine stimata tra 14 min
+[2026-09-22 04:44:31] LAVORO 50/67  (4, 30, 2)  fine stimata tra 13 min
+[2026-09-22 04:45:42] LAVORO 51/67  (1, 40, 0)  fine stimata tra 12 min
+[2026-09-22 04:46:08] LAVORO 52/67  (1, 40, 1)  fine stimata tra 11 min
+[2026-09-22 04:46:14] LAVORO 53/67  (4, 30, 3)  fine stimata tra 10 min
+[2026-09-22 04:47:20] LAVORO 54/67  (1, 40, 2)  fine stimata tra 10 min
+[2026-09-22 04:47:30] LAVORO 55/67  (4, 30, 4)  fine stimata tra 9 min
+[2026-09-22 04:47:52] LAVORO 56/67  (1, 40, 4)  fine stimata tra 8 min
+[2026-09-22 04:48:06] LAVORO 57/67  (1, 40, 3)  fine stimata tra 7 min
+[2026-09-22 04:50:23] LAVORO 58/67  (2, 40, 1)  fine stimata tra 7 min
+[2026-09-22 04:50:31] LAVORO 59/67  (2, 40, 0)  fine stimata tra 6 min
+[2026-09-22 04:50:50] LAVORO 60/67  (2, 40, 2)  fine stimata tra 5 min
+[2026-09-22 04:51:16] LAVORO 61/67  (2, 40, 3)  fine stimata tra 4 min
+[2026-09-22 04:53:10] LAVORO 62/67  (2, 40, 4)  fine stimata tra 4 min
+[2026-09-22 04:53:52] LAVORO 63/67  (4, 40, 0)  fine stimata tra 3 min
+[2026-09-22 04:54:16] LAVORO 64/67  (4, 40, 1)  fine stimata tra 2 min
+[2026-09-22 04:54:46] LAVORO 65/67  (4, 40, 2)  fine stimata tra 1 min
+[2026-09-22 04:56:06] LAVORO 66/67  (4, 40, 3)  fine stimata tra 1 min
+[2026-09-22 04:56:46] LAVORO 67/67  (4, 40, 4)  fine stimata tra 0 min
+[2026-09-22 04:56:47] Sintesi — F1 medio sul test pulito, per numero di FD:
+N_FD           1       2       4
+Rumore_%                        
+0         0.9214  0.9214  0.9214
+5         0.9015  0.8887  0.8852
+10        0.8861  0.8697  0.8618
+20        0.8684  0.8472  0.8272
+30        0.8554  0.8299  0.7926
+40        0.8430  0.8099  0.7507
+[2026-09-22 04:56:47] FINE. Righe nel CSV: 360 (attese 360)

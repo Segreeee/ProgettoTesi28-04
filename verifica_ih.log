@@ -1,0 +1,128 @@
+  1 FD, rumore 5%, 250 righe: IH_approx=24, esatto=24, rapporto=1.0
+  1 FD, rumore 5%, 500 righe: IH_approx=74, esatto=72, rapporto=1.028
+  1 FD, rumore 5%, 1000 righe: IH_approx=257, esatto=254, rapporto=1.012
+  1 FD, rumore 5%, 2000 righe: IH_approx=789, esatto=729, rapporto=1.082
+  1 FD, rumore 10%, 250 righe: IH_approx=26, esatto=26, rapporto=1.0
+  1 FD, rumore 10%, 500 righe: IH_approx=66, esatto=66, rapporto=1.0
+  1 FD, rumore 10%, 1000 righe: IH_approx=249, esatto=241, rapporto=1.033
+  1 FD, rumore 10%, 2000 righe: IH_approx=861, esatto=799, rapporto=1.078
+  1 FD, rumore 20%, 250 righe: IH_approx=24, esatto=24, rapporto=1.0
+  1 FD, rumore 20%, 500 righe: IH_approx=72, esatto=71, rapporto=1.014
+  1 FD, rumore 20%, 1000 righe: IH_approx=261, esatto=255, rapporto=1.024
+  1 FD, rumore 20%, 2000 righe: IH_approx=855, esatto=804, rapporto=1.063
+  1 FD, rumore 30%, 250 righe: IH_approx=24, esatto=23, rapporto=1.043
+  1 FD, rumore 30%, 500 righe: IH_approx=72, esatto=68, rapporto=1.059
+  1 FD, rumore 30%, 1000 righe: IH_approx=251, esatto=243, rapporto=1.033
+  1 FD, rumore 30%, 2000 righe: IH_approx=855, esatto=803, rapporto=1.065
+  1 FD, rumore 40%, 250 righe: IH_approx=25, esatto=25, rapporto=1.0
+  1 FD, rumore 40%, 500 righe: IH_approx=67, esatto=66, rapporto=1.015
+  1 FD, rumore 40%, 1000 righe: IH_approx=251, esatto=240, rapporto=1.046
+  1 FD, rumore 40%, 2000 righe: IH_approx=865, esatto=799, rapporto=1.083
+  2 FD, rumore 5%, 250 righe: IH_approx=32, esatto=29, rapporto=1.103
+  2 FD, rumore 5%, 500 righe: IH_approx=117, esatto=102, rapporto=1.147
+  2 FD, rumore 5%, 1000 righe: IH_approx=374, esatto=324, rapporto=1.154
+  2 FD, rumore 5%, 2000 righe: IH_approx=1049, esatto=879, rapporto=1.193
+  2 FD, rumore 10%, 250 righe: IH_approx=34, esatto=29, rapporto=1.172
+  2 FD, rumore 10%, 500 righe: IH_approx=113, esatto=98, rapporto=1.153
+  2 FD, rumore 10%, 1000 righe: IH_approx=369, esatto=315, rapporto=1.171
+  2 FD, rumore 10%, 2000 righe: IH_approx=1100, esatto=904, rapporto=1.217
+  2 FD, rumore 20%, 250 righe: IH_approx=36, esatto=33, rapporto=1.091
+  2 FD, rumore 20%, 500 righe: IH_approx=106, esatto=96, rapporto=1.104
+  2 FD, rumore 20%, 1000 righe: IH_approx=344, esatto=301, rapporto=1.143
+  2 FD, rumore 20%, 2000 righe: IH_approx=1056, esatto=879, rapporto=1.201
+  2 FD, rumore 30%, 250 righe: IH_approx=29, esatto=25, rapporto=1.16
+  2 FD, rumore 30%, 500 righe: IH_approx=93, esatto=82, rapporto=1.134
+  2 FD, rumore 30%, 1000 righe: IH_approx=331, esatto=294, rapporto=1.126
+  2 FD, rumore 30%, 2000 righe: IH_approx=1002, esatto=846, rapporto=1.184
+  2 FD, rumore 40%, 250 righe: IH_approx=27, esatto=26, rapporto=1.038
+  2 FD, rumore 40%, 500 righe: IH_approx=97, esatto=88, rapporto=1.102
+  2 FD, rumore 40%, 1000 righe: IH_approx=318, esatto=280, rapporto=1.136
+  2 FD, rumore 40%, 2000 righe: IH_approx=984, esatto=852, rapporto=1.155
+  4 FD, rumore 5%, 250 righe: IH_approx=64, esatto=46, rapporto=1.391
+  4 FD, rumore 5%, 500 righe: IH_approx=176, esatto=129, rapporto=1.364
+  4 FD, rumore 5%, 1000 righe: IH_approx=494, esatto=367, rapporto=1.346
+  4 FD, rumore 5%, 2000 righe: IH_approx=1235, esatto=946, rapporto=1.305
+  4 FD, rumore 10%, 250 righe: IH_approx=85, esatto=58, rapporto=1.466
+  4 FD, rumore 10%, 500 righe: IH_approx=202, esatto=140, rapporto=1.443
+  4 FD, rumore 10%, 1000 righe: IH_approx=551, esatto=389, rapporto=1.416
+  4 FD, rumore 10%, 2000 righe: IH_approx=1415, esatto=1021, rapporto=1.386
+  4 FD, rumore 20%, 250 righe: IH_approx=111, esatto=79, rapporto=1.405
+  4 FD, rumore 20%, 500 righe: IH_approx=284, esatto=203, rapporto=1.399
+  4 FD, rumore 20%, 1000 righe: IH_approx=693, esatto=484, rapporto=1.432
+  4 FD, rumore 20%, 2000 righe: IH_approx=1588, esatto=1149, rapporto=1.382
+  4 FD, rumore 30%, 250 righe: IH_approx=136, esatto=93, rapporto=1.462
+  4 FD, rumore 30%, 500 righe: IH_approx=333, esatto=226, rapporto=1.473
+  4 FD, rumore 30%, 1000 righe: IH_approx=800, esatto=560, rapporto=1.429
+  4 FD, rumore 30%, 2000 righe: IH_approx=1716, esatto=1273, rapporto=1.348
+  4 FD, rumore 40%, 250 righe: IH_approx=144, esatto=105, rapporto=1.371
+  4 FD, rumore 40%, 500 righe: IH_approx=362, esatto=264, rapporto=1.371
+  4 FD, rumore 40%, 1000 righe: IH_approx=830, esatto=627, rapporto=1.324
+  4 FD, rumore 40%, 2000 righe: IH_approx=1812, esatto=nan, rapporto=nan
+
+Salvato in 'verifica_ih.csv'.
+ N_FD  Rumore_%  Righe    IM   IP  IH_approx  IH_esatto_ilp  IH_esatto_formula  Scarto_assoluto  Rapporto_approx_su_esatto  Secondi_approx  Secondi_ilp  ILP_risolto
+    1         5    250    26   48         24           24.0               24.0              0.0                      1.000            0.11         0.02         True
+    1         5    500    80  144         74           72.0               72.0              2.0                      1.028            0.06         0.01         True
+    1         5   1000   301  480        257          254.0              254.0              3.0                      1.012            0.12         0.01         True
+    1         5   2000  1193 1383        789          729.0              729.0             60.0                      1.082            0.21         0.05         True
+    1        10    250    28   50         26           26.0               26.0              0.0                      1.000            0.03         0.01         True
+    1        10    500    74  126         66           66.0               66.0              0.0                      1.000            0.06         0.01         True
+    1        10   1000   288  462        249          241.0              241.0              8.0                      1.033            0.12         0.01         True
+    1        10   2000  1250 1431        861          799.0              799.0             62.0                      1.078            0.30         0.06         True
+    1        20    250    26   46         24           24.0               24.0              0.0                      1.000            0.03         0.01         True
+    1        20    500    79  136         72           71.0               71.0              1.0                      1.014            0.07         0.01         True
+    1        20   1000   302  484        261          255.0              255.0              6.0                      1.024            0.18         0.01         True
+    1        20   2000  1260 1432        855          804.0              804.0             51.0                      1.063            0.21         0.06         True
+    1        30    250    25   46         24           23.0               23.0              1.0                      1.043            0.03         0.01         True
+    1        30    500    76  136         72           68.0               68.0              4.0                      1.059            0.06         0.01         True
+    1        30   1000   287  467        251          243.0              243.0              8.0                      1.033            0.12         0.01         True
+    1        30   2000  1254 1424        855          803.0              803.0             52.0                      1.065            0.21         0.06         True
+    1        40    250    27   48         25           25.0               25.0              0.0                      1.000            0.03         0.01         True
+    1        40    500    74  128         67           66.0               66.0              1.0                      1.015            0.06         0.01         True
+    1        40   1000   286  461        251          240.0              240.0             11.0                      1.046            0.12         0.01         True
+    1        40   2000  1252 1437        865          799.0              799.0             66.0                      1.083            0.21         0.06         True
+    2         5    250    38   62         32           29.0                NaN              3.0                      1.103            0.06         0.01         True
+    2         5    500   142  218        117          102.0                NaN             15.0                      1.147            0.13         0.02         True
+    2         5   1000   517  650        374          324.0                NaN             50.0                      1.154            0.24         0.01         True
+    2         5   2000  1997 1703       1049          879.0                NaN            170.0                      1.193            0.43         0.07         True
+    2        10    250    36   60         34           29.0                NaN              5.0                      1.172            0.06         0.01         True
+    2        10    500   135  201        113           98.0                NaN             15.0                      1.153            0.13         0.01         True
+    2        10   1000   509  645        369          315.0                NaN             54.0                      1.171            0.24         0.01         True
+    2        10   2000  1989 1700       1100          904.0                NaN            196.0                      1.217            0.45         0.08         True
+    2        20    250    38   66         36           33.0                NaN              3.0                      1.091            0.12         0.01         True
+    2        20    500   123  192        106           96.0                NaN             10.0                      1.104            0.12         0.01         True
+    2        20   1000   470  603        344          301.0                NaN             43.0                      1.143            0.24         0.01         True
+    2        20   2000  1877 1639       1056          879.0                NaN            177.0                      1.201            0.48         0.07         True
+    2        30    250    31   54         29           25.0                NaN              4.0                      1.160            0.07         0.01         True
+    2        30    500   111  169         93           82.0                NaN             11.0                      1.134            0.13         0.01         True
+    2        30   1000   432  581        331          294.0                NaN             37.0                      1.126            0.25         0.01         True
+    2        30   2000  1704 1592       1002          846.0                NaN            156.0                      1.184            0.47         0.07         True
+    2        40    250    32   50         27           26.0                NaN              1.0                      1.038            0.06         0.01         True
+    2        40    500   116  175         97           88.0                NaN              9.0                      1.102            0.19         0.01         True
+    2        40   1000   412  555        318          280.0                NaN             38.0                      1.136            0.24         0.01         True
+    2        40   2000  1624 1567        984          852.0                NaN            132.0                      1.155            0.47         0.07         True
+    4         5    250   184  155         64           46.0                NaN             18.0                      1.391            0.10         0.01         True
+    4         5    500   653  416        176          129.0                NaN             47.0                      1.364            0.17         0.02         True
+    4         5   1000  2646  940        494          367.0                NaN            127.0                      1.346            0.32         0.03         True
+    4         5   2000 10280 1977       1235          946.0                NaN            289.0                      1.305            0.56         0.42         True
+    4        10    250   199  164         85           58.0                NaN             27.0                      1.466            0.11         0.01         True
+    4        10    500   816  415        202          140.0                NaN             62.0                      1.443            0.19         0.01         True
+    4        10   1000  3161  978        551          389.0                NaN            162.0                      1.416            0.34         0.05         True
+    4        10   2000 15186 1996       1415         1021.0                NaN            394.0                      1.386            0.60         0.61         True
+    4        20    250   314  213        111           79.0                NaN             32.0                      1.405            0.11         0.01         True
+    4        20    500  1359  477        284          203.0                NaN             81.0                      1.399            0.20         0.04         True
+    4        20   1000  5248  991        693          484.0                NaN            209.0                      1.432            0.45         0.15         True
+    4        20   2000 21146 1997       1588         1149.0                NaN            439.0                      1.382            0.65         4.76         True
+    4        30    250   368  216        136           93.0                NaN             43.0                      1.462            0.11         0.02         True
+    4        30    500  1652  481        333          226.0                NaN            107.0                      1.473            0.23         0.03         True
+    4        30   1000  6490  997        800          560.0                NaN            240.0                      1.429            0.45         0.69         True
+    4        30   2000 26681 2000       1716         1273.0                NaN            443.0                      1.348            0.68        56.75         True
+    4        40    250   376  211        144          105.0                NaN             39.0                      1.371            0.12         0.02         True
+    4        40    500  1592  476        362          264.0                NaN             98.0                      1.371            0.21         0.11         True
+    4        40   1000  6566  994        830          627.0                NaN            203.0                      1.324            0.45         1.79         True
+    4        40   2000 26829 2000       1812            NaN                NaN              NaN                        NaN            0.68       120.06        False
+
+Rapporto approssimato / esatto: da 1.000 a 1.473 (garanzia teorica: al piu' 2).
+Scarto assoluto: da 0 a 443 tuple.
+Con 1 FD la formula chiusa coincide con l'ottimo dell'ILP: True
+IH_OK

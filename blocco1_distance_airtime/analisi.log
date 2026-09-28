@@ -1,0 +1,67 @@
+0. Controllo: training sporcato, test pulito
+   rumore  0%: quota media di righe di training sporche = 0.0000
+   rumore  5%: quota media di righe di training sporche = 0.0501
+   rumore 10%: quota media di righe di training sporche = 0.1002
+   rumore 20%: quota media di righe di training sporche = 0.2001
+   rumore 30%: quota media di righe di training sporche = 0.3001
+   rumore 40%: quota media di righe di training sporche = 0.4003
+   rumore 0%: training pulito=True; rumore > 0: training sporco=True; quota crescente col rumore=True; test sporco = test pulito a 0%: True
+   CONTROLLO SUPERATO.
+
+1. Aggregato salvato in 'aggregato.csv'.
+Modello   Decision Tree  Logistic Regression  Neural Network  Random Forest
+Rumore_%                                                                   
+0                0.8419               0.8714          0.8351         0.8662
+5                0.8398               0.8081          0.8330         0.8653
+10               0.8395               0.7607          0.8317         0.8642
+20               0.8361               0.6942          0.8264         0.8612
+30               0.8330               0.6424          0.8211         0.8580
+40               0.8296               0.5977          0.8145         0.8538
+
+2. Scomposizione del danno (media dei 4 modelli), salvata in 'scomposizione.csv':
+ Rumore_%  F1_test_pulito  F1_test_sporco  Perdita_apprendimento  Perdita_input_corrotto  Perdita_totale_test_sporco  Quota_apprendimento_%
+        0          0.8536          0.8536                 0.0000                  0.0000                      0.0000                    NaN
+        5          0.8366          0.8051                 0.0171                  0.0315                      0.0486                   35.2
+       10          0.8240          0.7638                 0.0296                  0.0602                      0.0898                   33.0
+       20          0.8045          0.6909                 0.0492                  0.1136                      0.1627                   30.2
+       30          0.7886          0.6263                 0.0650                  0.1624                      0.2274                   28.6
+       40          0.7739          0.5657                 0.0797                  0.2082                      0.2879                   27.7
+
+3. Correlazioni salvate in 'correlazioni.csv' (test pulito):
+            Modello Valutazione Metrica_Inconsistenza  Pearson_r    Pearson_p  Spearman_rho   Spearman_p
+      Decision Tree test_pulito                    IM    -0.9450 4.016842e-15       -0.9397 1.431448e-14
+      Decision Tree test_pulito                    IP    -0.7075 1.231585e-05       -0.9458 3.311502e-15
+      Decision Tree test_pulito                    IH    -0.9487 1.546220e-15       -0.9482 1.804906e-15
+Logistic Regression test_pulito                    IM    -0.9930 1.541497e-27       -0.9781 1.250222e-20
+Logistic Regression test_pulito                    IP    -0.8627 8.809677e-10       -0.9870 8.788608e-24
+Logistic Regression test_pulito                    IH    -0.9903 1.579691e-25       -0.9745 1.016179e-19
+     Neural Network test_pulito                    IM    -0.9727 2.611177e-19       -0.9747 9.022647e-20
+     Neural Network test_pulito                    IP    -0.6987 1.750792e-05       -0.9731 2.136051e-19
+     Neural Network test_pulito                    IH    -0.9766 3.210990e-20       -0.9709 6.270626e-19
+      Random Forest test_pulito                    IM    -0.9626 2.071821e-17       -0.9637 1.369678e-17
+      Random Forest test_pulito                    IP    -0.6809 3.455525e-05       -0.9676 2.797537e-18
+      Random Forest test_pulito                    IH    -0.9683 2.091542e-18       -0.9664 4.757295e-18
+
+4. Significativita' del degrado (t-test a un campione), salvata in 'test_degrado.csv':
+            Modello  Rumore_%  F1_baseline  F1_medio   Calo           t      p_value  Significativo
+      Decision Tree         5       0.8419    0.8398 0.0021   -3.246612 3.147641e-02           True
+      Decision Tree        10       0.8419    0.8395 0.0024   -3.362400 2.824191e-02           True
+      Decision Tree        20       0.8419    0.8361 0.0058  -14.793566 1.215471e-04           True
+      Decision Tree        30       0.8419    0.8330 0.0089   -8.038320 1.300047e-03           True
+      Decision Tree        40       0.8419    0.8296 0.0123  -22.163062 2.453357e-05           True
+Logistic Regression         5       0.8714    0.8081 0.0633  -56.886788 5.717569e-07           True
+Logistic Regression        10       0.8714    0.7607 0.1107  -98.703470 6.317197e-08           True
+Logistic Regression        20       0.8714    0.6942 0.1772 -174.971792 6.400067e-09           True
+Logistic Regression        30       0.8714    0.6424 0.2290 -345.230490 4.223674e-10           True
+Logistic Regression        40       0.8714    0.5977 0.2737 -121.891487 2.716833e-08           True
+     Neural Network         5       0.8351    0.8330 0.0021   -4.130741 1.448516e-02           True
+     Neural Network        10       0.8351    0.8317 0.0034   -5.751161 4.532086e-03           True
+     Neural Network        20       0.8351    0.8264 0.0087  -16.570197 7.769064e-05           True
+     Neural Network        30       0.8351    0.8211 0.0140  -18.400305 5.132721e-05           True
+     Neural Network        40       0.8351    0.8145 0.0206  -27.860204 9.874000e-06           True
+      Random Forest         5       0.8662    0.8653 0.0009   -4.098595 1.487012e-02           True
+      Random Forest        10       0.8662    0.8642 0.0020   -7.455956 1.728906e-03           True
+      Random Forest        20       0.8662    0.8612 0.0050  -11.624764 3.129591e-04           True
+      Random Forest        30       0.8662    0.8580 0.0082  -15.101610 1.120646e-04           True
+      Random Forest        40       0.8662    0.8538 0.0124  -17.937941 5.676963e-05           True
+   Livelli con calo significativo: 20/20

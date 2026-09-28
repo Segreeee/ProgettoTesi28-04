@@ -1,0 +1,77 @@
+Configurazione,Rep,Seed,Modello,Colonne_sporcate,F1_test_pulito,F1_test_sporco,Quota_train_sporca
+FD Distance -> DistanceGroup,0,100,Logistic Regression,2,0.5938,0.5297,0.4001
+FD Distance -> DistanceGroup,0,100,Random Forest,2,0.8595,0.8452,0.4001
+FD Distance -> DistanceGroup,0,100,Decision Tree,2,0.831,0.687,0.4001
+FD Distance -> DistanceGroup,0,100,Neural Network,2,0.8294,0.8167,0.4001
+Nessun rumore (baseline),0,100,Logistic Regression,0,0.8714,0.8714,0.0
+Nessun rumore (baseline),0,100,Random Forest,0,0.8662,0.8662,0.0
+Nessun rumore (baseline),0,100,Decision Tree,0,0.8419,0.8419,0.0
+Nessun rumore (baseline),0,100,Neural Network,0,0.8351,0.8351,0.0
+FD Distance -> DistanceGroup,1,101,Logistic Regression,2,0.5972,0.5346,0.401
+FD Distance -> DistanceGroup,1,101,Random Forest,2,0.862,0.8473,0.401
+FD Distance -> DistanceGroup,1,101,Decision Tree,2,0.8262,0.6788,0.401
+FD Distance -> DistanceGroup,1,101,Neural Network,2,0.8285,0.8163,0.401
+FD Distance -> DistanceGroup,2,102,Logistic Regression,2,0.5981,0.5331,0.4008
+FD Distance -> DistanceGroup,2,102,Random Forest,2,0.8588,0.8461,0.4008
+FD Distance -> DistanceGroup,2,102,Decision Tree,2,0.827,0.6818,0.4008
+FD Distance -> DistanceGroup,2,102,Neural Network,2,0.8275,0.8179,0.4008
+FD Origin+Dest -> Distance,0,100,Logistic Regression,3,0.8189,0.806,0.4001
+FD Origin+Dest -> Distance,0,100,Random Forest,3,0.8615,0.854,0.4001
+FD Origin+Dest -> Distance,0,100,Decision Tree,3,0.8411,0.8121,0.4001
+FD Origin+Dest -> Distance,0,100,Neural Network,3,0.8279,0.8071,0.4001
+FD Origin+Dest -> Distance,1,101,Logistic Regression,3,0.8202,0.8073,0.401
+FD Origin+Dest -> Distance,1,101,Random Forest,3,0.8613,0.8524,0.401
+FD Origin+Dest -> Distance,1,101,Decision Tree,3,0.8376,0.8085,0.401
+FD Origin+Dest -> Distance,1,101,Neural Network,3,0.831,0.8095,0.401
+FD Origin+Dest -> Distance,2,102,Logistic Regression,3,0.8198,0.8067,0.4008
+FD Origin+Dest -> Distance,2,102,Random Forest,3,0.8604,0.8539,0.4008
+FD Origin+Dest -> Distance,2,102,Decision Tree,3,0.8351,0.808,0.4008
+FD Origin+Dest -> Distance,2,102,Neural Network,3,0.8271,0.8066,0.4008
+Concetto aeroporto di origine,0,100,Logistic Regression,7,0.8572,0.8305,0.4001
+Concetto aeroporto di origine,0,100,Random Forest,7,0.8592,0.8432,0.4001
+Concetto aeroporto di origine,0,100,Decision Tree,7,0.8361,0.8162,0.4001
+Concetto aeroporto di origine,0,100,Neural Network,7,0.8288,0.7832,0.4001
+Concetto aeroporto di origine,1,101,Logistic Regression,7,0.858,0.8312,0.401
+Concetto aeroporto di origine,1,101,Random Forest,7,0.861,0.8431,0.401
+Concetto aeroporto di origine,1,101,Decision Tree,7,0.8402,0.8187,0.401
+Concetto aeroporto di origine,1,101,Neural Network,7,0.8307,0.7851,0.401
+Concetto aeroporto di origine,2,102,Logistic Regression,7,0.8567,0.8289,0.4008
+Concetto aeroporto di origine,2,102,Random Forest,7,0.8579,0.8433,0.4008
+Concetto aeroporto di origine,2,102,Decision Tree,7,0.8392,0.819,0.4008
+Concetto aeroporto di origine,2,102,Neural Network,7,0.8292,0.7806,0.4008
+FD Reporting_Airline -> IATA_CODE,0,100,Logistic Regression,2,0.8706,0.8688,0.4001
+FD Reporting_Airline -> IATA_CODE,0,100,Random Forest,2,0.868,0.8689,0.4001
+FD Reporting_Airline -> IATA_CODE,0,100,Decision Tree,2,0.8451,0.8412,0.4001
+FD Reporting_Airline -> IATA_CODE,0,100,Neural Network,2,0.8403,0.8349,0.4001
+FD Reporting_Airline -> IATA_CODE,1,101,Logistic Regression,2,0.8715,0.87,0.401
+FD Reporting_Airline -> IATA_CODE,1,101,Random Forest,2,0.8675,0.8681,0.401
+FD Reporting_Airline -> IATA_CODE,1,101,Decision Tree,2,0.8436,0.8399,0.401
+FD Reporting_Airline -> IATA_CODE,1,101,Neural Network,2,0.8388,0.8329,0.401
+FD Reporting_Airline -> IATA_CODE,2,102,Logistic Regression,2,0.8707,0.8702,0.4008
+FD Reporting_Airline -> IATA_CODE,2,102,Random Forest,2,0.8664,0.8675,0.4008
+FD Reporting_Airline -> IATA_CODE,2,102,Decision Tree,2,0.8444,0.8403,0.4008
+FD Reporting_Airline -> IATA_CODE,2,102,Neural Network,2,0.8378,0.8319,0.4008
+FD CRSDepTime -> DepTimeBlk,0,100,Logistic Regression,2,0.8723,0.8718,0.4001
+FD CRSDepTime -> DepTimeBlk,0,100,Random Forest,2,0.8681,0.8686,0.4001
+FD CRSDepTime -> DepTimeBlk,0,100,Decision Tree,2,0.8429,0.8402,0.4001
+FD CRSDepTime -> DepTimeBlk,0,100,Neural Network,2,0.8404,0.8378,0.4001
+FD CRSDepTime -> DepTimeBlk,1,101,Logistic Regression,2,0.8721,0.8716,0.401
+FD CRSDepTime -> DepTimeBlk,1,101,Random Forest,2,0.8676,0.8683,0.401
+FD CRSDepTime -> DepTimeBlk,1,101,Decision Tree,2,0.8446,0.8411,0.401
+FD CRSDepTime -> DepTimeBlk,1,101,Neural Network,2,0.8376,0.8365,0.401
+FD CRSDepTime -> DepTimeBlk,2,102,Logistic Regression,2,0.8718,0.8716,0.4008
+FD CRSDepTime -> DepTimeBlk,2,102,Random Forest,2,0.8691,0.8691,0.4008
+FD CRSDepTime -> DepTimeBlk,2,102,Decision Tree,2,0.8444,0.8451,0.4008
+FD CRSDepTime -> DepTimeBlk,2,102,Neural Network,2,0.8383,0.8351,0.4008
+Concetto distanza e rotta (esperimento),0,100,Logistic Regression,20,0.5977,0.4556,0.4001
+Concetto distanza e rotta (esperimento),0,100,Random Forest,20,0.853,0.6302,0.4001
+Concetto distanza e rotta (esperimento),0,100,Decision Tree,20,0.8313,0.5926,0.4001
+Concetto distanza e rotta (esperimento),0,100,Neural Network,20,0.8153,0.5831,0.4001
+Concetto distanza e rotta (esperimento),1,101,Logistic Regression,20,0.6008,0.4574,0.401
+Concetto distanza e rotta (esperimento),1,101,Random Forest,20,0.8553,0.6304,0.401
+Concetto distanza e rotta (esperimento),1,101,Decision Tree,20,0.8303,0.5937,0.401
+Concetto distanza e rotta (esperimento),1,101,Neural Network,20,0.8169,0.5882,0.401
+Concetto distanza e rotta (esperimento),2,102,Logistic Regression,20,0.5982,0.459,0.4008
+Concetto distanza e rotta (esperimento),2,102,Random Forest,20,0.8527,0.6287,0.4008
+Concetto distanza e rotta (esperimento),2,102,Decision Tree,20,0.8294,0.5869,0.4008
+Concetto distanza e rotta (esperimento),2,102,Neural Network,20,0.813,0.581,0.4008

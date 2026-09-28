@@ -1,0 +1,89 @@
+N_FD,Regime,Modello,Valutazione,Metrica_Inconsistenza,N_punti,Pearson_r,Pearson_p,Spearman_rho,Spearman_p
+1,tutti i livelli,Decision Tree,test_sporco,IM,30,-0.9605,4.329611373148853e-17,-0.9646,9.656576119097278e-18
+1,tutti i livelli,Decision Tree,test_sporco,IP,30,-0.9547,2.829681581687256e-16,-0.9702,9.038297675513883e-19
+1,tutti i livelli,Decision Tree,test_sporco,IH,30,-0.9309,9.119340792689967e-14,-0.9674,3.115276846433235e-18
+1,tutti i livelli,Decision Tree,test_pulito,IM,30,-0.8996,1.3818247382722892e-11,-0.8951,2.4903549807007887e-11
+1,tutti i livelli,Decision Tree,test_pulito,IP,30,-0.9061,5.708103057389056e-12,-0.9012,1.1272594813859202e-11
+1,tutti i livelli,Decision Tree,test_pulito,IH,30,-0.9103,3.0699613684713776e-12,-0.8951,2.4941335552229953e-11
+1,tutti i livelli,Logistic Regression,test_sporco,IM,30,-0.8022,9.806809814888381e-08,-0.9525,5.433128311045869e-16
+1,tutti i livelli,Logistic Regression,test_sporco,IP,30,-0.7846,2.873490268728222e-07,-0.9547,2.805345709814298e-16
+1,tutti i livelli,Logistic Regression,test_sporco,IH,30,-0.735,3.742383464959089e-06,-0.9502,1.053513109669001e-15
+1,tutti i livelli,Logistic Regression,test_pulito,IM,30,-0.8494,2.932125203834852e-09,-0.967,3.603549221313009e-18
+1,tutti i livelli,Logistic Regression,test_pulito,IP,30,-0.8343,1.0116604113671635e-08,-0.9675,2.9848268372843724e-18
+1,tutti i livelli,Logistic Regression,test_pulito,IH,30,-0.7906,2.0146571506087764e-07,-0.9718,4.095873625333002e-19
+1,tutti i livelli,Neural Network,test_sporco,IM,30,-0.9557,2.1113511064832692e-16,-0.9755,5.827061038579278e-20
+1,tutti i livelli,Neural Network,test_sporco,IP,30,-0.9487,1.5783594552520748e-15,-0.9771,2.333196169247287e-20
+1,tutti i livelli,Neural Network,test_sporco,IH,30,-0.9211,5.421102861945349e-13,-0.9781,1.2541022236379525e-20
+1,tutti i livelli,Neural Network,test_pulito,IM,30,-0.9573,1.2557864000251162e-16,-0.9518,6.583884585217854e-16
+1,tutti i livelli,Neural Network,test_pulito,IP,30,-0.9621,2.482637622630396e-17,-0.955,2.621123531899463e-16
+1,tutti i livelli,Neural Network,test_pulito,IH,30,-0.9561,1.8430927398859307e-16,-0.9552,2.4519159044333274e-16
+1,tutti i livelli,Random Forest,test_sporco,IM,30,-0.9705,7.580877340435507e-19,-0.9612,3.354493078591081e-17
+1,tutti i livelli,Random Forest,test_sporco,IP,30,-0.9705,7.714835513942835e-19,-0.9675,2.966650985898995e-18
+1,tutti i livelli,Random Forest,test_sporco,IH,30,-0.9577,1.1015104307459474e-16,-0.9616,2.981260030020317e-17
+1,tutti i livelli,Random Forest,test_pulito,IM,30,-0.9716,4.682335299100432e-19,-0.9734,1.8463723155233231e-19
+1,tutti i livelli,Random Forest,test_pulito,IP,30,-0.9727,2.672993993437311e-19,-0.9779,1.4436412510224585e-20
+1,tutti i livelli,Random Forest,test_pulito,IH,30,-0.964,1.1870174160662904e-17,-0.9726,2.761573607457824e-19
+5,tutti i livelli,Decision Tree,test_sporco,IM,30,-0.9833,3.006581328911398e-22,-0.9754,6.196997021048808e-20
+5,tutti i livelli,Decision Tree,test_sporco,IP,30,-0.6424,0.00012938834079991685,-0.6473,0.00011057019898609192
+5,tutti i livelli,Decision Tree,test_sporco,IH,30,-0.9699,1.0088775555656089e-18,-0.9732,2.066645482418822e-19
+5,tutti i livelli,Decision Tree,test_pulito,IM,30,-0.9156,1.3607873841798632e-12,-0.9248,2.8581323362528646e-13
+5,tutti i livelli,Decision Tree,test_pulito,IP,30,-0.476,0.007836384981352276,-0.5439,0.0018910908263245698
+5,tutti i livelli,Decision Tree,test_pulito,IH,30,-0.8795,1.5685309766355387e-10,-0.9259,2.3340256891531865e-13
+5,tutti i livelli,Logistic Regression,test_sporco,IM,30,-0.9453,3.74112939615588e-15,-0.9607,4.077997943701002e-17
+5,tutti i livelli,Logistic Regression,test_sporco,IP,30,-0.8504,2.6905934502742895e-09,-0.6473,0.00011057019898609192
+5,tutti i livelli,Logistic Regression,test_sporco,IH,30,-0.9732,2.0249343444188249e-19,-0.9616,2.9721042854482594e-17
+5,tutti i livelli,Logistic Regression,test_pulito,IM,30,-0.9491,1.4001344212180976e-15,-0.9612,3.354493078591081e-17
+5,tutti i livelli,Logistic Regression,test_pulito,IP,30,-0.837,8.184263796281926e-09,-0.6474,0.00011031025175330423
+5,tutti i livelli,Logistic Regression,test_pulito,IH,30,-0.9687,1.748986754575152e-18,-0.9635,1.481393556866471e-17
+5,tutti i livelli,Neural Network,test_sporco,IM,30,-0.9973,3.1869605299544e-33,-0.9817,1.0537087233634128e-21
+5,tutti i livelli,Neural Network,test_sporco,IP,30,-0.6516,9.606335730054187e-05,-0.6473,0.00011057019898609192
+5,tutti i livelli,Neural Network,test_sporco,IH,30,-0.9836,2.3166741739932697e-22,-0.9745,1.0161791103753299e-19
+5,tutti i livelli,Neural Network,test_pulito,IM,30,-0.9785,9.969938415057735e-21,-0.9812,1.4724799869551102e-21
+5,tutti i livelli,Neural Network,test_pulito,IP,30,-0.5825,0.0007326499980625187,-0.6473,0.00011057019898609192
+5,tutti i livelli,Neural Network,test_pulito,IH,30,-0.9496,1.2174463690229583e-15,-0.9745,1.0161791103753299e-19
+5,tutti i livelli,Random Forest,test_sporco,IM,30,-0.9885,1.5210437767656234e-24,-0.9866,1.369267521396265e-23
+5,tutti i livelli,Random Forest,test_sporco,IP,30,-0.6195,0.00026183520614496457,-0.6473,0.00011057019898609192
+5,tutti i livelli,Random Forest,test_sporco,IH,30,-0.9653,7.185066638782341e-18,-0.9866,1.369267521396265e-23
+5,tutti i livelli,Random Forest,test_pulito,IM,30,-0.977,2.419079071365453e-20,-0.9662,4.9572568836389335e-18
+5,tutti i livelli,Random Forest,test_pulito,IP,30,-0.6248,0.00022358250910072826,-0.6474,0.00011005076187854676
+5,tutti i livelli,Random Forest,test_pulito,IH,30,-0.9521,6.030821207209465e-16,-0.9756,5.477573040823699e-20
+10,tutti i livelli,Decision Tree,test_sporco,IM,30,-0.7917,1.882100812083949e-07,-0.6039,0.00041040127583670804
+10,tutti i livelli,Decision Tree,test_sporco,IP,30,-0.6639,6.332764570676995e-05,-0.6474,0.00011031025175330423
+10,tutti i livelli,Decision Tree,test_sporco,IH,30,-0.8775,1.9563260712882915e-10,-0.9814,1.2507605292351132e-21
+10,tutti i livelli,Decision Tree,test_pulito,IM,30,-0.6152,0.00029666103177316313,-0.5808,0.0007639781532956113
+10,tutti i livelli,Decision Tree,test_pulito,IP,30,-0.4788,0.00742986959892411,-0.5438,0.0018964214175875192
+10,tutti i livelli,Decision Tree,test_pulito,IH,30,-0.7267,5.426970671351457e-06,-0.9372,2.4730631810689872e-14
+10,tutti i livelli,Logistic Regression,test_sporco,IM,30,-0.8983,1.646044421905791e-11,-0.615,0.00029828643724424643
+10,tutti i livelli,Logistic Regression,test_sporco,IP,30,-0.8157,3.972469193595618e-08,-0.6474,0.00011031025175330423
+10,tutti i livelli,Logistic Regression,test_sporco,IH,30,-0.9559,1.9690763480555292e-16,-0.9649,8.48351328505268e-18
+10,tutti i livelli,Logistic Regression,test_pulito,IM,30,-0.8655,6.702519591815663e-10,-0.6147,0.0003008315819823099
+10,tutti i livelli,Logistic Regression,test_pulito,IP,30,-0.7916,1.8976725835950618e-07,-0.6473,0.00011057019898609192
+10,tutti i livelli,Logistic Regression,test_pulito,IH,30,-0.9328,6.25409497186457e-14,-0.972,3.84709185304181e-19
+10,tutti i livelli,Neural Network,test_sporco,IM,30,-0.7807,3.594657577305943e-07,-0.607,0.00037577452308757596
+10,tutti i livelli,Neural Network,test_sporco,IP,30,-0.6518,9.528811704339688e-05,-0.6474,0.00011031025175330423
+10,tutti i livelli,Neural Network,test_sporco,IH,30,-0.8697,4.402929243205022e-10,-0.9778,1.548099881947223e-20
+10,tutti i livelli,Neural Network,test_pulito,IM,30,-0.6744,4.38007436333817e-05,-0.6063,0.00038370310448416437
+10,tutti i livelli,Neural Network,test_pulito,IP,30,-0.5674,0.0010769233583275612,-0.6473,0.00011057019898609192
+10,tutti i livelli,Neural Network,test_pulito,IH,30,-0.7835,3.0575068098591154e-07,-0.9744,1.0813138232867903e-19
+10,tutti i livelli,Random Forest,test_sporco,IM,30,-0.6831,3.187237655908933e-05,-0.6137,0.0003101256926636725
+10,tutti i livelli,Random Forest,test_sporco,IP,30,-0.5762,0.0008603236304943394,-0.6474,0.00011031025175330423
+10,tutti i livelli,Random Forest,test_sporco,IH,30,-0.7911,1.951606599483916e-07,-0.9756,5.477648932746812e-20
+10,tutti i livelli,Random Forest,test_pulito,IM,30,-0.6485,0.0001064538715642885,-0.6076,0.0003694103636169009
+10,tutti i livelli,Random Forest,test_pulito,IP,30,-0.5554,0.0014433740873968969,-0.6473,0.00011057019898609192
+10,tutti i livelli,Random Forest,test_pulito,IH,30,-0.7607,1.068164947068643e-06,-0.9722,3.444193002801693e-19
+10,dal picco di IM (20%) in poi,Decision Tree,test_sporco,IM,15,0.9602,1.409407913249536e-08,0.899,5.179045483439197e-06
+10,dal picco di IM (20%) in poi,Decision Tree,test_sporco,IH,15,-0.8636,3.343096495154559e-05,-0.9517,4.881205676444207e-08
+10,dal picco di IM (20%) in poi,Decision Tree,test_pulito,IM,15,0.8799,1.5204025773818457e-05,0.8679,2.751806395512921e-05
+10,dal picco di IM (20%) in poi,Decision Tree,test_pulito,IH,15,-0.7796,0.0006107879044929181,-0.8686,2.6536323144025384e-05
+10,dal picco di IM (20%) in poi,Logistic Regression,test_sporco,IM,15,0.9268,6.864526617700671e-07,0.8536,5.1731435667097704e-05
+10,dal picco di IM (20%) in poi,Logistic Regression,test_sporco,IH,15,-0.8698,2.5085717557404657e-05,-0.8061,0.0002844986359517555
+10,dal picco di IM (20%) in poi,Logistic Regression,test_pulito,IM,15,0.9536,3.7889839145501886e-08,0.8607,3.805525022664778e-05
+10,dal picco di IM (20%) in poi,Logistic Regression,test_pulito,IH,15,-0.878,1.6825340173850384e-05,-0.8651,3.131288519988173e-05
+10,dal picco di IM (20%) in poi,Neural Network,test_sporco,IM,15,0.9856,2.0024886113970805e-11,0.8937,7.15333054621877e-06
+10,dal picco di IM (20%) in poi,Neural Network,test_sporco,IH,15,-0.9173,1.4809340843440324e-06,-0.9007,4.658041945403572e-06
+10,dal picco di IM (20%) in poi,Neural Network,test_pulito,IM,15,0.9818,9.137493596818111e-11,0.8714,2.3236477821632632e-05
+10,dal picco di IM (20%) in poi,Neural Network,test_pulito,IH,15,-0.8596,3.9918922127790175e-05,-0.8847,1.1819879040035737e-05
+10,dal picco di IM (20%) in poi,Random Forest,test_sporco,IM,15,0.9829,6.193658719354064e-11,0.8597,3.979716121893136e-05
+10,dal picco di IM (20%) in poi,Random Forest,test_sporco,IH,15,-0.8864,1.076256337048714e-05,-0.8766,1.805797492584714e-05
+10,dal picco di IM (20%) in poi,Random Forest,test_pulito,IM,15,0.9683,3.269494230759318e-09,0.8464,6.923823609737214e-05
+10,dal picco di IM (20%) in poi,Random Forest,test_pulito,IH,15,-0.8679,2.746438577202284e-05,-0.899,5.179045483439236e-06

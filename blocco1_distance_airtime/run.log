@@ -1,0 +1,54 @@
+[2026-09-15 01:29:54] ============================================================
+[2026-09-15 01:29:54] Blocco 1 (Distance -> DistanceGroup, obiettivo AirTimeBucket) — 30,000 righe
+[2026-09-15 01:29:54] Classi del target: {'<=58m': 5887, '59-86m': 5831, '87-120m': 5736, '121-164m': 5808, '>164m': 5800}
+[2026-09-15 01:29:54] FD [(['Distance'], 'DistanceGroup')] e 18 colonne ridondanti: 0 violazioni sul campione pulito.
+[2026-09-15 01:29:54] RAM disponibile 3.3 GB -> 2 processi paralleli, Random Forest con 8 thread
+[2026-09-15 01:29:54] Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-15 01:29:54] Lavori totali 30, gia' completati 0, da eseguire 30
+[2026-09-15 01:44:38] LAVORO 1/30  (0, 0)  IM=0  fine stimata tra 427 min
+[2026-09-15 01:44:44] LAVORO 2/30  (0, 1)  IM=0  fine stimata tra 207 min
+[2026-09-15 01:59:36] LAVORO 3/30  (0, 2)  IM=0  fine stimata tra 267 min
+[2026-09-15 01:59:45] LAVORO 4/30  (0, 3)  IM=0  fine stimata tra 194 min
+[2026-09-15 02:14:12] LAVORO 5/30  (5, 0)  IM=29,735  fine stimata tra 222 min
+[2026-09-15 02:14:43] LAVORO 6/30  (0, 4)  IM=0  fine stimata tra 179 min
+[2026-09-15 02:28:01] LAVORO 7/30  (5, 1)  IM=29,492  fine stimata tra 191 min
+[2026-09-15 02:29:11] LAVORO 8/30  (5, 2)  IM=27,919  fine stimata tra 163 min
+[2026-09-15 02:41:34] LAVORO 9/30  (5, 3)  IM=28,265  fine stimata tra 167 min
+[2026-09-15 02:43:19] LAVORO 10/30  (5, 4)  IM=26,963  fine stimata tra 147 min
+[2026-09-15 02:55:09] LAVORO 11/30  (10, 0)  IM=57,750  fine stimata tra 147 min
+[2026-09-15 02:56:07] LAVORO 12/30  (10, 1)  IM=56,094  fine stimata tra 129 min
+[2026-09-15 03:08:22] LAVORO 13/30  (10, 2)  IM=54,020  fine stimata tra 129 min
+[2026-09-15 03:09:17] LAVORO 14/30  (10, 3)  IM=56,141  fine stimata tra 114 min
+[2026-09-15 03:20:54] LAVORO 15/30  (10, 4)  IM=54,298  fine stimata tra 111 min
+[2026-09-15 03:22:02] LAVORO 16/30  (20, 0)  IM=106,860  fine stimata tra 98 min
+[2026-09-15 03:33:08] LAVORO 17/30  (20, 1)  IM=105,992  fine stimata tra 94 min
+[2026-09-15 03:35:19] LAVORO 18/30  (20, 2)  IM=104,784  fine stimata tra 84 min
+[2026-09-15 03:46:04] LAVORO 19/30  (20, 3)  IM=106,725  fine stimata tra 79 min
+[2026-09-15 03:49:00] LAVORO 20/30  (20, 4)  IM=104,601  fine stimata tra 70 min
+[2026-09-15 08:48:32] ============================================================
+[2026-09-15 08:48:32] Blocco 1 (Distance -> DistanceGroup, obiettivo AirTimeBucket) — 30,000 righe
+[2026-09-15 08:48:32] Classi del target: {'<=58m': 5887, '59-86m': 5831, '87-120m': 5736, '121-164m': 5808, '>164m': 5800}
+[2026-09-15 08:48:32] FD [(['Distance'], 'DistanceGroup')] e 18 colonne ridondanti: 0 violazioni sul campione pulito.
+[2026-09-15 08:48:32] RAM disponibile 1.2 GB -> 1 processi paralleli, Random Forest con 16 thread
+[2026-09-15 08:48:32] Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-15 08:48:32] Lavori totali 30, gia' completati 20, da eseguire 10
+[2026-09-15 09:00:07] LAVORO 1/10  (30, 0)  IM=151,492  fine stimata tra 104 min
+[2026-09-15 11:48:40] LAVORO 2/10  (30, 1)  IM=148,787  fine stimata tra 721 min
+[2026-09-15 13:45:54] ============================================================
+[2026-09-15 13:45:54] Blocco 1 (Distance -> DistanceGroup, obiettivo AirTimeBucket) — 30,000 righe
+[2026-09-15 13:45:54] Classi del target: {'<=58m': 5887, '59-86m': 5831, '87-120m': 5736, '121-164m': 5808, '>164m': 5800}
+[2026-09-15 13:45:54] FD [(['Distance'], 'DistanceGroup')] e 18 colonne ridondanti: 0 violazioni sul campione pulito.
+[2026-09-15 13:45:54] RAM disponibile 5.2 GB -> 4 processi paralleli, Random Forest con 4 thread
+[2026-09-15 13:45:54] Livelli di rumore: [0.0, 0.05, 0.1, 0.2, 0.3, 0.4] | Repliche: 5
+[2026-09-15 13:45:54] Lavori totali 30, gia' completati 22, da eseguire 8
+[2026-09-15 14:01:48] LAVORO 1/8  (30, 3)  IM=150,254  fine stimata tra 111 min
+[2026-09-15 14:03:28] LAVORO 2/8  (40, 0)  IM=187,658  fine stimata tra 53 min
+[2026-09-15 14:04:13] LAVORO 3/8  (30, 4)  IM=148,158  fine stimata tra 31 min
+[2026-09-15 14:04:37] LAVORO 4/8  (30, 2)  IM=147,711  fine stimata tra 19 min
+[2026-09-15 14:16:53] LAVORO 5/8  (40, 1)  IM=187,751  fine stimata tra 19 min
+[2026-09-15 14:19:12] LAVORO 6/8  (40, 4)  IM=184,876  fine stimata tra 11 min
+[2026-09-15 14:19:22] LAVORO 7/8  (40, 2)  IM=185,204  fine stimata tra 5 min
+[2026-09-15 14:19:27] LAVORO 8/8  (40, 3)  IM=187,579  fine stimata tra 0 min
+[2026-09-15 14:19:27] Baseline (rumore 0%), accuracy sul test pulito: Decision Tree 0.8419, Logistic Regression 0.8711, Neural Network 0.8350, Random Forest 0.8659
+[2026-09-15 14:19:27] Sanity check (rumore 0%): max |test_sporco - test_pulito| = 0.000000, quota training sporca = 0.0
+[2026-09-15 14:19:27] FINE. Righe nel CSV: 120 (attese 120)
